@@ -35,9 +35,6 @@ split.o: split_index.cpp Tokenizer.h func.h Inverted_Index.h
 dir:
 	mkdir htmls index index/split stopwords
 
-clear: html_sanity.o tokenizer.o inverted_index.o func.o
-	g++ -std=c++11 func.o Inverted_Index.o Tokenizer.o clean_html.o $(FLAGS) -o sanity
-
 # Run in ubuntu: export LD_LIBRARY_PATH="/usr/local/lib"
 #ulimit -n MAX OPEN FILE
 
