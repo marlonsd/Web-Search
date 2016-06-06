@@ -25,8 +25,13 @@ private:
 	void load_full_index();
 	void reset_distance();
 
-	void distance_diff(array<int,5>& v);
-	void distance_rest(array<int,4>& v);
+	void distance_diff(vector<int>& v);
+	void distance_rest(vector<int>& v);
+
+	void write_line(int word_id, int doc_id, int freq, int pos, fstream& file);
+	void write_line(vector<int> values, fstream& file, vector<int>::size_type min = 4);
+
+	bool read_line(fstream& file, vector<int>& v, int it = 4);
 
 public:
 	InvertedIndex();
@@ -39,6 +44,8 @@ public:
 	vector<FileList> get_list(string& token);
 
 	void rest();
+
+	void to_text();
 
 };
 
