@@ -17,3 +17,4 @@ Para executar indexação, htmls devem estar na pasta htmls:
   
 Para busca binária:
   ./search
+  
