@@ -1,4 +1,4 @@
-# Indexing
+# Web Search
 
 Para executar, necessário instalar htmlcxx [http://htmlcxx.sourceforge.net].
 

@@ -1,0 +1,14 @@
+.DS_Store
+*.txt
+*.out
+*.o
+indexing
+search
+split
+sanity
+htmls*
+aux_file
+index/*
+out*
+alt*
+!alt_main.cpp
