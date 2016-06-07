@@ -102,6 +102,9 @@ unordered_set<string> load_stop_words(string path){
 			while (!input.eof()){
 				input >> word;
 
+				cleaningWord(word);
+				word.erase(std::remove_if(word.begin(), word.end(),[](char x){return std::isspace(x);}),word.end());
+
 				if(word.size() > 1){
 					stopwords.insert(word);
 				}
