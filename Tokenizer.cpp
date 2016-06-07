@@ -14,7 +14,6 @@ Tokenizer::Tokenizer(const string& s, const unordered_set<string>& stopwords){
 
 // Need to find out how tokens must be, especially their ending
 void Tokenizer::normalizeWord(string& s){
-	unsigned int i;
 
 	// Removing accents, punctuation and converting to lower case
 	cleaningWord(s);

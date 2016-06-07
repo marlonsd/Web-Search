@@ -102,6 +102,7 @@ unordered_set<string> load_stop_words(string path){
 			while (!input.eof()){
 				input >> word;
 
+				// Cleaning words just like in the Tokenizer
 				cleaningWord(word);
 				word.erase(std::remove_if(word.begin(), word.end(),[](char x){return std::isspace(x);}),word.end());
 

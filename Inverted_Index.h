@@ -10,6 +10,7 @@ struct Vocabulary{
 	string word;
 	int pos;
 	int total_docs;
+	double idf;
 };
 
 class InvertedIndex{
@@ -29,7 +30,6 @@ private:
 	deque<Vocabulary> vocabulary_order;
 
 	void memory_dump();
-	vector<string> get_vocabulary();
 	void load_vocabulary();
 	void load_full_index();
 	void reset_distance();

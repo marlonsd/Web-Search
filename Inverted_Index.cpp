@@ -108,18 +108,21 @@ void InvertedIndex::indexing(Tokenizer& t, int index){
 			// Testing if token is not already in the vocabulary
 			auto search = this->vocabulary.find(token);
 			if (search == this->vocabulary.end()){
+
+				// Adding to vocabulary hash
 				this->vocabulary[token] = this->word_index;
 
+				// Saving group of vocabulary info
 				Vocabulary item;
 				item.word = token;
 				item.pos = this->word_index;
 				item.total_docs = 0;
+				item.idf = -1;
 				this->vocabulary_order.push_back(item);
 
+				// Updating word index in the vocabulary
 				this->word_index++;
 			}
-
-			// this->vocabulary_order[this->vocabulary[token]].total++;
 
 			// Testing if token is not already in the index
 			auto search2 = this->inverted_index.find(token);
@@ -148,6 +151,7 @@ void InvertedIndex::indexing(Tokenizer& t, int index){
 		}
 	}
 
+	// Updating n_i
 	for (string word : docs_words){
 		this->vocabulary_order[this->vocabulary[word]].total_docs++;
 	}
@@ -310,6 +314,7 @@ void InvertedIndex::sorted_index(){
 
 
 		for (int j = 0; j < n_files; j++){
+			// Closing file
 			p[j].close();
 
 			// Deleting temp files
@@ -320,43 +325,22 @@ void InvertedIndex::sorted_index(){
 		out.close();
 	}
 
+	// Transforming binary to text
 	this->to_text();
 }
 
 void InvertedIndex::vocabulary_dump(Vocabulary item, streampos pos){
 
 	fstream f;
+	double idf = log2((double) this->total_docs/item.total_docs);
 
 	f.open(VOCABULARY_FILE_NAME, ios::out | ios::app);
 
-	// word, index position, ni, N/ni
-	f << item.word << " " << pos << " " << item.total_docs << " " << (float) this->total_docs/item.total_docs << endl;
-
-	// cout << this->total_docs << " " << item.total_docs << endl;
-		
-	f.close();
-
-}
-
-vector<string> InvertedIndex::get_vocabulary(){
-	string word;
-	vector<string> vocabulary;
-	fstream f;
-
-	f.open(VOCABULARY_FILE_NAME, ios::in);
-
-	if (f.is_open()){
-		while (!f.eof()){
-			Vocabulary item;
-			f >> item.word >> item.pos >> item.total_docs ;
-
-			vocabulary.push_back(item.word);
-		}
-	}
+	// word, index position, ni, idf
+	f << item.word << " " << pos << " " << item.total_docs << " " << idf << endl;
 
 	f.close();
 
-	return vocabulary;
 }
 
 void InvertedIndex::load_vocabulary(){
@@ -371,10 +355,10 @@ void InvertedIndex::load_vocabulary(){
 
 		while (!f.eof()){
 			Vocabulary item;
-			float idf;
+			double idf;
 
 			// word, index position, ni, N/ni
-			f >> item.word >> item.pos >> item.total_docs >> idf;
+			f >> item.word >> item.pos >> item.total_docs >> item.idf;
 
 			if (item.word.size()){
 
@@ -393,6 +377,7 @@ void InvertedIndex::load_index(){
 	this->load_vocabulary();
 }
 
+// TODO: Retrieve information from binary file instead text
 vector<FileList> InvertedIndex::get_list(string& token){
 	vector<FileList> list = {};
 	vector<int> line = {-1,-1,-1,-1};
@@ -495,6 +480,7 @@ void InvertedIndex::distance_rest(vector<int>& v){
 
 }
 
+// TODO: Retrieve information from binary file instead text
 void InvertedIndex::rest(){
 	ifstream f;
 	vector<int> aux(4);
@@ -527,6 +513,7 @@ void InvertedIndex::rest(){
 	f.close();
 }
 
+// Converting binary file to text
 void InvertedIndex::to_text(){
 	fstream output;
 	fstream input;

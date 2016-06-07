@@ -22,7 +22,7 @@ int main(int argc, const char* argv[]) {
 
 	doc_id.open(DOC_ID_FILE_NAME, ios::out);
 
-	cout << "reading (ms),tokenizing (ms),indexing (ms),#files,total time (s), sorting, voc dump" << endl;
+	// cout << "reading (ms),tokenizing (ms),indexing (ms),#files,total time (s), sorting, voc dump" << endl;
 
 	for (string file : files){
 		input.open(DIRNAME+file, ios::in);
