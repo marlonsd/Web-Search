@@ -11,11 +11,12 @@
 #include <unordered_map>
 #include <cstdlib>
 #include <queue>
+#include <deque>
 #include <dirent.h>
 #include <html/ParserDom.h>
 // #include <boost/algorithm/string.hpp>
 
-#define MEMORY_LIMITE 250000 // (bytes)
+#define MEMORY_LIMITE 250000000 // (bytes)
 // #define MEMORY_LIMITE 160 // (bytes)
 
 /* <word id, doc id, frequency of word, position>

@@ -1,15 +1,18 @@
 #include "Inverted_Index.h"
 
 InvertedIndex::InvertedIndex(){
-	this->vocabulary_buffer = "";
 	this->memory_usage = 0;
 	this->word_index = 0;
 	this->total_token = 0;
 	this->total_size_index = 0;
 	this->n_dumps = 0;
 
+	this->total_docs = 0;
+
 	this->vocabulary = {};
 	this->inverted_index = {};
+
+	this->vocabulary_order = {};
 
 	for (int i = 0; i < 4; i++){
 		this->previous[i] = 0;
@@ -77,6 +80,8 @@ bool InvertedIndex::read_line(fstream& file, vector<int>& v, int it){
 }
 
 void InvertedIndex::indexing(Tokenizer& t, int index){
+	unordered_set<string> docs_words;
+
 
 	/* A file must be indexed entirely, so it is possible to calculate total number of terms in a same file.
 		To do so, it is calculate the necessaary space to store this one file and the actual size of index.
@@ -84,6 +89,10 @@ void InvertedIndex::indexing(Tokenizer& t, int index){
 	*/
 	if ((this->memory_usage) && (((t.size()*INDEX_LINE_SIZE)+this->memory_usage) >= MEMORY_LIMITE)){
 		this->memory_dump();
+	}
+
+	if (t.size() > 0){
+		this->total_docs++;
 	}
 
 	// Iterating through tokens
@@ -94,18 +103,23 @@ void InvertedIndex::indexing(Tokenizer& t, int index){
 		if (token.size()) {
 			this->total_token++;
 
+			docs_words.insert(token);
+
 			// Testing if token is not already in the vocabulary
 			auto search = this->vocabulary.find(token);
 			if (search == this->vocabulary.end()){
 				this->vocabulary[token] = this->word_index;
+
+				Vocabulary item;
+				item.word = token;
+				item.pos = this->word_index;
+				item.total_docs = 0;
+				this->vocabulary_order.push_back(item);
+
 				this->word_index++;
-
-				this->vocabulary_buffer+=(token+'\n');
-
-				if (this->vocabulary_buffer.length() >= LOCAL_VOCABULARY_SIZE){
-					this->vocabulary_dump();
-				}
 			}
+
+			// this->vocabulary_order[this->vocabulary[token]].total++;
 
 			// Testing if token is not already in the index
 			auto search2 = this->inverted_index.find(token);
@@ -132,6 +146,10 @@ void InvertedIndex::indexing(Tokenizer& t, int index){
 				this->memory_dump();
 			}
 		}
+	}
+
+	for (string word : docs_words){
+		this->vocabulary_order[this->vocabulary[word]].total_docs++;
 	}
 }
 
@@ -170,10 +188,6 @@ void InvertedIndex::memory_dump(){
 	for (int i = 0; i < count; i++){
 		vector<int> aux;
 
-		// for (int j = 0; j < 4; j++){
-		// 	f >> value;
-		// 	aux[j] = stoi(value);
-		// }
 		test = this->read_line(f, aux);
 
 		if (test){
@@ -193,7 +207,6 @@ void InvertedIndex::memory_dump(){
 
 	// Saving sorted tuples
 	for (vector<int> s : all_lines){
-		// cout << s[0] << " " << s[1] << " " << s[2] << " " << s[3] << '\n';
 		this->write_line(s, sorted_f);
 	}
 
@@ -205,16 +218,16 @@ void InvertedIndex::memory_dump(){
 }
 
 void InvertedIndex::sorted_index(){
-	int i = 0;
+	int value, i = 0;
 	vector<int> aux(5);
-	int value;
+	bool test, final = false;
 	priority_queue<vector<int>, vector<vector<int>>, comparator> min_heap;
-	bool final = false, test;
 
 	if (this->memory_usage){
 		memory_dump();
 	}
 
+	cout << "Total of files evaluated: " << this->total_docs << endl;
 	cout << "Total tokens: " << this->total_size_index << " " << this->total_token << endl;
 	cout << "Memory Limit: " << (MEMORY_LIMITE/INDEX_LINE_SIZE) << endl;
 	cout << "Total of files: " << this->n_dumps << endl;
@@ -249,12 +262,6 @@ void InvertedIndex::sorted_index(){
 			p[j].open(INDEX_BACKUP_FILE_NAME+to_string(i)+".bin", ios::in | ios::binary);
 			i++;
 
-			// Reading line
-			// for (int k = 0; k < 4; k++){
-			// 	p[j] >> value;
-			// 	aux[k] = value;
-			// }
-
 			test = this->read_line(p[j], aux);
 
 			if (test){
@@ -271,28 +278,26 @@ void InvertedIndex::sorted_index(){
 			aux = min_heap.top();
 			min_heap.pop();
 
-			// If last file, do compression
+			// If last file:
+			// add word to vocabulary;
+			// do compression
 			if (final){
-				this->distance_diff(aux);
+				if (this->vocabulary_order.size() && this->vocabulary_order[0].pos == aux[0]){			
+					// Each line occupates 16 bytes
+					this->vocabulary_dump(this->vocabulary_order[0], out.tellp());
+					this->vocabulary_order.pop_front();
+				}
+
+				// this->distance_diff(aux);
 			}
 			
 			// Saving smallest tuple
-			// for (int j = 0; j < 4; j++){
-			// 	out << aux[j];
-			// }
-
-			// // out << aux[3] << '\n';
-
 			this->write_line(aux, out);
 
 			// Test if file have finished
 			if (!p[aux[4]].eof()){
 				int position = aux[4];
 
-				// for (int j = 0; j < 4; j++){
-				// 	p[aux[4]] >> value;
-				// 	aux[j] = value;
-				// }
 				test = this->read_line(p[position], aux);
 
 				// Test if file have finished
@@ -318,16 +323,17 @@ void InvertedIndex::sorted_index(){
 	this->to_text();
 }
 
-void InvertedIndex::vocabulary_dump(){
+void InvertedIndex::vocabulary_dump(Vocabulary item, streampos pos){
 
 	fstream f;
 
 	f.open(VOCABULARY_FILE_NAME, ios::out | ios::app);
 
-	f << this->vocabulary_buffer;
-	
-	this->vocabulary_buffer = "";
+	// word, index position, ni, N/ni
+	f << item.word << " " << pos << " " << item.total_docs << " " << (float) this->total_docs/item.total_docs << endl;
 
+	// cout << this->total_docs << " " << item.total_docs << endl;
+		
 	f.close();
 
 }
@@ -341,9 +347,10 @@ vector<string> InvertedIndex::get_vocabulary(){
 
 	if (f.is_open()){
 		while (!f.eof()){
-			f >> word;
+			Vocabulary item;
+			f >> item.word >> item.pos >> item.total_docs ;
 
-			vocabulary.push_back(word);
+			vocabulary.push_back(item.word);
 		}
 	}
 
@@ -353,18 +360,29 @@ vector<string> InvertedIndex::get_vocabulary(){
 }
 
 void InvertedIndex::load_vocabulary(){
-	int word_index = 0;
-	string word;
 	fstream f;
+	int word_index = 0;
 
 	f.open(VOCABULARY_FILE_NAME, ios::in);
 
 	if (f.is_open()){
-		while (!f.eof()){
-			f >> word;
+		this->vocabulary_order = {};
+		this->vocabulary = {};
 
-			this->vocabulary[word] = word_index;
-			word_index++;
+		while (!f.eof()){
+			Vocabulary item;
+			float idf;
+
+			// word, index position, ni, N/ni
+			f >> item.word >> item.pos >> item.total_docs >> idf;
+
+			if (item.word.size()){
+
+				this->vocabulary[item.word] = word_index;
+				this->vocabulary_order.push_back(item);
+
+				word_index++;
+			}
 		}
 	}
 
@@ -535,6 +553,4 @@ void InvertedIndex::to_text(){
 
 	input.close();
 	output.close();
-
-
 }

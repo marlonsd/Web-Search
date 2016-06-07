@@ -6,9 +6,14 @@
 
 using namespace std;
 
+struct Vocabulary{
+	string word;
+	int pos;
+	int total_docs;
+};
+
 class InvertedIndex{
 private:
-	string vocabulary_buffer;
 	int memory_usage;
 	int total_size_index;
 	int word_index;
@@ -16,8 +21,12 @@ private:
 	int n_dumps;
 	int previous[4];
 
+	int total_docs;
+
 	unordered_map<string, int> vocabulary;					// <word, id>
 	unordered_map<string,vector<FileList>> inverted_index;	// <id_word, list of occurrences>
+
+	deque<Vocabulary> vocabulary_order;
 
 	void memory_dump();
 	vector<string> get_vocabulary();
@@ -39,7 +48,7 @@ public:
 
 	void indexing(Tokenizer& t, int index = 0);
 	void sorted_index();
-	void vocabulary_dump();
+	void vocabulary_dump(Vocabulary item, streampos pos);
 	void load_index();
 	vector<FileList> get_list(string& token);
 

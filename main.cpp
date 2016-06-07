@@ -111,7 +111,7 @@ int main(int argc, const char* argv[]) {
 
 	cout << "Done indexing" << endl;
 
-	index.vocabulary_dump();
+	// index.vocabulary_dump();
 	index.sorted_index();
 
 	exit(0);
