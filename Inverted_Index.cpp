@@ -41,7 +41,34 @@ void InvertedIndex::write_line(int word_id, int doc_id, int freq, int pos, fstre
 
 // Writes a line in a binary file
 // Format: word_id, doc_id, freq_in_doc, position
+void InvertedIndex::write_line(int word_id, int doc_id, int freq, int pos, ofstream& file){
+	// file << word_id << doc_id << freq << pos;
+	file.write((const char*) &word_id, sizeof(word_id));
+	file.write((const char*) &doc_id, sizeof(doc_id));
+	file.write((const char*) &freq, sizeof(freq));
+	file.write((const char*) &pos, sizeof(pos));
+}
+
+// Writes a line in a binary file
+// Format: word_id, doc_id, freq_in_doc, position
 void InvertedIndex::write_line(vector<int> values, fstream& file, vector<int>::size_type min){
+	vector<int> aux;
+
+	if (values.size() > min){
+		std::copy(values.begin(), min+values.begin(), std::back_inserter(aux));
+	} else {
+		aux = values;		
+	}
+
+
+	for (int value : aux){
+		file.write((char*) &value, sizeof(value));	
+	}
+}
+
+// Writes a line in a binary file
+// Format: word_id, doc_id, freq_in_doc, position
+void InvertedIndex::write_line(vector<int> values, ofstream& file, vector<int>::size_type min){
 	vector<int> aux;
 
 	if (values.size() > min){
@@ -58,6 +85,29 @@ void InvertedIndex::write_line(vector<int> values, fstream& file, vector<int>::s
 
 // Reads a line from a binary file
 bool InvertedIndex::read_line(fstream& file, vector<int>& v, streampos pos, int it){
+	bool test = true;
+	int aux;
+
+	v.clear();
+
+	if (pos > 0){
+		file.seekg(pos);
+	}
+
+	for (int i = 0; ((i < it) && test); i++){
+		if(file.read((char*) &aux, sizeof(aux))){
+			v.push_back(aux);
+			test = true;
+		} else {
+			test = false;
+		}
+	}
+
+	return test;
+}
+
+// Reads a line from a binary file
+bool InvertedIndex::read_line(ifstream& file, vector<int>& v, streampos pos, int it){
 	bool test = true;
 	int aux;
 
@@ -383,6 +433,7 @@ void InvertedIndex::load_vocabulary(){
 }
 
 // TODO: Retrieve information from binary file instead text
+// Retrieves list of files that contains token
 vector<FileList> InvertedIndex::get_list(string& token){
 	vector<FileList> list = {};
 	vector<int> line = {-1,-1,-1,-1};
@@ -391,10 +442,18 @@ vector<FileList> InvertedIndex::get_list(string& token){
 
 	this->reset_distance();
 
+	// Test if vocabulary have already been restored
+	if (this->vocabulary.size() == 0){
+		this->load_vocabulary();
+	}
+
 	auto search = this->vocabulary.find(token);
 	if (search != this->vocabulary.end()){
 		string filename = INDEX_SORTED_FILE_NAME;
 		f.open(filename+"_text");
+
+		// Vocabulary item = this->vocabulary_order[this->vocabulary[token]];
+		// f.open(INDEX_SORTED_FILE_NAME);
 
 		while(line[0] <= vocabulary[token] && !f.eof()){
 
@@ -487,34 +546,32 @@ void InvertedIndex::distance_rest(vector<int>& v){
 
 }
 
-// TODO: Retrieve information from binary file instead text
 // Restores index from file
 void InvertedIndex::rest(){
-	ifstream f;
-	vector<int> aux(4);
 	int s;
+	ifstream f;
+	bool test;
+	vector<int> aux;
 
-	string filename = INDEX_SORTED_FILE_NAME;
+	// string filename = INDEX_SORTED_FILE_NAME+"_text";
 
-	f.open(filename+"_text");
+	f.open(INDEX_SORTED_FILE_NAME, ios::in | ios::binary);
 
 	this->reset_distance();
 
-	while(!f.eof()){
-		for (int i = 0; i < 4; i++){
-			f >> s;
-			aux[i] = s;
+	test = this->read_line(f, aux);
+
+	while(test){
+
+		this->distance_rest(aux);
+
+		for (int i = 0; i < 3; i++){
+			cout << aux[i] << " ";
 		}
 
-		if (!f.eof()){
-			distance_rest(aux);
+		cout << aux[3] << endl;
 
-			for (int i = 0; i < 3; i++){
-				cout << aux[i] << " ";
-			}
-
-			cout << aux[3] << endl;
-		}
+		test = this->read_line(f, aux);
 
 	}
 

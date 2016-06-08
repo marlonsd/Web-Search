@@ -37,9 +37,13 @@ private:
 	void distance_rest(vector<int>& v);
 
 	void write_line(int word_id, int doc_id, int freq, int pos, fstream& file);
+	void write_line(int word_id, int doc_id, int freq, int pos, ofstream& file);
+
 	void write_line(vector<int> values, fstream& file, vector<int>::size_type min = 4);
+	void write_line(vector<int> values, ofstream& file, vector<int>::size_type min = 4);
 
 	bool read_line(fstream& file, vector<int>& v, streampos pos = 0, int it = 4);
+	bool read_line(ifstream& file, vector<int>& v, streampos pos = 0, int it = 4);
 
 public:
 	InvertedIndex();
