@@ -7,10 +7,11 @@
 using namespace std;
 
 struct Vocabulary{
-	string word;	// Current Word
-	streampos pos;	// Word's position in index file
-	int total_docs;	// Total number of docs that contains "word"
-	double idf;		// "word"'s idf
+	int id;				// word id
+	string word;		// Current Word
+	streampos file_pos;	// Word's position in index file
+	int total_docs;		// Total number of docs that contains "word"
+	double idf;			// "word"'s idf
 };
 
 class InvertedIndex{

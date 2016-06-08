@@ -166,7 +166,8 @@ void InvertedIndex::indexing(Tokenizer& t, int index){
 				// Saving group of vocabulary info
 				Vocabulary item;
 				item.word = token;
-				item.pos = 0;			// Unknown right now
+				item.id = this->word_index;
+				item.file_pos = 0;		// Unknown right now
 				item.total_docs = 0;	// Unknown right now
 				item.idf = -1;			// Unknown right now
 
@@ -342,7 +343,7 @@ void InvertedIndex::sorted_index(){
 			// add word to vocabulary;
 			// do compression
 			if (final){
-				if (this->vocabulary_order.size() && this->vocabulary_order[0].pos == aux[0]){			
+				if (this->vocabulary_order.size() && this->vocabulary_order[0].id == aux[0]){			
 					// Each line occupates 16 bytes
 					this->vocabulary_dump(this->vocabulary_order[0], out.tellp());
 					this->vocabulary_order.pop_front();
@@ -419,13 +420,16 @@ void InvertedIndex::load_vocabulary(){
 
 			// word, index position, ni, N/ni
 			f >> item.word >> pos >> item.total_docs >> item.idf;
-			item.pos = (streampos) pos;
+			item.file_pos = (streampos) pos;
 			
 			if (item.word.size()){
 				this->vocabulary[item.word] = this->word_index;
+
+				item.id = this->word_index;
 				this->vocabulary_order.push_back(item);
 
 				this->word_index++;
+
 			}
 		}
 	}
@@ -455,19 +459,19 @@ vector<FileList> InvertedIndex::get_list(string& token){
 		// f.open(filename+"_text");
 
 		Vocabulary item = this->vocabulary_order[this->vocabulary[token]];
-		cout << this->vocabulary[token] << " " << item.pos << endl;
+		// cout << this->vocabulary[token] << " " << item.file_pos << endl;
 		f.open(INDEX_SORTED_FILE_NAME);
 
-		f.seekg(item.pos);
+		f.seekg(item.file_pos);
 
 		test = this->read_line(f, line);
-		this->distance_rest(line);
-		cout << "First" << endl;
-		for (int i : line){
-			cout << i << " ";
-		}
-		cout << endl;	
-		cout << endl;
+		// this->distance_rest(line);
+		// cout << "First" << endl;
+		// for (int i : line){
+			// cout << i << " ";
+		// }
+		// cout << endl;	
+		// cout << endl;
 
 		while(test && line[0] <= this->vocabulary[token]){
 
@@ -479,10 +483,10 @@ vector<FileList> InvertedIndex::get_list(string& token){
 			int rep = line[2];
 
 			if (line[0] == this->vocabulary[token]){
-				for (int i : line){
-					cout << i << " ";
-				}
-				cout << endl;
+				// for (int i : line){
+					// cout << i << " ";
+				// }
+				// cout << endl;
 				FileList temp;
 				temp.file_index = line[1];
 				temp.position.push_back(line[3]);
@@ -495,12 +499,12 @@ vector<FileList> InvertedIndex::get_list(string& token){
 						// }
 
 						test = this->read_line(f, line);
-						this->distance_rest(line);
+						// this->distance_rest(line);
 
-						for (int i : line){
-							cout << i << " ";
-						}
-						cout << endl;
+						// for (int i : line){
+							// cout << i << " ";
+						// }
+						// cout << endl;
 
 						temp.position.push_back(line[3]);						
 					}
@@ -516,7 +520,7 @@ vector<FileList> InvertedIndex::get_list(string& token){
 				}
 			}
 			test = this->read_line(f, line);
-			this->distance_rest(line);
+			// this->distance_rest(line);
 		}
 
 	}
