@@ -30,7 +30,6 @@ private:
 	deque<Vocabulary> vocabulary_order;
 
 	void memory_dump();
-	void load_vocabulary();
 	void load_full_index();
 	void reset_distance();
 
@@ -40,7 +39,7 @@ private:
 	void write_line(int word_id, int doc_id, int freq, int pos, fstream& file);
 	void write_line(vector<int> values, fstream& file, vector<int>::size_type min = 4);
 
-	bool read_line(fstream& file, vector<int>& v, int it = 4);
+	bool read_line(fstream& file, vector<int>& v, streampos pos = 0, int it = 4);
 
 public:
 	InvertedIndex();
@@ -51,6 +50,8 @@ public:
 	void vocabulary_dump(Vocabulary item, streampos pos);
 	void load_index();
 	vector<FileList> get_list(string& token);
+
+	void load_vocabulary();
 
 	void rest();
 

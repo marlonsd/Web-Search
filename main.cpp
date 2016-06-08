@@ -1,5 +1,6 @@
 #include "Inverted_Index.h"
 #include "func.h"			// Defines are here
+#include <boost/version.hpp>
 
 void resetingOutputFiles();
 void parsing(const string& doc, Tokenizer& t, const unordered_set<string>& stopwords);

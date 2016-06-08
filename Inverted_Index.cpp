@@ -14,9 +14,7 @@ InvertedIndex::InvertedIndex(){
 
 	this->vocabulary_order = {};
 
-	for (int i = 0; i < 4; i++){
-		this->previous[i] = 0;
-	}
+	this->reset_distance();
 
 }
 
@@ -31,6 +29,8 @@ void InvertedIndex::reset_distance(){
 	}
 }
 
+// Writes a line in a binary file
+// Format: word_id, doc_id, freq_in_doc, position
 void InvertedIndex::write_line(int word_id, int doc_id, int freq, int pos, fstream& file){
 	// file << word_id << doc_id << freq << pos;
 	file.write((const char*) &word_id, sizeof(word_id));
@@ -39,6 +39,8 @@ void InvertedIndex::write_line(int word_id, int doc_id, int freq, int pos, fstre
 	file.write((const char*) &pos, sizeof(pos));
 }
 
+// Writes a line in a binary file
+// Format: word_id, doc_id, freq_in_doc, position
 void InvertedIndex::write_line(vector<int> values, fstream& file, vector<int>::size_type min){
 	vector<int> aux;
 
@@ -54,15 +56,18 @@ void InvertedIndex::write_line(vector<int> values, fstream& file, vector<int>::s
 	}
 }
 
-bool InvertedIndex::read_line(fstream& file, vector<int>& v, int it){
+// Reads a line from a binary file
+bool InvertedIndex::read_line(fstream& file, vector<int>& v, streampos pos, int it){
 	bool test = true;
 	int aux;
-	// int i = 0;
 
 	v.clear();
 
-	for (int i = 0; ((i < it) && test); i++){
+	if (pos > 0){
+		file.seekg(pos);
+	}
 
+	for (int i = 0; ((i < it) && test); i++){
 		if(file.read((char*) &aux, sizeof(aux))){
 			v.push_back(aux);
 			test = true;
@@ -71,14 +76,10 @@ bool InvertedIndex::read_line(fstream& file, vector<int>& v, int it){
 		}
 	}
 
-	// while(file.read((char*) &aux, sizeof(aux)) && i < it){
-	// 	v.push_back(aux);
-	// 	i++;
-	// }
-
 	return test;
 }
 
+// Does indexing
 void InvertedIndex::indexing(Tokenizer& t, int index){
 	unordered_set<string> docs_words;
 
@@ -157,6 +158,8 @@ void InvertedIndex::indexing(Tokenizer& t, int index){
 	}
 }
 
+// Saves all data stored in this->inverted_index in a file
+// Data is sorted base on word_id and document_id
 void InvertedIndex::memory_dump(){
 
 	bool test;
@@ -221,6 +224,8 @@ void InvertedIndex::memory_dump(){
 	this->n_dumps++;
 }
 
+// Creates one index containing all tokens
+// Uses sort-based multiway merge
 void InvertedIndex::sorted_index(){
 	int value, i = 0;
 	vector<int> aux(5);
@@ -329,6 +334,8 @@ void InvertedIndex::sorted_index(){
 	this->to_text();
 }
 
+// Saves info in the vocabulary file
+// Format: word index_position ni idf
 void InvertedIndex::vocabulary_dump(Vocabulary item, streampos pos){
 
 	fstream f;
@@ -343,15 +350,17 @@ void InvertedIndex::vocabulary_dump(Vocabulary item, streampos pos){
 
 }
 
+
+// Loads vocabulary from file
 void InvertedIndex::load_vocabulary(){
 	fstream f;
-	int word_index = 0;
 
 	f.open(VOCABULARY_FILE_NAME, ios::in);
 
 	if (f.is_open()){
-		this->vocabulary_order = {};
-		this->vocabulary = {};
+		// this->vocabulary_order = {};
+		// this->vocabulary = {};
+		InvertedIndex();
 
 		while (!f.eof()){
 			Vocabulary item;
@@ -362,19 +371,15 @@ void InvertedIndex::load_vocabulary(){
 
 			if (item.word.size()){
 
-				this->vocabulary[item.word] = word_index;
+				this->vocabulary[item.word] = this->word_index;
 				this->vocabulary_order.push_back(item);
 
-				word_index++;
+				this->word_index++;
 			}
 		}
 	}
 
 	f.close();
-}
-
-void InvertedIndex::load_index(){
-	this->load_vocabulary();
 }
 
 // TODO: Retrieve information from binary file instead text
@@ -434,6 +439,7 @@ vector<FileList> InvertedIndex::get_list(string& token){
 	return list;
 }
 
+// Calculates the differance between current item and previous one
 void InvertedIndex::distance_diff(vector<int>& v){
 
 	// v[0] = Term index
@@ -460,6 +466,7 @@ void InvertedIndex::distance_diff(vector<int>& v){
 
 }
 
+// Calculates the real value of the current item related to previous one
 void InvertedIndex::distance_rest(vector<int>& v){
 
 	if (v[1] != 0){
@@ -481,6 +488,7 @@ void InvertedIndex::distance_rest(vector<int>& v){
 }
 
 // TODO: Retrieve information from binary file instead text
+// Restores index from file
 void InvertedIndex::rest(){
 	ifstream f;
 	vector<int> aux(4);
