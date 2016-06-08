@@ -17,6 +17,28 @@ int main(int argc, const char* argv[]) {
 	double duration;
 	Tokenizer t;
 
+	/* */
+	string token = "papa";
+
+	cout << "Loading vocabulary" << endl;
+	index.load_vocabulary();
+	cout << "Vocabulary loaded" << endl;
+
+	cout << "Consulting query \""<< token << "\"" << endl;
+	vector<FileList> query = index.get_list(token);
+	cout << "Done consulting" << endl;
+
+	for (FileList list : query){
+		cout << "Document #" << list.file_index << ":\n\t";
+		for (int id : list.position){
+			cout << id << " ";
+		}
+		cout << endl << endl;
+	}
+
+	exit(0);
+	/* */
+
 	resetingOutputFiles();
 
 	files = list_dir_files(DIRNAME);

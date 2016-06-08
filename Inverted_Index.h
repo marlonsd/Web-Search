@@ -7,10 +7,10 @@
 using namespace std;
 
 struct Vocabulary{
-	string word;
-	int pos;
-	int total_docs;
-	double idf;
+	string word;	// Current Word
+	streampos pos;	// Word's position in index file
+	int total_docs;	// Total number of docs that contains "word"
+	double idf;		// "word"'s idf
 };
 
 class InvertedIndex{
@@ -51,8 +51,9 @@ public:
 
 	void indexing(Tokenizer& t, int index = 0);
 	void sorted_index();
+	
 	void vocabulary_dump(Vocabulary item, streampos pos);
-	void load_index();
+
 	vector<FileList> get_list(string& token);
 
 	void load_vocabulary();
