@@ -17,7 +17,7 @@ int main(int argc, const char* argv[]) {
 
 	load_doc_id(doc_id);
 
-	index.load_index();
+	index.load_vocabulary();
 
 	while(true) {
 		cout << "Query ('q' to exit): ";
