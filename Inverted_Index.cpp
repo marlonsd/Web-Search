@@ -107,6 +107,7 @@ bool InvertedIndex::read_line(fstream& file, vector<int>& v, streampos pos, int 
 }
 
 // Reads a line from a binary file
+// Line format: word_id, doc_id, freq_in_doc, position
 bool InvertedIndex::read_line(ifstream& file, vector<int>& v, streampos pos, int it){
 	bool test = true;
 	int aux;
@@ -129,7 +130,7 @@ bool InvertedIndex::read_line(ifstream& file, vector<int>& v, streampos pos, int
 	return test;
 }
 
-// Does indexing
+// Indexing
 void InvertedIndex::indexing(Tokenizer& t, int index){
 	unordered_set<string> docs_words;
 
@@ -349,7 +350,7 @@ void InvertedIndex::sorted_index(){
 					this->vocabulary_order.pop_front();
 				}
 
-				// this->distance_diff(aux);
+				this->distance_diff(aux);
 			}
 			
 			// Saving smallest tuple
@@ -384,6 +385,8 @@ void InvertedIndex::sorted_index(){
 
 	// Transforming binary to text
 	this->to_text();
+
+	this->rest();
 }
 
 // Saves info in the vocabulary file
@@ -453,76 +456,41 @@ vector<FileList> InvertedIndex::get_list(string& token){
 		this->load_vocabulary();
 	}
 
+	// Test if token is in vocabulary
 	auto search = this->vocabulary.find(token);
 	if (search != this->vocabulary.end()){
-		// string filename = INDEX_SORTED_FILE_NAME;
-		// f.open(filename+"_text");
 
 		Vocabulary item = this->vocabulary_order[this->vocabulary[token]];
-		// cout << this->vocabulary[token] << " " << item.file_pos << endl;
-		f.open(INDEX_SORTED_FILE_NAME);
 
+		f.open(INDEX_SORTED_FILE_NAME, ios::binary);
+
+		// Puts file in the exact position the token starts in index file
 		f.seekg(item.file_pos);
 
 		test = this->read_line(f, line);
-		// this->distance_rest(line);
-		// cout << "First" << endl;
-		// for (int i : line){
-			// cout << i << " ";
-		// }
-		// cout << endl;	
-		// cout << endl;
 
-		while(test && line[0] <= this->vocabulary[token]){
-
-			// for (int i = 0; i < 4; i++){
-			// 	f >> s;
-			// 	line[i] = stoi(s);
-			// }
+		// Iterates in the exact number of docs that have token
+		for(int i = 0; i < item.total_docs && test; i++){
+			this->distance_rest(line);
 
 			int rep = line[2];
 
-			if (line[0] == this->vocabulary[token]){
-				// for (int i : line){
-					// cout << i << " ";
-				// }
-				// cout << endl;
-				FileList temp;
-				temp.file_index = line[1];
-				temp.position.push_back(line[3]);
+			FileList temp;
+			temp.file_index = line[1];
+			temp.position.push_back(line[3]);
 
-				if (test){
-					for (int r = 0; r < rep - 1 && test; r++ ){				
-						// for (int i = 0; i < 4; i++){
-						// 	f >> s;
-						// 	line[i] = stoi(s);
-						// }
+			// Repeats the exact number of times token appers in the doc
+			for (int r = 0; r < rep - 1 && test; r++ ){				
 
-						test = this->read_line(f, line);
-						// this->distance_rest(line);
+				test = this->read_line(f, line);
+				this->distance_rest(line);
 
-						// for (int i : line){
-							// cout << i << " ";
-						// }
-						// cout << endl;
-
-						temp.position.push_back(line[3]);						
-					}
-				}
-
-				list.push_back(temp);
-			} else {
-				for (int r = 0; r < rep - 1 && test; r++){
-					// for (int i = 0; i < 4; i++){
-					// 	f >> s;
-					// }
-					test = this->read_line(f, line);
-				}
+				temp.position.push_back(line[3]);						
 			}
-			test = this->read_line(f, line);
-			// this->distance_rest(line);
-		}
 
+			list.push_back(temp);
+			test = this->read_line(f, line);
+		}
 	}
 
 	return list;
@@ -569,43 +537,60 @@ void InvertedIndex::distance_rest(vector<int>& v){
 		this->previous[3] = 0;
 	}
 
+	for (int i : v){
+		cout << i << " ";
+	}
+	cout << '\t';
+
 	for (int i = 0; i < 4; i++){
 		v[i] = v[i] + this->previous[i];
 		this->previous[i] = v[i];
 	}
 
+	for (int i : v){
+		cout << i << " ";
+	}
+	cout << endl;
+
 }
 
 // Restores index from file
+// In the index, it is stored the differences
+// This method convertes the differences into the real values
 void InvertedIndex::rest(){
 	int s;
 	ifstream f;
+	ofstream out;
 	bool test;
 	vector<int> aux;
 
-	// string filename = INDEX_SORTED_FILE_NAME+"_text";
+	string filename = INDEX_SORTED_FILE_NAME;
 
-	f.open(INDEX_SORTED_FILE_NAME, ios::in | ios::binary);
+	f.open(filename, ios::in | ios::binary);
 
-	this->reset_distance();
+	filename += "_text_full";
+	out.open(filename, ios::out);
 
 	test = this->read_line(f, aux);
+
+	this->reset_distance();
 
 	while(test){
 
 		this->distance_rest(aux);
 
 		for (int i = 0; i < 3; i++){
-			cout << aux[i] << " ";
+			out << aux[i] << " ";
 		}
 
-		cout << aux[3] << endl;
+		out << aux[3] << endl;
 
 		test = this->read_line(f, aux);
 
 	}
 
 	f.close();
+	out.close();
 }
 
 // Converting binary file to text

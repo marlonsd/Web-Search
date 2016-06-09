@@ -1,5 +1,6 @@
 #include "Inverted_Index.h"
 #include "func.h"			// Defines are here
+#include "Inverted_Index.h"
 
 vector<int> instersection(vector<int> &v1, vector<int> &v2);
 void load_doc_id(vector<string>& doc_id);
@@ -15,27 +16,6 @@ int main(int argc, const char* argv[]) {
 	bool first = true;
 	vector<string> doc_id;
 
-	/* Search */
-	// string token = "papa";
-
-	// cout << "Loading vocabulary" << endl;
-	// index.load_vocabulary();
-	// cout << "Vocabulary loaded" << endl;
-
-	// cout << "Consulting query \""<< token << "\"" << endl;
-	// vector<FileList> query = index.get_list(token);
-	// cout << "Done consulting" << endl;
-
-	// for (FileList list : query){
-	// 	cout << "Document #" << list.file_index << ":\n\t";
-	// 	for (int id : list.position){
-	// 		cout << id << " ";
-	// 	}
-	// 	cout << endl << endl;
-	// }
-
-	// exit(0);
-	/* */
 
 	load_doc_id(doc_id);
 
