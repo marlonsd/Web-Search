@@ -386,6 +386,7 @@ void InvertedIndex::sorted_index(){
 	// Transforming binary to text
 	this->to_text();
 
+	// Saves text file without the usage of comprassion
 	this->rest();
 }
 
@@ -413,8 +414,7 @@ void InvertedIndex::load_vocabulary(){
 	f.open(VOCABULARY_FILE_NAME, ios::in);
 
 	if (f.is_open()){
-		// this->vocabulary_order = {};
-		// this->vocabulary = {};
+
 		InvertedIndex();
 
 		while (!f.eof()){
@@ -440,7 +440,6 @@ void InvertedIndex::load_vocabulary(){
 	f.close();
 }
 
-// TODO: Retrieve information from binary file instead text
 // Retrieves list of files that contains token
 vector<FileList> InvertedIndex::get_list(string& token){
 	vector<FileList> list = {};
