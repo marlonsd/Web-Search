@@ -406,7 +406,6 @@ void InvertedIndex::vocabulary_dump(Vocabulary item, streampos pos){
 
 }
 
-
 // Loads vocabulary from file
 void InvertedIndex::load_vocabulary(){
 	ifstream f;

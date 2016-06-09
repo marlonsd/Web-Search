@@ -1,9 +1,10 @@
+#include <html/ParserDom.h>
 #include "Inverted_Index.h"
 #include "func.h"			// Defines are here
-#include <boost/version.hpp>
 
 void resetingOutputFiles();
 void parsing(const string& doc, Tokenizer& t, const unordered_set<string>& stopwords);
+void parsing_anchor_text(const string& doc, Tokenizer& t, const unordered_set<string>& stopwords);
 
 int main(int argc, const char* argv[]) {  
 
@@ -110,16 +111,24 @@ int main(int argc, const char* argv[]) {
 
 							doc_id << url << endl;
 
+							// parsing_anchor_text(acc, t, stopwords);
 
 							parsing(acc, t, stopwords);
 
-							index.indexing(t, file_index);
+							// index.indexing(t, file_index);
 
 							file_index++;
 
 							state = 1;
 							acc = "";
 							url = "";
+
+							exit(0);
+
+							string s;
+							cout << endl << "-------------" << endl;
+							cout << "Enter value: ";
+							cin >> s;
 						}
 
 						break;
@@ -169,15 +178,57 @@ void parsing(const string& doc, Tokenizer& t, const unordered_set<string>& stopw
 			if ((tag_name == "script") ||
 				(tag_name == "noscript") ||
 				(tag_name == "style") ||
-				(tag_name == "textarea")
+				(tag_name == "textarea") ||
+				(tag_name == "img")
 				){
 				it.skip_children();
 				continue;
+			} else {
+				if (tag_name == "a"){
+					cout << "-----" << endl;
+					it->parseAttributes();
+					cout << it->text() << endl;
+					cout << it->closingText() << endl;
+					std::map<std::string, std::string> attributes = it->attributes();
+
+					for (auto i : attributes){
+						cout << i.first << " " << i.second << endl;
+					}
+					cout << "-----" << endl << endl;
+				}	
 			}
 		}
 
 		if ((!it->isTag()) && (!it->isComment())) {
 			t.addTokens(it->text(), stopwords);
 		}
+	}
+}
+
+void parsing_anchor_text(const string& doc, Tokenizer& t, const unordered_set<string>& stopwords){
+	htmlcxx::HTML::ParserDom parser;
+	tree<htmlcxx::HTML::Node> dom = parser.parseTree(doc);
+
+	cout << dom << endl;
+
+	tree<htmlcxx::HTML::Node>::iterator it = dom.begin();
+
+	for (; it != dom.end(); ++it) {
+		// if(it.node != 0 && dom.parent(it) != NULL){
+		// 	string tag_name = dom.parent(it)->tagName();
+		// 	transform(tag_name.begin(), tag_name.end(), tag_name.begin(), ::tolower);
+
+		// 	// Skipping code embedded in html
+		// 	if ((tag_name == "script") ||
+		// 		(tag_name == "noscript") ||
+		// 		(tag_name == "style") ||
+		// 		(tag_name == "textarea")
+		// 		){
+		// 		it.skip_children();
+		// 		continue;
+		// 	}
+		// }
+
+			
 	}
 }
