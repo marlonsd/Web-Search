@@ -5,10 +5,12 @@ Tokenizer::Tokenizer(){
 }
 
 Tokenizer::Tokenizer(const string& s){
+	Tokenizer();
 	this->generatingTokens(s, this->tokens);
 }
 
 Tokenizer::Tokenizer(const string& s, const unordered_set<string>& stopwords){
+	Tokenizer();
 	this->generatingTokens(s, this->tokens, stopwords);
 }
 

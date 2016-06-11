@@ -1,6 +1,7 @@
 #include <html/ParserDom.h>
 #include "lib/indexer/Inverted_Index.h"
 #include "lib/common/func.h"			// Defines are here
+#include "lib/common/Document.h"
 
 #include <html/utils.h>
 #include <html/Uri.h>
@@ -19,7 +20,7 @@ int main(int argc, const char* argv[]) {
 	unordered_set<string> stopwords = load_stop_words(STOPWORDS_PATH);
 	InvertedIndex index;
 	double duration;
-	Tokenizer t;
+	// Tokenizer t;
 
 	/* Search */
 	// string token = "papa";
@@ -114,24 +115,19 @@ int main(int argc, const char* argv[]) {
 
 							doc_id << url << endl;
 
-							parsing_anchor_text(acc, t, stopwords, url);
+							// parsing_anchor_text(acc, t, stopwords, url);
 
 							// parsing(acc, t, stopwords);
 
-							// index.indexing(t, file_index);
+							Document doc(acc, url);
+							Tokenizer t(doc.get_text(), stopwords);
+							index.indexing(t, file_index);
 
 							file_index++;
 
 							state = 1;
 							acc = "";
 							url = "";
-
-							exit(0);
-
-							string s;
-							cout << endl << "-------------" << endl;
-							cout << "Enter value: ";
-							cin >> s;
 						}
 
 						break;
@@ -163,113 +159,4 @@ void resetingOutputFiles(){
 
 	output.open(VOCABULARY_FILE_NAME, ios::out);
 	output.close();
-}
-
-//Parse doc's html code
-void parsing(const string& doc, Tokenizer& t, const unordered_set<string>& stopwords){
-	htmlcxx::HTML::ParserDom parser;
-	tree<htmlcxx::HTML::Node> dom = parser.parseTree(doc);
-
-	tree<htmlcxx::HTML::Node>::iterator it = dom.begin();
-
-	for (; it != dom.end(); ++it) {
-		if(it.node != 0 && dom.parent(it) != NULL){
-			string tag_name = dom.parent(it)->tagName();
-			transform(tag_name.begin(), tag_name.end(), tag_name.begin(), ::tolower);
-
-			// Skipping code embedded in html
-			if ((tag_name == "script") ||
-				(tag_name == "noscript") ||
-				(tag_name == "style") ||
-				(tag_name == "textarea") ||
-				(tag_name == "img")
-				){
-				it.skip_children();
-				continue;
-			} else {
-				if (tag_name == "a"){
-					cout << "-----" << endl;
-					it->parseAttributes();
-					cout << it->text() << endl;
-					cout << it->closingText() << endl;
-					std::map<std::string, std::string> attributes = it->attributes();
-
-					for (auto i : attributes){
-						cout << i.first << " " << i.second << endl;
-					}
-					cout << "-----" << endl << endl;
-				}	
-			}
-		}
-
-		if ((!it->isTag()) && (!it->isComment())) {
-			t.addTokens(it->text(), stopwords);
-		}
-	}
-}
-
-void parsing_anchor_text(const string& doc, Tokenizer& t, const unordered_set<string>& stopwords, string url){
-	htmlcxx::HTML::ParserDom parser;
-	tree<htmlcxx::HTML::Node> dom = parser.parseTree(doc);
-
-	tree<htmlcxx::HTML::Node>::iterator it = dom.begin();
-
-	for (; it != dom.end(); ++it) {
-		if(it.node != 0 && dom.parent(it) != NULL){
-			string tag_name = dom.parent(it)->tagName();
-			transform(tag_name.begin(), tag_name.end(), tag_name.begin(), ::tolower);
-			// Skipping code embedded in html
-			if ((tag_name == "script") ||
-				(tag_name == "noscript") ||
-				(tag_name == "style") ||
-				(tag_name == "textarea") ||
-				(tag_name == "img")
-				){
-				it.skip_children();
-				continue;
-			}
-		}
-
-		if ((!it->isTag()) && (!it->isComment())) {
-			t.addTokens(it->text(), stopwords);
-		} else {
-			string tag_name = it->tagName();
-			transform(tag_name.begin(), tag_name.end(), tag_name.begin(), ::tolower);
-			if (tag_name == "a"){
-				it->parseAttributes();
-
-				pair<bool, std::string> attrib = it->attribute("rel");
-
-				if(!(attrib.first == true && attrib.second == "nofollow")){
-					attrib = it->attribute("href");
-					string anchor_text;
-					int children = it.number_of_children();
-					for(int i=0; i<children; i++){
-						it++;
-
-						if(it == dom.end()){
-							return;
-						}
-
-						if(!it->isTag()){
-							anchor_text += it->text();
-						}
-					}
-
-					cout << "Anchor Text: " << anchor_text << endl;
-
-					string normal_url = htmlcxx::HTML::convert_link(attrib.second, url);
-					cout << "URL: " << normal_url << endl << endl;
-
-					// if (links_.find(normal_url)==links_.end()) {
-					//     links_[normal_url] = "";
-					// }
-					// links_[normal_url] = " ";
-					// links_[normal_url] += anchor_text;
-					// text_ += " ";
-					// text_ += anchor_text;
-				}
-			}
-		}
-	}
 }

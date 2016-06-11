@@ -3,6 +3,7 @@
 
 #include <deque>
 #include "../common/func.h"
+#include "../common/Document.h"
 
 
 using namespace std;

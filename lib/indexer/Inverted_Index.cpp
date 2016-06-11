@@ -535,20 +535,10 @@ void InvertedIndex::distance_rest(vector<int>& v){
 		this->previous[3] = 0;
 	}
 
-	for (int i : v){
-		cout << i << " ";
-	}
-	cout << '\t';
-
 	for (int i = 0; i < 4; i++){
 		v[i] = v[i] + this->previous[i];
 		this->previous[i] = v[i];
 	}
-
-	for (int i : v){
-		cout << i << " ";
-	}
-	cout << endl;
 
 }
 

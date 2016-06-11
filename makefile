@@ -1,21 +1,24 @@
 FLAGS += -funsigned-char -I /usr/local/include/htmlcxx -L/usr/local/lib -lhtmlcxx
 
-all: indexing bsearch remove_o
+all: indexing bsearch 
 
-indexing: main.o tokenizer.o inverted_index.o func.o
-	g++ -std=c++11 func.o Inverted_Index.o Tokenizer.o main.o $(FLAGS) -o indexing 
+indexing: main.o tokenizer.o inverted_index.o func.o document.o
+	g++ -std=c++11 Document.o func.o Inverted_Index.o Tokenizer.o main.o $(FLAGS) -o indexing 
 
-main.o: main.cpp lib/indexer/Tokenizer.h lib/common/func.h lib/indexer/Inverted_Index.h
+main.o: main.cpp lib/indexer/Tokenizer.h lib/common/func.h lib/indexer/Inverted_Index.h lib/common/Document.h
 	g++ -std=c++11 $(FLAGS) -c main.cpp
 
-inverted_index.o: lib/indexer/Inverted_Index.cpp lib/indexer/Inverted_Index.h lib/indexer/Tokenizer.h lib/common/func.h
+inverted_index.o: lib/indexer/Inverted_Index.cpp lib/indexer/Inverted_Index.h lib/indexer/Tokenizer.h lib/common/func.h lib/common/Document.h
 	g++ -std=c++11 $(FLAGS) -c lib/indexer/Inverted_Index.cpp
 
-tokenizer.o: lib/indexer/Tokenizer.cpp lib/indexer/Tokenizer.h lib/common/func.h
+tokenizer.o: lib/indexer/Tokenizer.cpp lib/indexer/Tokenizer.h lib/common/func.h lib/common/Document.h
 	g++ -std=c++11 $(FLAGS) -c lib/indexer/Tokenizer.cpp
 
-func.o: lib/common/func.cpp lib/common/func.h lib/indexer/Tokenizer.h
+func.o: lib/common/func.cpp lib/common/func.h
 	g++ -std=c++11 $(FLAGS) -c lib/common/func.cpp		
+
+document.o: lib/common/Document.cpp lib/common/Document.h lib/common/func.h
+	g++ -std=c++11 $(FLAGS) -c lib/common/document.cpp		
 
 clean:
 	rm *.o indexing search
@@ -23,7 +26,7 @@ clean:
 bsearch: bsearch.o tokenizer.o inverted_index.o func.o
 	g++ -std=c++11 func.o Inverted_Index.o Tokenizer.o boolean_search.o $(FLAGS) -o search
 
-bsearch.o: lib/search/boolean_search.cpp lib/indexer/Tokenizer.h lib/common/func.h lib/indexer/Inverted_Index.h
+bsearch.o: lib/search/boolean_search.cpp lib/indexer/Tokenizer.h lib/common/func.h lib/indexer/Inverted_Index.h lib/common/Document.h
 	g++ -std=c++11 $(FLAGS) -c lib/search/boolean_search.cpp
 
 dir:

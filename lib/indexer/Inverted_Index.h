@@ -2,6 +2,7 @@
 #define INVERTED_INDEX_H
 
 #include "../common/func.h"
+#include "../common/Document.h"
 #include "Tokenizer.h"
 
 using namespace std;
@@ -49,6 +50,7 @@ private:
 public:
 	InvertedIndex();
 	InvertedIndex(Tokenizer& t, int index = 0);
+	InvertedIndex(Document& doc, int index = 0);
 
 	void indexing(Tokenizer& t, int index = 0);
 	void sorted_index();
