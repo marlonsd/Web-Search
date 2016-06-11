@@ -1,21 +1,21 @@
 FLAGS += -funsigned-char -I /usr/local/include/htmlcxx -L/usr/local/lib -lhtmlcxx
 
-all: indexing bsearch
+all: indexing bsearch remove_o
 
 indexing: main.o tokenizer.o inverted_index.o func.o
-	g++ -std=c++11 func.o Inverted_Index.o Tokenizer.o main.o $(FLAGS) -o indexing
+	g++ -std=c++11 func.o Inverted_Index.o Tokenizer.o main.o $(FLAGS) -o indexing 
 
-main.o: main.cpp Tokenizer.h func.h Inverted_Index.h
+main.o: main.cpp lib/indexer/Tokenizer.h lib/common/func.h lib/indexer/Inverted_Index.h
 	g++ -std=c++11 $(FLAGS) -c main.cpp
 
-inverted_index.o: Inverted_Index.cpp Inverted_Index.h Tokenizer.h func.h
-	g++ -std=c++11 $(FLAGS) -c Inverted_Index.cpp
+inverted_index.o: lib/indexer/Inverted_Index.cpp lib/indexer/Inverted_Index.h lib/indexer/Tokenizer.h lib/common/func.h
+	g++ -std=c++11 $(FLAGS) -c lib/indexer/Inverted_Index.cpp
 
-tokenizer.o: Tokenizer.cpp Tokenizer.h func.h
-	g++ -std=c++11 $(FLAGS) -c Tokenizer.cpp
+tokenizer.o: lib/indexer/Tokenizer.cpp lib/indexer/Tokenizer.h lib/common/func.h
+	g++ -std=c++11 $(FLAGS) -c lib/indexer/Tokenizer.cpp
 
-func.o: func.cpp func.h Tokenizer.h
-	g++ -std=c++11 $(FLAGS) -c func.cpp		
+func.o: lib/common/func.cpp lib/common/func.h lib/indexer/Tokenizer.h
+	g++ -std=c++11 $(FLAGS) -c lib/common/func.cpp		
 
 clean:
 	rm *.o indexing search
@@ -23,11 +23,14 @@ clean:
 bsearch: bsearch.o tokenizer.o inverted_index.o func.o
 	g++ -std=c++11 func.o Inverted_Index.o Tokenizer.o boolean_search.o $(FLAGS) -o search
 
-bsearch.o: boolean_search.cpp Tokenizer.h func.h Inverted_Index.h
-	g++ -std=c++11 $(FLAGS) -c boolean_search.cpp
+bsearch.o: lib/search/boolean_search.cpp lib/indexer/Tokenizer.h lib/common/func.h lib/indexer/Inverted_Index.h
+	g++ -std=c++11 $(FLAGS) -c lib/search/boolean_search.cpp
 
 dir:
-	mkdir htmls index index/split stopwords
+	mkdir util/htmls util/index util/index/split
+
+remove_o:
+	rm *.o
 
 # Run in ubuntu: export LD_LIBRARY_PATH="/usr/local/lib"
 #ulimit -n MAX OPEN FILE

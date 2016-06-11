@@ -1,6 +1,6 @@
 #include <html/ParserDom.h>
-#include "Inverted_Index.h"
-#include "func.h"			// Defines are here
+#include "lib/indexer/Inverted_Index.h"
+#include "lib/common/func.h"			// Defines are here
 
 #include <html/utils.h>
 #include <html/Uri.h>

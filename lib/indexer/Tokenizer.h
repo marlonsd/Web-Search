@@ -2,7 +2,7 @@
 #define TOKENIZER_H
 
 #include <deque>
-#include "func.h"
+#include "../common/func.h"
 
 
 using namespace std;

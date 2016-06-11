@@ -26,13 +26,13 @@
 
 #define LOCAL_VOCABULARY_SIZE 30000 //(bytes)
 
-#define DIRNAME "htmls/"
-#define STOPWORDS_PATH "stopwords/"
-#define INDEX_AUX_FILE_NAME "index/aux_index.bin"
-#define INDEX_BACKUP_FILE_NAME "index/split/backup_index"
-#define INDEX_SORTED_FILE_NAME "index/sorted_index.bin"
-#define VOCABULARY_FILE_NAME "index/vocabulary"
-#define DOC_ID_FILE_NAME "index/doc_id"
+#define DIRNAME "util/htmls/"
+#define STOPWORDS_PATH "util/stopwords/"
+#define INDEX_AUX_FILE_NAME "util/index/aux_index.bin"
+#define INDEX_BACKUP_FILE_NAME "util/index/split/backup_index"
+#define INDEX_SORTED_FILE_NAME "util/index/sorted_index.bin"
+#define VOCABULARY_FILE_NAME "util/index/vocabulary"
+#define DOC_ID_FILE_NAME "util/index/doc_id"
 
 #define MAX_OS_OPEN_FILE 4000
 

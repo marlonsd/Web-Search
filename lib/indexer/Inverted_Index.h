@@ -1,7 +1,7 @@
 #ifndef INVERTED_INDEX_H
 #define INVERTED_INDEX_H
 
-#include "func.h"
+#include "../common/func.h"
 #include "Tokenizer.h"
 
 using namespace std;
