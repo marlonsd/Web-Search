@@ -7,4 +7,4 @@ search
 util/htmls/*
 aux_file
 util/index/*
-!util/stopwords
+!util/stopwords/*
