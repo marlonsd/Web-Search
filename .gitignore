@@ -4,6 +4,7 @@
 *.o
 indexing
 search
-htmls/*
+util/htmls/*
 aux_file
-index/*
+util/index/*
+!util/stopwords
