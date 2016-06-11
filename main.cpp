@@ -2,9 +2,12 @@
 #include "Inverted_Index.h"
 #include "func.h"			// Defines are here
 
+#include <html/utils.h>
+#include <html/Uri.h>
+
 void resetingOutputFiles();
 void parsing(const string& doc, Tokenizer& t, const unordered_set<string>& stopwords);
-void parsing_anchor_text(const string& doc, Tokenizer& t, const unordered_set<string>& stopwords);
+void parsing_anchor_text(const string& doc, Tokenizer& t, const unordered_set<string>& stopwords, string url);
 
 int main(int argc, const char* argv[]) {  
 
@@ -111,9 +114,9 @@ int main(int argc, const char* argv[]) {
 
 							doc_id << url << endl;
 
-							// parsing_anchor_text(acc, t, stopwords);
+							parsing_anchor_text(acc, t, stopwords, url);
 
-							parsing(acc, t, stopwords);
+							// parsing(acc, t, stopwords);
 
 							// index.indexing(t, file_index);
 
@@ -205,30 +208,68 @@ void parsing(const string& doc, Tokenizer& t, const unordered_set<string>& stopw
 	}
 }
 
-void parsing_anchor_text(const string& doc, Tokenizer& t, const unordered_set<string>& stopwords){
+void parsing_anchor_text(const string& doc, Tokenizer& t, const unordered_set<string>& stopwords, string url){
 	htmlcxx::HTML::ParserDom parser;
 	tree<htmlcxx::HTML::Node> dom = parser.parseTree(doc);
-
-	cout << dom << endl;
 
 	tree<htmlcxx::HTML::Node>::iterator it = dom.begin();
 
 	for (; it != dom.end(); ++it) {
-		// if(it.node != 0 && dom.parent(it) != NULL){
-		// 	string tag_name = dom.parent(it)->tagName();
-		// 	transform(tag_name.begin(), tag_name.end(), tag_name.begin(), ::tolower);
+		if(it.node != 0 && dom.parent(it) != NULL){
+			string tag_name = dom.parent(it)->tagName();
+			transform(tag_name.begin(), tag_name.end(), tag_name.begin(), ::tolower);
+			// Skipping code embedded in html
+			if ((tag_name == "script") ||
+				(tag_name == "noscript") ||
+				(tag_name == "style") ||
+				(tag_name == "textarea") ||
+				(tag_name == "img")
+				){
+				it.skip_children();
+				continue;
+			}
+		}
 
-		// 	// Skipping code embedded in html
-		// 	if ((tag_name == "script") ||
-		// 		(tag_name == "noscript") ||
-		// 		(tag_name == "style") ||
-		// 		(tag_name == "textarea")
-		// 		){
-		// 		it.skip_children();
-		// 		continue;
-		// 	}
-		// }
+		if ((!it->isTag()) && (!it->isComment())) {
+			t.addTokens(it->text(), stopwords);
+		} else {
+			string tag_name = it->tagName();
+			transform(tag_name.begin(), tag_name.end(), tag_name.begin(), ::tolower);
+			if (tag_name == "a"){
+				it->parseAttributes();
 
-			
+				pair<bool, std::string> attrib = it->attribute("rel");
+
+				if(!(attrib.first == true && attrib.second == "nofollow")){
+					attrib = it->attribute("href");
+					string anchor_text;
+					int children = it.number_of_children();
+					for(int i=0; i<children; i++){
+						it++;
+
+						if(it == dom.end()){
+							return;
+						}
+
+						if(!it->isTag()){
+							anchor_text += it->text();
+						}
+					}
+
+					cout << "Anchor Text: " << anchor_text << endl;
+
+					string normal_url = htmlcxx::HTML::convert_link(attrib.second, url);
+					cout << "URL: " << normal_url << endl << endl;
+
+					// if (links_.find(normal_url)==links_.end()) {
+					//     links_[normal_url] = "";
+					// }
+					// links_[normal_url] = " ";
+					// links_[normal_url] += anchor_text;
+					// text_ += " ";
+					// text_ += anchor_text;
+				}
+			}
+		}
 	}
 }
