@@ -2,8 +2,8 @@ FLAGS += -funsigned-char -I /usr/local/include/htmlcxx -L/usr/local/lib -lhtmlcx
 
 all: indexing bsearch 
 
-indexing: main.o tokenizer.o inverted_index.o func.o document.o
-	g++ -std=c++11 Document.o func.o Inverted_Index.o Tokenizer.o main.o $(FLAGS) -o indexing 
+indexing: main.o tokenizer.o inverted_index.o func.o document.o graph.o
+	g++ -std=c++11 Document.o func.o Inverted_Index.o Tokenizer.o graph.o main.o $(FLAGS) -o indexing 
 
 main.o: main.cpp lib/indexer/Tokenizer.h lib/common/func.h lib/indexer/Inverted_Index.h lib/common/Document.h
 	g++ -std=c++11 $(FLAGS) -c main.cpp
@@ -19,6 +19,9 @@ func.o: lib/common/func.cpp lib/common/func.h
 
 document.o: lib/common/Document.cpp lib/common/Document.h lib/common/func.h
 	g++ -std=c++11 $(FLAGS) -c lib/common/document.cpp		
+
+graph.o: lib/search/graph.cpp lib/search/graph.h lib/common/func.h lib/common/Document.h
+	g++ -std=c++11 $(FLAGS) -c lib/search/graph.cpp
 
 clean:
 	rm *.o indexing search

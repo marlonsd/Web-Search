@@ -15,6 +15,7 @@ class Document{
 private:
 	string url;
 	string text;
+	string title;
 	unordered_map<string, string> links; 		// <URL, Anchor text>
 
 	void parser(const string& doc);
@@ -25,6 +26,7 @@ public:
 
 	string get_url();
 	string get_text();
+	string get_title();
 	unordered_map<string, string> get_links();	// <URL, Anchor text>
 
 };

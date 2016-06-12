@@ -1,8 +1,11 @@
-#include <html/ParserDom.h>
-#include "lib/indexer/Inverted_Index.h"
 #include "lib/common/func.h"			// Defines are here
 #include "lib/common/Document.h"
 
+#include "lib/indexer/Inverted_Index.h"
+
+#include "lib/search/graph.h"
+
+#include <html/ParserDom.h>
 #include <html/utils.h>
 #include <html/Uri.h>
 
@@ -20,6 +23,7 @@ int main(int argc, const char* argv[]) {
 	unordered_set<string> stopwords = load_stop_words(STOPWORDS_PATH);
 	InvertedIndex index;
 	double duration;
+	Graph network;
 	// Tokenizer t;
 
 	/* Search */
@@ -48,7 +52,7 @@ int main(int argc, const char* argv[]) {
 
 	files = list_dir_files(DIRNAME);
 
-	doc_id.open(DOC_ID_FILE_NAME, ios::out);
+	// doc_id.open(DOC_ID_FILE_NAME, ios::out);
 
 	// cout << "reading (ms),tokenizing (ms),indexing (ms),#files,total time (s), sorting, voc dump" << endl;
 
@@ -120,6 +124,9 @@ int main(int argc, const char* argv[]) {
 							// parsing(acc, t, stopwords);
 
 							Document doc(acc, url);
+							
+							network.add_url(doc);
+
 							Tokenizer t(doc.get_text(), stopwords);
 							index.indexing(t, file_index);
 
@@ -138,7 +145,7 @@ int main(int argc, const char* argv[]) {
 		input.close();
 	}
 
-	doc_id.close();
+	// doc_id.close();
 
 	cout << "Done indexing" << endl;
 

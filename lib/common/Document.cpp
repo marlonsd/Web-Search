@@ -60,27 +60,30 @@ void Document::parser(const string& doc){
 						}
 					}
 
-					// cout << "Anchor Text: " << anchor_text << endl;
-
 					string normal_url = htmlcxx::HTML::convert_link(attrib.second, url);
-					// cout << "URL: " << normal_url << endl << endl;
 
-					this->links[normal_url] = anchor_text;
+					// Initialize normal_url, in case it doesnt existe already
+					if (this->links.find(normal_url) == this->links.end()) {
+						this->links[normal_url] = "";
+					}
 
-					// if (links_.find(normal_url)==links_.end()) {
-					//     links_[normal_url] = "";
-					// }
-					// links_[normal_url] = " ";
-					// links_[normal_url] += anchor_text;
-					// text_ += " ";
-					// text_ += anchor_text;
+					// Adds anchor text referent to normal_url
+					this->links[normal_url] += anchor_text + " ";
+
+					// Adds anchor text referent to document's text
+					this->text += anchor_text; + " ";
+				}
+			} else{
+				if(tag_name == "title"){
+					it++;
+					if(!(it == dom.end())){
+						this->title = it->text();
+					}
 				}
 			}
 		}
 	}
 }
-
-
 
 
 string Document::get_url(){
@@ -89,6 +92,10 @@ string Document::get_url(){
 
 string Document::get_text(){
 	return this->text;
+}
+
+string Document::get_title(){
+	return this->title;
 }
 
 // <URL, Anchor text>
