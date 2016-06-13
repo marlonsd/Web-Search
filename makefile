@@ -18,7 +18,7 @@ func.o: lib/common/func.cpp lib/common/func.h
 	g++ -std=c++11 $(FLAGS) -c lib/common/func.cpp		
 
 document.o: lib/common/Document.cpp lib/common/Document.h lib/common/func.h
-	g++ -std=c++11 $(FLAGS) -c lib/common/document.cpp		
+	g++ -std=c++11 $(FLAGS) -c lib/common/Document.cpp		
 
 graph.o: lib/search/graph.cpp lib/search/graph.h lib/common/func.h lib/common/Document.h
 	g++ -std=c++11 $(FLAGS) -c lib/search/graph.cpp
