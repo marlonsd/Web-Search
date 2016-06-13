@@ -22,6 +22,7 @@ int main(int argc, const char* argv[]) {
 	size_t found, alt_found;
 	unordered_set<string> stopwords = load_stop_words(STOPWORDS_PATH);
 	InvertedIndex index;
+	InvertedIndex anchor_index(true);
 	double duration;
 	Graph network;
 	// Tokenizer t;
@@ -52,7 +53,7 @@ int main(int argc, const char* argv[]) {
 
 	files = list_dir_files(DIRNAME);
 
-	// doc_id.open(DOC_ID_FILE_NAME, ios::out);
+	doc_id.open(DOC_ID_FILE_NAME, ios::out);
 
 	// cout << "reading (ms),tokenizing (ms),indexing (ms),#files,total time (s), sorting, voc dump" << endl;
 
@@ -130,6 +131,12 @@ int main(int argc, const char* argv[]) {
 							Tokenizer t(doc.get_text(), stopwords);
 							index.indexing(t, file_index);
 
+							for (auto link : doc.get_links()){
+								Tokenizer l(link.second, stopwords);
+								// TODO: Change URLs id
+								anchor_index.indexing(l, file_index);
+							}
+
 							file_index++;
 
 							state = 1;
@@ -145,12 +152,13 @@ int main(int argc, const char* argv[]) {
 		input.close();
 	}
 
-	// doc_id.close();
+	doc_id.close();
 
 	cout << "Done indexing" << endl;
 
 	// index.vocabulary_dump();
 	index.sorted_index();
+	anchor_index.sorted_index();
 
 	exit(0);
 }

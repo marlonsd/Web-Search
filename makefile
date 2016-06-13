@@ -33,7 +33,7 @@ bsearch.o: lib/search/boolean_search.cpp lib/indexer/Tokenizer.h lib/common/func
 	g++ -std=c++11 $(FLAGS) -c lib/search/boolean_search.cpp
 
 dir:
-	mkdir util/htmls util/index util/index/split
+	mkdir util/htmls util/index util/index/split util/index/anchor util/index/anchor/split
 
 remove_o:
 	rm *.o

@@ -1,6 +1,6 @@
 #include "Inverted_Index.h"
 
-InvertedIndex::InvertedIndex(){
+InvertedIndex::InvertedIndex(bool anchor){
 	this->memory_usage = 0;
 	this->word_index = 0;
 	this->total_token = 0;
@@ -16,10 +16,14 @@ InvertedIndex::InvertedIndex(){
 
 	this->reset_distance();
 
+	this->anchor = anchor;
+
 }
 
-InvertedIndex::InvertedIndex(Tokenizer& t, int index){
+InvertedIndex::InvertedIndex(Tokenizer& t, int index, bool anchor){
 	InvertedIndex();
+	this->anchor = anchor;
+
 	this->indexing(t, index);
 }
 
@@ -219,7 +223,11 @@ void InvertedIndex::memory_dump(){
 	int count = 0, index_size = this->inverted_index.size();
 	fstream f, sorted_f;
 
-	f.open(INDEX_AUX_FILE_NAME, ios::out | ios::binary);
+	if (!this->anchor){
+		f.open(INDEX_AUX_FILE_NAME, ios::out | ios::binary);
+	} else {
+		f.open(ANCHOR_INDEX_AUX_FILE_NAME, ios::out | ios::binary);
+	}
 
 	// Generating tuples and saving in file
 	// < word_id, doc_id, freq, pos >
@@ -238,8 +246,13 @@ void InvertedIndex::memory_dump(){
 	this->inverted_index.clear();
 	this->memory_usage = 0;
 
-	f.open(INDEX_AUX_FILE_NAME, ios::in | ios::binary);
-	sorted_f.open(INDEX_BACKUP_FILE_NAME+to_string(this->n_dumps)+".bin", ios::out | ios::binary);
+	if (!this->anchor){
+		f.open(INDEX_AUX_FILE_NAME, ios::in | ios::binary);
+		sorted_f.open(INDEX_BACKUP_FILE_NAME+to_string(this->n_dumps)+".bin", ios::out | ios::binary);
+	} else {
+		f.open(ANCHOR_INDEX_AUX_FILE_NAME, ios::in | ios::binary);
+		sorted_f.open(ANCHOR_INDEX_BACKUP_FILE_NAME+to_string(this->n_dumps)+".bin", ios::out | ios::binary);
+	}
 
 	string value;
 	vector<vector<int>> all_lines;
@@ -289,10 +302,17 @@ void InvertedIndex::sorted_index(){
 		memory_dump();
 	}
 
+
+	cout << "Saving";
+	if (anchor){
+		cout << " anchor";
+	}
+	cout << " text index\n";
 	cout << "Total of files evaluated: " << this->total_docs << endl;
 	cout << "Total tokens: " << this->total_size_index << " " << this->total_token << endl;
+	cout << "Vocabulary size: " << this->vocabulary.size() << endl;
 	cout << "Memory Limit: " << (MEMORY_LIMITE/INDEX_LINE_SIZE) << endl;
-	cout << "Total of files: " << this->n_dumps << endl;
+	cout << "Total of files: " << this->n_dumps << endl << endl;
 
 
 	while(i < this->n_dumps){
@@ -303,7 +323,11 @@ void InvertedIndex::sorted_index(){
 		if ((this->n_dumps - i) <= (MEMORY_LIMITE/INDEX_LINE_SIZE) && ((this->n_dumps - i) < (MAX_OS_OPEN_FILE - 1000))){
 			// If true, needs saving final sorted index
 			n_files = this->n_dumps - i;
-			out.open(INDEX_SORTED_FILE_NAME, ios::out | ios::binary);
+			if (!this->anchor){
+				out.open(INDEX_SORTED_FILE_NAME, ios::out | ios::binary);
+			} else {
+				out.open(ANCHOR_INDEX_SORTED_FILE_NAME, ios::out | ios::binary);
+			}
 			final = true;
 		} else {
 			// Intercalation
@@ -311,7 +335,11 @@ void InvertedIndex::sorted_index(){
 						MAX_OS_OPEN_FILE - 1 :
 						(MEMORY_LIMITE/INDEX_LINE_SIZE));
 
-			out.open(INDEX_BACKUP_FILE_NAME+to_string(this->n_dumps)+".bin", ios::out | ios::binary);
+			if (!this->anchor){
+				out.open(INDEX_BACKUP_FILE_NAME+to_string(this->n_dumps)+".bin", ios::out | ios::binary);
+			} else {
+				out.open(ANCHOR_INDEX_BACKUP_FILE_NAME+to_string(this->n_dumps)+".bin", ios::out | ios::binary);
+			}
 			this->n_dumps++;
 		}
 
@@ -320,15 +348,29 @@ void InvertedIndex::sorted_index(){
 		fstream p[n_files];
 
 		// Evaliating from t to i+n_files
-		for (int j = 0; j < n_files; j++){
-			p[j].open(INDEX_BACKUP_FILE_NAME+to_string(i)+".bin", ios::in | ios::binary);
-			i++;
+		if (!this->anchor){
+			for (int j = 0; j < n_files; j++){
+				p[j].open(INDEX_BACKUP_FILE_NAME+to_string(i)+".bin", ios::in | ios::binary);
+				i++;
 
-			test = this->read_line(p[j], aux);
+				test = this->read_line(p[j], aux);
 
-			if (test){
-				aux.push_back(j); // Locating read file
-				min_heap.push(aux);
+				if (test){
+					aux.push_back(j); // Locating read file
+					min_heap.push(aux);
+				}
+			}
+		} else {
+			for (int j = 0; j < n_files; j++){
+				p[j].open(ANCHOR_INDEX_BACKUP_FILE_NAME+to_string(i)+".bin", ios::in | ios::binary);
+				i++;
+
+				test = this->read_line(p[j], aux);
+
+				if (test){
+					aux.push_back(j); // Locating read file
+					min_heap.push(aux);
+				}
 			}
 		}
 
@@ -370,14 +412,24 @@ void InvertedIndex::sorted_index(){
 			}
 		}
 
+		if (!this->anchor){
+			for (int j = 0; j < n_files; j++){
+				// Closing file
+				p[j].close();
 
-		for (int j = 0; j < n_files; j++){
-			// Closing file
-			p[j].close();
+				// Deleting temp files
+				string filename = INDEX_BACKUP_FILE_NAME+to_string(i-n_files+j);
+				// remove(filename.c_str());
+			}
+		} else {
+			for (int j = 0; j < n_files; j++){
+				// Closing file
+				p[j].close();
 
-			// Deleting temp files
-			string filename = INDEX_BACKUP_FILE_NAME+to_string(i-n_files+j);
-			remove(filename.c_str());				
+				// Deleting temp files
+				string filename = ANCHOR_INDEX_BACKUP_FILE_NAME+to_string(i-n_files+j);
+				// remove(filename.c_str());
+			}
 		}
 
 		out.close();
@@ -397,7 +449,11 @@ void InvertedIndex::vocabulary_dump(Vocabulary item, streampos pos){
 	fstream f;
 	double idf = log2((double) this->total_docs/item.total_docs);
 
-	f.open(VOCABULARY_FILE_NAME, ios::out | ios::app);
+	if (!this->anchor){
+		f.open(VOCABULARY_FILE_NAME, ios::out | ios::app);
+	} else {
+		f.open(ANCHOR_VOCABULARY_FILE_NAME, ios::out | ios::app);
+	}
 
 	// word, index position, ni, idf
 	f << item.word << " " << pos << " " << item.total_docs << " " << idf << endl;
@@ -410,7 +466,11 @@ void InvertedIndex::vocabulary_dump(Vocabulary item, streampos pos){
 void InvertedIndex::load_vocabulary(){
 	ifstream f;
 
-	f.open(VOCABULARY_FILE_NAME, ios::in);
+	if (!this->anchor){
+		f.open(VOCABULARY_FILE_NAME, ios::in);
+	} else {
+		f.open(ANCHOR_VOCABULARY_FILE_NAME, ios::in);
+	}
 
 	if (f.is_open()){
 
@@ -455,12 +515,15 @@ vector<FileList> InvertedIndex::get_list(string& token){
 	}
 
 	// Test if token is in vocabulary
-	auto search = this->vocabulary.find(token);
-	if (search != this->vocabulary.end()){
+	if (this->vocabulary.find(token) != this->vocabulary.end()){
 
 		Vocabulary item = this->vocabulary_order[this->vocabulary[token]];
 
-		f.open(INDEX_SORTED_FILE_NAME, ios::binary);
+		if (!this->anchor){
+			f.open(INDEX_SORTED_FILE_NAME, ios::binary);
+		} else {
+			f.open(ANCHOR_INDEX_SORTED_FILE_NAME, ios::binary);
+		}
 
 		// Puts file in the exact position the token starts in index file
 		f.seekg(item.file_pos);
@@ -551,8 +614,13 @@ void InvertedIndex::rest(){
 	ofstream out;
 	bool test;
 	vector<int> aux;
+	string filename;
 
-	string filename = INDEX_SORTED_FILE_NAME;
+	if (!this->anchor){
+		filename = INDEX_SORTED_FILE_NAME;
+	} else {
+		filename = ANCHOR_INDEX_SORTED_FILE_NAME;
+	}
 
 	f.open(filename, ios::in | ios::binary);
 
@@ -587,8 +655,13 @@ void InvertedIndex::to_text(){
 	fstream input;
 	vector<int> line;
 	bool test;
+	string filename;
 
-	string filename = INDEX_SORTED_FILE_NAME;
+	if (!this->anchor){
+		filename = INDEX_SORTED_FILE_NAME;
+	} else {
+		filename = ANCHOR_INDEX_SORTED_FILE_NAME;
+	}
 
 	output.open(filename+"_text", ios::out);
 	input.open(filename, ios::in | ios::binary);

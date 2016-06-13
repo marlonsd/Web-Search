@@ -7,7 +7,8 @@
 using namespace std;
 
 struct Node{
-	int in_links;
+	bool collected;
+	unsigned int in_links;
 	vector<string> out_links;
 };
 

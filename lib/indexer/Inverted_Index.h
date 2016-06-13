@@ -26,6 +26,8 @@ private:
 
 	int total_docs;
 
+	bool anchor;		// Indicates type of indexer: anchor or text
+
 	unordered_map<string, int> vocabulary;					// <word, id>
 	unordered_map<string,vector<FileList>> inverted_index;	// <id_word, list of occurrences>
 
@@ -48,9 +50,8 @@ private:
 	bool read_line(ifstream& file, vector<int>& v, streampos pos = 0, int it = 4);
 
 public:
-	InvertedIndex();
-	InvertedIndex(Tokenizer& t, int index = 0);
-	InvertedIndex(Document& doc, int index = 0);
+	InvertedIndex(bool anchor = false);
+	InvertedIndex(Tokenizer& t, int index = 0, bool anchor = false);
 
 	void indexing(Tokenizer& t, int index = 0);
 	void sorted_index();

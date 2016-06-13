@@ -23,6 +23,7 @@ void Graph::increase_inlink(const string url){
 		Node aux;
 		aux.in_links = 0;
 		aux.out_links = {};
+		aux.collected = false;
 
 		this->links[url] = aux;
 	}
@@ -45,6 +46,8 @@ void Graph::add_url(Document doc){
 
 		this->links[url] = aux;
 	}
+
+	this->links[url].collected = true;
 
 	for (auto e : doc.get_links()){
 		this->links[url].out_links.push_back(e.first);
