@@ -19,8 +19,6 @@ void split(const string& s, char c, vector<string>& v) {
 	}
 }
 
-
-
 void cleaningWord(string& str) {
 	for(unsigned int i=0;i<str.length();i++) {
 	  str.at(i) = tolower(str.at(i));
@@ -116,4 +114,3 @@ unordered_set<string> load_stop_words(string path){
 
 	return stopwords;
 }
-

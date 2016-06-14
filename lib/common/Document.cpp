@@ -71,7 +71,7 @@ void Document::parser(const string& doc){
 					this->links[normal_url] += anchor_text + " ";
 
 					// Adds anchor text referent to document's text
-					this->text += anchor_text; + " ";
+					this->text += anchor_text + " ";
 				}
 			} else{
 				if(tag_name == "title"){

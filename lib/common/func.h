@@ -30,6 +30,7 @@
 
 #define STOPWORDS_PATH "util/stopwords/"
 
+// Regular text
 #define INDEX_AUX_FILE_NAME "util/index/aux_index.bin"
 #define INDEX_BACKUP_FILE_NAME "util/index/split/backup_index"
 #define INDEX_SORTED_FILE_NAME "util/index/sorted_index.bin"
@@ -38,6 +39,7 @@
 
 #define DOC_ID_FILE_NAME "util/index/doc_id"
 
+// Anchor text
 #define ANCHOR_INDEX_AUX_FILE_NAME "util/index/anchor/aux_index.bin"
 #define ANCHOR_INDEX_BACKUP_FILE_NAME "util/index/anchor/split/backup_index"
 #define ANCHOR_INDEX_SORTED_FILE_NAME "util/index/anchor/sorted_index.bin"
@@ -46,6 +48,7 @@
  
 #define ANCHOR_DOC_ID_FILE_NAME "util/index/anchor/doc_id"
 
+// Max OS open files
 #define MAX_OS_OPEN_FILE 4000
 
 
@@ -75,5 +78,7 @@ void split(const string& s, char c, vector<string>& v);
 void cleaningWord(string& str);
 vector<string> list_dir_files(string path);
 unordered_set<string> load_stop_words(string path);
+
+// unsigned int link_map(string url);
 
 #endif

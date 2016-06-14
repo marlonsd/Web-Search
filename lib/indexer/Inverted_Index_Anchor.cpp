@@ -1,139 +1,67 @@
-#include "Inverted_Index.h"
+#include "Inverted_Index_Anchor.h"
 
-InvertedIndex::InvertedIndex(){
-	this->memory_usage = 0;
-	this->word_index = 0;
-	this->total_token = 0;
-	this->total_size_index = 0;
-	this->n_dumps = 0;
-
-	this->total_docs = 0;
-
-	this->vocabulary = {};
-	this->inverted_index = {};
-
-	this->vocabulary_order = {};
-
-	this->reset_distance();
-
-}
-
-InvertedIndex::InvertedIndex(Tokenizer& t, int index){
+InvertedIndexAnchor::InvertedIndexAnchor(){
 	InvertedIndex();
-
-	this->indexing(t, index);
+	this->anchor_id = 0;
+	this->links_map = {};
+	this->sorted_map = {};
 }
 
-void InvertedIndex::reset_distance(){
-	for (int i = 0; i < 4; i++){
-		this->previous[i] = 0;
-	}
+InvertedIndexAnchor::InvertedIndexAnchor(Tokenizer& t, string url){
+	InvertedIndexAnchor();
+
+	this->indexing(t, url);
 }
 
-// Writes a line in a binary file
-// Format: word_id, doc_id, freq_in_doc, position
-void InvertedIndex::write_line(int word_id, int doc_id, int freq, int pos, fstream& file){
-	// file << word_id << doc_id << freq << pos;
-	file.write((const char*) &word_id, sizeof(word_id));
-	file.write((const char*) &doc_id, sizeof(doc_id));
-	file.write((const char*) &freq, sizeof(freq));
-	file.write((const char*) &pos, sizeof(pos));
-}
+InvertedIndexAnchor::InvertedIndexAnchor(Document doc){
+	InvertedIndexAnchor();
 
-// Writes a line in a binary file
-// Format: word_id, doc_id, freq_in_doc, position
-void InvertedIndex::write_line(int word_id, int doc_id, int freq, int pos, ofstream& file){
-	// file << word_id << doc_id << freq << pos;
-	file.write((const char*) &word_id, sizeof(word_id));
-	file.write((const char*) &doc_id, sizeof(doc_id));
-	file.write((const char*) &freq, sizeof(freq));
-	file.write((const char*) &pos, sizeof(pos));
-}
-
-// Writes a line in a binary file
-// Format: word_id, doc_id, freq_in_doc, position
-void InvertedIndex::write_line(vector<int> values, fstream& file, vector<int>::size_type min){
-	vector<int> aux;
-
-	if (values.size() > min){
-		std::copy(values.begin(), min+values.begin(), std::back_inserter(aux));
-	} else {
-		aux = values;		
-	}
-
-
-	for (int value : aux){
-		file.write((char*) &value, sizeof(value));	
-	}
-}
-
-// Writes a line in a binary file
-// Format: word_id, doc_id, freq_in_doc, position
-void InvertedIndex::write_line(vector<int> values, ofstream& file, vector<int>::size_type min){
-	vector<int> aux;
-
-	if (values.size() > min){
-		std::copy(values.begin(), min+values.begin(), std::back_inserter(aux));
-	} else {
-		aux = values;		
-	}
-
-
-	for (int value : aux){
-		file.write((char*) &value, sizeof(value));	
-	}
-}
-
-// Reads a line from a binary file
-bool InvertedIndex::read_line(fstream& file, vector<int>& v, streampos pos, int it){
-	bool test = true;
-	int aux;
-
-	v.clear();
-
-	if (pos > 0){
-		file.seekg(pos);
-	}
-
-	for (int i = 0; ((i < it) && test); i++){
-		if(file.read((char*) &aux, sizeof(aux))){
-			v.push_back(aux);
-			test = true;
-		} else {
-			test = false;
-		}
-	}
-
-	return test;
-}
-
-// Reads a line from a binary file
-// Line format: word_id, doc_id, freq_in_doc, position
-bool InvertedIndex::read_line(ifstream& file, vector<int>& v, streampos pos, int it){
-	bool test = true;
-	int aux;
-
-	v.clear();
-
-	if (pos > 0){
-		file.seekg(pos);
-	}
-
-	for (int i = 0; ((i < it) && test); i++){
-		if(file.read((char*) &aux, sizeof(aux))){
-			v.push_back(aux);
-			test = true;
-		} else {
-			test = false;
-		}
-	}
-
-	return test;
+	this->indexing(doc);
 }
 
 // Indexing
-void InvertedIndex::indexing(Tokenizer& t, int index){
+void InvertedIndexAnchor::indexing(Document doc){
+
+	string url = doc.get_url();
+
+	if(this->links_map.find(url) == this->links_map.end()){
+		this->links_map[url] = this->anchor_id;
+
+		ProcessedFile aux;
+		aux.filename = url;
+		aux.processed = false;
+		this->sorted_map.push_back(aux);
+
+		this->anchor_id++;
+	}
+
+	this->sorted_map[links_map[url]].processed = true;
+
+	for (auto item : doc.get_links()){
+		Tokenizer t(item.second, Stopwords::instance()->get_value());
+		this->indexing(t, item.first);
+	}
+}
+
+void InvertedIndexAnchor::indexing(Tokenizer& t, string url){
+
+	if(this->links_map.find(url) == this->links_map.end()){
+		this->links_map[url] = this->anchor_id;
+
+		ProcessedFile aux;
+		aux.filename = url;
+		aux.processed = false;
+		this->sorted_map.push_back(aux);
+
+		this->anchor_id++;
+	}
+
+	this->indexing(t, this->links_map[url]);
+}
+
+void InvertedIndexAnchor::indexing(Tokenizer& t, int index){
 	unordered_set<string> docs_words;
+
 
 	/* A file must be indexed entirely, so it is possible to calculate total number of terms in a same file.
 		To do so, it is calculate the necessaary space to store this one file and the actual size of index.
@@ -211,75 +139,9 @@ void InvertedIndex::indexing(Tokenizer& t, int index){
 	}
 }
 
-// Saves all data stored in this->inverted_index in a file
-// Data is sorted base on word_id and document_id
-void InvertedIndex::memory_dump(){
-
-	bool test;
-	int count = 0, index_size = this->inverted_index.size();
-	fstream f, sorted_f;
-
-	f.open(INDEX_AUX_FILE_NAME, ios::out | ios::binary);
-
-	// Generating tuples and saving in file
-	// < word_id, doc_id, freq, pos >
-	for (auto word : this->vocabulary){
-		for (auto document : this->inverted_index[word.first]){
-			int list_size = document.position.size();
-			for (int pos : document.position){
-				this->write_line(word.second, document.file_index, list_size, pos, f);
-				count++;
-			}
-		}
-	}
-
-	f.close();
-
-	this->inverted_index.clear();
-	this->memory_usage = 0;
-
-	f.open(INDEX_AUX_FILE_NAME, ios::in | ios::binary);
-	sorted_f.open(INDEX_BACKUP_FILE_NAME+to_string(this->n_dumps)+".bin", ios::out | ios::binary);
-
-	string value;
-	vector<vector<int>> all_lines;
-
-	// Loading tuples
-	for (int i = 0; i < count; i++){
-		vector<int> aux;
-
-		test = this->read_line(f, aux);
-
-		if (test){
-			all_lines.push_back(aux);
-		}
-	}
-
-	// Sorting tuples
-	sort(begin(all_lines), end(all_lines),
-		[](const vector<int>& A, vector<int>& B) {
-			return (
-				(A[0] < B[0]) ||									// Sorting by word id
-				((A[0] == B[0]) && (A[1] < B[1])) ||				// Sorting by document id
-				((A[0] == B[0]) && (A[1] == B[1]) && (A[3] < B[3]))	// Sorting by position
-				);
-		});
-
-	// Saving sorted tuples
-	for (vector<int> s : all_lines){
-		this->write_line(s, sorted_f);
-	}
-
-	f.close();
-	sorted_f.close();
-
-	this->total_size_index += count;
-	this->n_dumps++;
-}
-
 // Creates one index containing all tokens
 // Uses sort-based multiway merge
-void InvertedIndex::sorted_index(){
+void InvertedIndexAnchor::sorted_index(){
 	int value, i = 0;
 	vector<int> aux(5);
 	bool test, final = false;
@@ -288,6 +150,7 @@ void InvertedIndex::sorted_index(){
 	if (this->memory_usage){
 		memory_dump();
 	}
+
 
 	cout << "Saving";
 	cout << " text index\n";
@@ -306,7 +169,7 @@ void InvertedIndex::sorted_index(){
 		if ((this->n_dumps - i) <= (MEMORY_LIMITE/INDEX_LINE_SIZE) && ((this->n_dumps - i) < (MAX_OS_OPEN_FILE - 1000))){
 			// If true, needs saving final sorted index
 			n_files = this->n_dumps - i;
-			out.open(INDEX_SORTED_FILE_NAME, ios::out | ios::binary);
+			out.open(ANCHOR_INDEX_SORTED_FILE_NAME, ios::out | ios::binary);
 			final = true;
 		} else {
 			// Intercalation
@@ -314,8 +177,7 @@ void InvertedIndex::sorted_index(){
 						MAX_OS_OPEN_FILE - 1 :
 						(MEMORY_LIMITE/INDEX_LINE_SIZE));
 
-			out.open(INDEX_BACKUP_FILE_NAME+to_string(this->n_dumps)+".bin", ios::out | ios::binary);
-
+			out.open(ANCHOR_INDEX_BACKUP_FILE_NAME+to_string(this->n_dumps)+".bin", ios::out | ios::binary);
 			this->n_dumps++;
 		}
 
@@ -324,8 +186,9 @@ void InvertedIndex::sorted_index(){
 		fstream p[n_files];
 
 		// Evaliating from t to i+n_files
+
 		for (int j = 0; j < n_files; j++){
-			p[j].open(INDEX_BACKUP_FILE_NAME+to_string(i)+".bin", ios::in | ios::binary);
+			p[j].open(ANCHOR_INDEX_BACKUP_FILE_NAME+to_string(i)+".bin", ios::in | ios::binary);
 			i++;
 
 			test = this->read_line(p[j], aux);
@@ -379,8 +242,8 @@ void InvertedIndex::sorted_index(){
 			p[j].close();
 
 			// Deleting temp files
-			string filename = INDEX_BACKUP_FILE_NAME+to_string(i-n_files+j);
-			remove(filename.c_str());
+			string filename = ANCHOR_INDEX_BACKUP_FILE_NAME+to_string(i-n_files+j);
+			// remove(filename.c_str());
 		}
 
 		out.close();
@@ -395,12 +258,12 @@ void InvertedIndex::sorted_index(){
 
 // Saves info in the vocabulary file
 // Format: word index_position ni idf
-void InvertedIndex::vocabulary_dump(Vocabulary item, streampos pos){
+void InvertedIndexAnchor::vocabulary_dump(Vocabulary item, streampos pos){
 
 	fstream f;
 	double idf = log2((double) this->total_docs/item.total_docs);
 
-	f.open(VOCABULARY_FILE_NAME, ios::out | ios::app);
+	f.open(ANCHOR_VOCABULARY_FILE_NAME, ios::out | ios::app);
 
 	// word, index position, ni, idf
 	f << item.word << " " << pos << " " << item.total_docs << " " << idf << endl;
@@ -410,14 +273,14 @@ void InvertedIndex::vocabulary_dump(Vocabulary item, streampos pos){
 }
 
 // Loads vocabulary from file
-void InvertedIndex::load_vocabulary(){
+void InvertedIndexAnchor::load_vocabulary(){
 	ifstream f;
 
-	f.open(VOCABULARY_FILE_NAME, ios::in);
+	f.open(ANCHOR_VOCABULARY_FILE_NAME, ios::in);
 
 	if (f.is_open()){
 
-		InvertedIndex();
+		InvertedIndexAnchor();
 
 		while (!f.eof()){
 			Vocabulary item;
@@ -443,7 +306,7 @@ void InvertedIndex::load_vocabulary(){
 }
 
 // Retrieves list of files that contains token
-vector<FileList> InvertedIndex::get_list(string& token){
+vector<FileList> InvertedIndexAnchor::get_list(string& token){
 	vector<FileList> list = {};
 	vector<int> line = {-1,-1,-1,-1};
 	ifstream f;
@@ -462,7 +325,7 @@ vector<FileList> InvertedIndex::get_list(string& token){
 
 		Vocabulary item = this->vocabulary_order[this->vocabulary[token]];
 
-		f.open(INDEX_SORTED_FILE_NAME, ios::binary);
+		f.open(ANCHOR_INDEX_SORTED_FILE_NAME, ios::binary);
 
 		// Puts file in the exact position the token starts in index file
 		f.seekg(item.file_pos);
@@ -496,58 +359,10 @@ vector<FileList> InvertedIndex::get_list(string& token){
 	return list;
 }
 
-// Calculates the differance between current item and previous one
-void InvertedIndex::distance_diff(vector<int>& v){
-
-	// v[0] = Term index
-	// v[1] = Doc index
-	// v[2] = Term freq at doc 
-	// v[3] = Pos at doc
-
-	if (v[1] != this->previous[1]){
-		this->previous[2] = 0;
-		this->previous[3] = 0;
-	}
-
-	if (v[0] != this->previous[0]){
-		this->previous[1] = 0;
-		this->previous[2] = 0;
-		this->previous[3] = 0;
-	}
-
-	for (int i = 0; i < 4; i++){
-		v[i] = v[i] - this->previous[i];
-		this->previous[i] = this->previous[i] + v[i];
-
-	}
-
-}
-
-// Calculates the real value of the current item related to previous one
-void InvertedIndex::distance_rest(vector<int>& v){
-
-	if (v[1] != 0){
-		this->previous[2] = 0;
-		this->previous[3] = 0;
-	}
-
-	if (v[0] != 0){
-		this->previous[1] = 0;
-		this->previous[2] = 0;
-		this->previous[3] = 0;
-	}
-
-	for (int i = 0; i < 4; i++){
-		v[i] = v[i] + this->previous[i];
-		this->previous[i] = v[i];
-	}
-
-}
-
 // Restores index from file
 // In the index, it is stored the differences
 // This method convertes the differences into the real values
-void InvertedIndex::rest(){
+void InvertedIndexAnchor::rest(){
 	int s;
 	ifstream f;
 	ofstream out;
@@ -555,7 +370,7 @@ void InvertedIndex::rest(){
 	vector<int> aux;
 	string filename;
 
-	filename = INDEX_SORTED_FILE_NAME;
+	filename = ANCHOR_INDEX_SORTED_FILE_NAME;
 
 	f.open(filename, ios::in | ios::binary);
 
@@ -585,14 +400,14 @@ void InvertedIndex::rest(){
 }
 
 // Converting binary file to text
-void InvertedIndex::to_text(){
+void InvertedIndexAnchor::to_text(){
 	fstream output;
 	fstream input;
 	vector<int> line;
 	bool test;
 	string filename;
 
-	filename = INDEX_SORTED_FILE_NAME;
+	filename = ANCHOR_INDEX_SORTED_FILE_NAME;
 
 	output.open(filename+"_text", ios::out);
 	input.open(filename, ios::in | ios::binary);

@@ -16,7 +16,7 @@ struct Vocabulary{
 };
 
 class InvertedIndex{
-private:
+protected:
 	int memory_usage;
 	int total_size_index;
 	int word_index;
@@ -26,14 +26,13 @@ private:
 
 	int total_docs;
 
-	bool anchor;		// Indicates type of indexer: anchor or text
-
 	unordered_map<string, int> vocabulary;					// <word, id>
 	unordered_map<string,vector<FileList>> inverted_index;	// <id_word, list of occurrences>
 
 	deque<Vocabulary> vocabulary_order;
 
 	void memory_dump();
+
 	void load_full_index();
 	void reset_distance();
 
@@ -49,11 +48,13 @@ private:
 	bool read_line(fstream& file, vector<int>& v, streampos pos = 0, int it = 4);
 	bool read_line(ifstream& file, vector<int>& v, streampos pos = 0, int it = 4);
 
+
 public:
-	InvertedIndex(bool anchor = false);
-	InvertedIndex(Tokenizer& t, int index = 0, bool anchor = false);
+	InvertedIndex();
+	InvertedIndex(Tokenizer& t, int index = 0);
 
 	void indexing(Tokenizer& t, int index = 0);
+
 	void sorted_index();
 	
 	void vocabulary_dump(Vocabulary item, streampos pos);

@@ -17,7 +17,7 @@ Graph::Graph(const vector<Document> docs){
 	}
 }
 
-void Graph::increase_inlink(const string url){
+void Graph::node(const unsigned int url){
 
 	if(this->links.find(url) == this->links.end()){
 		Node aux;
@@ -28,24 +28,24 @@ void Graph::increase_inlink(const string url){
 		this->links[url] = aux;
 	}
 
+}
+
+void Graph::increase_inlink(const unsigned int url){
+
+	this->node(url);
+
 	this->links[url].in_links++;
 
 }
 
 void Graph::add_url(Document doc){
-	string url = doc.get_url();
+	unsigned int url = doc.get_url();
 
-	if (!url.size()){
+	if (url <= 0){
 		return;
 	}
 
-	if(this->links.find(url) == this->links.end()){
-		Node aux;
-		aux.in_links = 0;
-		aux.out_links = {};
-
-		this->links[url] = aux;
-	}
+	this->node(url);
 
 	this->links[url].collected = true;
 
@@ -57,22 +57,30 @@ void Graph::add_url(Document doc){
 }
 
 
-vector<string> Graph::get_outbound_links(string url){
+vector<unsigned int> Graph::get_outbound_links(unsigned int url){
 
-	if(this->links.find(url) == this->links.end()){
+	if (this->links.find(url) == this->links.end()){
+		return {};
+	}
+
+	if (!this->links[url].collected){
 		return {};
 	}
 
 	return this->links[url].out_links;
 }
 
-vector<string> Graph::get_outbound_links(Document doc){
+vector<unsigned int> Graph::get_outbound_links(Document doc){
 	return this->get_outbound_links(doc.get_url());
 }
 
 
-unsigned int Graph::get_number_inbound_links(string url){
+unsigned int Graph::get_number_inbound_links(unsigned int url){
 	if(this->links.find(url) == this->links.end()){
+		return 0;
+	}
+
+	if (!this->links[url].collected){
 		return 0;
 	}
 
@@ -83,8 +91,12 @@ unsigned int Graph::get_number_inbound_links(Document doc){
 	return this->get_number_inbound_links(doc.get_url());
 }
 
-unsigned int Graph::get_number_outbound_links(string url){
+unsigned int Graph::get_number_outbound_links(unsigned int url){
 	if(this->links.find(url) == this->links.end()){
+		return 0;
+	}
+
+	if (!this->links[url].collected){
 		return 0;
 	}
 
@@ -95,9 +107,13 @@ unsigned int Graph::get_number_outbound_links(Document doc){
 	return this->get_number_outbound_links(doc.get_url());
 }
 
-Node Graph::get_node(string url){
+Node Graph::get_node(unsigned int url){
 
 	if(this->links.find(url) == this->links.end()){
+		return {};
+	}
+
+	if (!this->links[url].collected){
 		return {};
 	}
 
@@ -108,7 +124,7 @@ Node Graph::get_node(Document doc){
 	return this->get_node(doc.get_url());
 }
 
-unordered_map<string, Node> Graph::get_links(){
+unordered_map<unsigned int, Node> Graph::get_links(){
 	return this->links;
 }
 
@@ -118,7 +134,7 @@ void Graph::print(){
 		cout << e.first << "\n";
 		cout << "\t In links: " << e.second.in_links << endl;
 		cout << "\t Out links ["<< e.second.out_links.size() <<"] : " << endl;
-		for (string link : e.second.out_links){
+		for (unsigned int link : e.second.out_links){
 			cout << "\t\t" << link <<endl;
 		}
 		cout << endl;
