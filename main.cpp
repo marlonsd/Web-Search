@@ -1,5 +1,6 @@
 #include "lib/common/func.h"			// Defines are here
 #include "lib/common/Document.h"
+#include "lib/common/Stopwords.h"
 
 #include "lib/indexer/Inverted_Index.h"
 
@@ -13,18 +14,19 @@ void resetingOutputFiles();
 void parsing(const string& doc, Tokenizer& t, const unordered_set<string>& stopwords);
 void parsing_anchor_text(const string& doc, Tokenizer& t, const unordered_set<string>& stopwords, string url);
 
-int main(int argc, const char* argv[]) {  
+Stopwords *Stopwords::s_instance = 0;
 
+int main(int argc, const char* argv[]) {  
 	vector<string> files;
 	fstream input, doc_id;
 	string acc, url, last_read = "";
 	int state = 0, file_index = 0;
 	size_t found, alt_found;
-	unordered_set<string> stopwords = load_stop_words(STOPWORDS_PATH);
+	unordered_set<string> stopwords = Stopwords::instance()->get_value();
 	InvertedIndex index;
-	InvertedIndex anchor_index(true);
+	InvertedIndex anchor_index;
 	double duration;
-	Graph network;
+	// Graph network;
 	// Tokenizer t;
 
 	/* Search */
@@ -126,7 +128,7 @@ int main(int argc, const char* argv[]) {
 
 							Document doc(acc, url);
 							
-							network.add_url(doc);
+							// network.add_url(doc);
 
 							Tokenizer t(doc.get_text(), stopwords);
 							index.indexing(t, file_index);
@@ -164,7 +166,7 @@ int main(int argc, const char* argv[]) {
 }
 
 void resetingOutputFiles(){
-	fstream output;
+	ofstream output;
 	
 	output.open(INDEX_AUX_FILE_NAME, ios::out);
 	output.close();
@@ -173,5 +175,8 @@ void resetingOutputFiles(){
 	output.close();
 
 	output.open(VOCABULARY_FILE_NAME, ios::out);
+	output.close();
+
+	output.open(ANCHOR_DOC_ID_FILE_NAME, ios::out);
 	output.close();
 }
