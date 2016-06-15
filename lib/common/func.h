@@ -78,6 +78,7 @@ void split(const string& s, char c, vector<string>& v);
 void cleaningWord(string& str);
 vector<string> list_dir_files(string path);
 unordered_set<string> load_stop_words(string path);
+string getNormalizedUrl(string url);
 
 // unsigned int link_map(string url);
 

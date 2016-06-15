@@ -9,6 +9,9 @@ Document::Document(){
 Document::Document(const string& doc, const string url){
 	Document();
 	this->url = url;
+
+	LinkMap::instance()->add_value(url, true);
+
 	this->parser(doc);
 }
 
@@ -60,7 +63,7 @@ void Document::parser(const string& doc){
 						}
 					}
 
-					string normal_url = htmlcxx::HTML::convert_link(attrib.second, url);
+					unsigned int normal_url = LinkMap::instance()->get_value(htmlcxx::HTML::convert_link(attrib.second, url));
 
 					// Initialize normal_url, in case it doesnt existe already
 					if (this->links.find(normal_url) == this->links.end()) {
@@ -86,6 +89,10 @@ void Document::parser(const string& doc){
 }
 
 
+// unsigned int Document::get_url(){
+// 	return LinkMap::instance()->get_value(this->url);
+// }
+
 string Document::get_url(){
 	return this->url;
 }
@@ -99,6 +106,6 @@ string Document::get_title(){
 }
 
 // <URL, Anchor text>
-unordered_map<string, string> Document::get_links(){
+unordered_map<unsigned int, string> Document::get_links(){
 	return this->links;
 }

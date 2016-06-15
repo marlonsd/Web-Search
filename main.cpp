@@ -3,6 +3,7 @@
 #include "lib/common/Stopwords.h"
 
 #include "lib/indexer/Inverted_Index.h"
+#include "lib/indexer/Inverted_Index_Anchor.h"
 
 #include "lib/search/graph.h"
 
@@ -15,6 +16,7 @@ void parsing(const string& doc, Tokenizer& t, const unordered_set<string>& stopw
 void parsing_anchor_text(const string& doc, Tokenizer& t, const unordered_set<string>& stopwords, string url);
 
 Stopwords *Stopwords::s_instance = 0;
+LinkMap *LinkMap::s_instance = 0;
 
 int main(int argc, const char* argv[]) {  
 	vector<string> files;
@@ -22,9 +24,9 @@ int main(int argc, const char* argv[]) {
 	string acc, url, last_read = "";
 	int state = 0, file_index = 0;
 	size_t found, alt_found;
-	unordered_set<string> stopwords = Stopwords::instance()->get_value();
+	// unordered_set<string> stopwords = Stopwords::instance()->get_value();
 	InvertedIndex index;
-	InvertedIndex anchor_index;
+	InvertedIndexAnchor anchor_index;
 	double duration;
 	// Graph network;
 	// Tokenizer t;
@@ -61,6 +63,8 @@ int main(int argc, const char* argv[]) {
 
 	for (string file : files){
 		input.open(DIRNAME+file, ios::in);
+
+		state = 0;
 
 		if (input.is_open()){
 			while (!input.eof()){
@@ -120,6 +124,10 @@ int main(int argc, const char* argv[]) {
 
 						if (aux == "|||"){
 
+							if(url.back() == ' '){
+								url.pop_back();
+							}
+
 							doc_id << url << endl;
 
 							// parsing_anchor_text(acc, t, stopwords, url);
@@ -130,14 +138,16 @@ int main(int argc, const char* argv[]) {
 							
 							// network.add_url(doc);
 
-							Tokenizer t(doc.get_text(), stopwords);
-							index.indexing(t, file_index);
+							// Tokenizer t(doc.get_text(), Stopwords::instance()->get_value());
+							// index.indexing(t, file_index);
 
-							for (auto link : doc.get_links()){
-								Tokenizer l(link.second, stopwords);
-								// TODO: Change URLs id
-								anchor_index.indexing(l, file_index);
-							}
+							// for (auto link : doc.get_links()){
+							// 	Tokenizer l(link.second, Stopwords::instance()->get_value());
+							// 	// TODO: Change URLs id
+							// 	anchor_index.indexing(l, file_index);
+							// }
+
+							anchor_index.indexing(doc);
 
 							file_index++;
 

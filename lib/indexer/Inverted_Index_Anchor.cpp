@@ -2,15 +2,6 @@
 
 InvertedIndexAnchor::InvertedIndexAnchor(){
 	InvertedIndex();
-	this->anchor_id = 0;
-	this->links_map = {};
-	this->sorted_map = {};
-}
-
-InvertedIndexAnchor::InvertedIndexAnchor(Tokenizer& t, string url){
-	InvertedIndexAnchor();
-
-	this->indexing(t, url);
 }
 
 InvertedIndexAnchor::InvertedIndexAnchor(Document doc){
@@ -21,45 +12,13 @@ InvertedIndexAnchor::InvertedIndexAnchor(Document doc){
 
 // Indexing
 void InvertedIndexAnchor::indexing(Document doc){
-
-	string url = doc.get_url();
-
-	if(this->links_map.find(url) == this->links_map.end()){
-		this->links_map[url] = this->anchor_id;
-
-		ProcessedFile aux;
-		aux.filename = url;
-		aux.processed = false;
-		this->sorted_map.push_back(aux);
-
-		this->anchor_id++;
-	}
-
-	this->sorted_map[links_map[url]].processed = true;
-
 	for (auto item : doc.get_links()){
 		Tokenizer t(item.second, Stopwords::instance()->get_value());
 		this->indexing(t, item.first);
 	}
 }
 
-void InvertedIndexAnchor::indexing(Tokenizer& t, string url){
-
-	if(this->links_map.find(url) == this->links_map.end()){
-		this->links_map[url] = this->anchor_id;
-
-		ProcessedFile aux;
-		aux.filename = url;
-		aux.processed = false;
-		this->sorted_map.push_back(aux);
-
-		this->anchor_id++;
-	}
-
-	this->indexing(t, this->links_map[url]);
-}
-
-void InvertedIndexAnchor::indexing(Tokenizer& t, int index){
+void InvertedIndexAnchor::indexing(Tokenizer& t, unsigned int index){
 	unordered_set<string> docs_words;
 
 
@@ -125,7 +84,7 @@ void InvertedIndexAnchor::indexing(Tokenizer& t, int index){
 
 			this->memory_usage+=INDEX_LINE_SIZE;
 
-			word_id++;
+			// word_id++;
 
 			if (this->memory_usage >= MEMORY_LIMITE){
 				this->memory_dump();
@@ -152,8 +111,7 @@ void InvertedIndexAnchor::sorted_index(){
 	}
 
 
-	cout << "Saving";
-	cout << " text index\n";
+	cout << "Saving anchor text index\n";
 	cout << "Total of files evaluated: " << this->total_docs << endl;
 	cout << "Total tokens: " << this->total_size_index << " " << this->total_token << endl;
 	cout << "Vocabulary size: " << this->vocabulary.size() << endl;
@@ -207,6 +165,8 @@ void InvertedIndexAnchor::sorted_index(){
 			aux = min_heap.top();
 			min_heap.pop();
 
+			// cout << aux[1] << " " << this->sorted_map[aux[1]].filename << endl;
+
 			// If last file:
 			// add word to vocabulary;
 			// do compression
@@ -254,6 +214,8 @@ void InvertedIndexAnchor::sorted_index(){
 
 	// Saves text file without the usage of comprassion
 	this->rest();
+
+	LinkMap::instance()->dump();
 }
 
 // Saves info in the vocabulary file

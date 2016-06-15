@@ -10,26 +10,12 @@
 
 using namespace std;
 
-struct ProcessedFile{
-	bool processed;
-	string filename;
-};
-
 class InvertedIndexAnchor : public InvertedIndex {
-protected:
-	unsigned int anchor_id;
-
-	unordered_map<string, unsigned int> links_map;
-
-	vector<ProcessedFile> sorted_map;
-
 public:
 	InvertedIndexAnchor();
-	InvertedIndexAnchor(Tokenizer& t, string url);
 	InvertedIndexAnchor(Document doc);
 
-	void indexing(Tokenizer& t, int index = 0);
-	void indexing(Tokenizer& t, string url);
+	void indexing(Tokenizer& t, unsigned int index = 0);
 	void indexing(Document doc);
 
 	void sorted_index();

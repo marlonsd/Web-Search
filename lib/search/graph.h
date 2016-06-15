@@ -4,6 +4,8 @@
 #include "../common/func.h"
 #include "../common/Document.h"
 
+// #include "../indexer/Inverted_Index_Anchor.h"
+
 using namespace std;
 
 struct Node{

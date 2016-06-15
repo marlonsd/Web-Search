@@ -39,7 +39,7 @@ void Graph::increase_inlink(const unsigned int url){
 }
 
 void Graph::add_url(Document doc){
-	unsigned int url = doc.get_url();
+	unsigned int url = InvertedIndexAnchor:: doc.get_url();
 
 	if (url <= 0){
 		return;
