@@ -39,11 +39,7 @@ void Graph::increase_inlink(const unsigned int url){
 }
 
 void Graph::add_url(Document doc){
-	unsigned int url = InvertedIndexAnchor:: doc.get_url();
-
-	if (url <= 0){
-		return;
-	}
+	unsigned int url = LinkMap::instance()->get_value(doc.get_url());
 
 	this->node(url);
 
@@ -71,7 +67,7 @@ vector<unsigned int> Graph::get_outbound_links(unsigned int url){
 }
 
 vector<unsigned int> Graph::get_outbound_links(Document doc){
-	return this->get_outbound_links(doc.get_url());
+	return this->get_outbound_links(LinkMap::instance()->get_value(doc.get_url()));
 }
 
 
@@ -88,7 +84,7 @@ unsigned int Graph::get_number_inbound_links(unsigned int url){
 }
 
 unsigned int Graph::get_number_inbound_links(Document doc){
-	return this->get_number_inbound_links(doc.get_url());
+	return this->get_number_inbound_links(LinkMap::instance()->get_value(doc.get_url()));
 }
 
 unsigned int Graph::get_number_outbound_links(unsigned int url){
@@ -104,7 +100,7 @@ unsigned int Graph::get_number_outbound_links(unsigned int url){
 }
 
 unsigned int Graph::get_number_outbound_links(Document doc){
-	return this->get_number_outbound_links(doc.get_url());
+	return this->get_number_outbound_links(LinkMap::instance()->get_value(doc.get_url()));
 }
 
 Node Graph::get_node(unsigned int url){
@@ -121,7 +117,7 @@ Node Graph::get_node(unsigned int url){
 }
 
 Node Graph::get_node(Document doc){
-	return this->get_node(doc.get_url());
+	return this->get_node(LinkMap::instance()->get_value(doc.get_url()));
 }
 
 unordered_map<unsigned int, Node> Graph::get_links(){
@@ -129,6 +125,8 @@ unordered_map<unsigned int, Node> Graph::get_links(){
 }
 
 void Graph::print(){
+
+	cout << "Printing graph" << endl << endl;
 
 	for (auto e : this->links){
 		cout << e.first << "\n";

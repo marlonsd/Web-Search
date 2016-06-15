@@ -3,6 +3,7 @@
 
 #include "../common/func.h"
 #include "../common/Document.h"
+#include "../common/linkmap.h"
 
 // #include "../indexer/Inverted_Index_Anchor.h"
 

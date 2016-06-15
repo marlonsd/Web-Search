@@ -28,7 +28,7 @@ int main(int argc, const char* argv[]) {
 	InvertedIndex index;
 	InvertedIndexAnchor anchor_index;
 	double duration;
-	// Graph network;
+	Graph network;
 	// Tokenizer t;
 
 	/* Search */
@@ -136,10 +136,10 @@ int main(int argc, const char* argv[]) {
 
 							Document doc(acc, url);
 							
-							// network.add_url(doc);
+							network.add_url(doc);
 
-							// Tokenizer t(doc.get_text(), Stopwords::instance()->get_value());
-							// index.indexing(t, file_index);
+							Tokenizer t(doc.get_text(), Stopwords::instance()->get_value());
+							index.indexing(t, file_index);
 
 							// for (auto link : doc.get_links()){
 							// 	Tokenizer l(link.second, Stopwords::instance()->get_value());
@@ -168,9 +168,10 @@ int main(int argc, const char* argv[]) {
 
 	cout << "Done indexing" << endl;
 
-	// index.vocabulary_dump();
 	index.sorted_index();
 	anchor_index.sorted_index();
+
+	network.print();
 
 	exit(0);
 }

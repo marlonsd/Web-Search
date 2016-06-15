@@ -2,8 +2,8 @@ FLAGS += -funsigned-char -I /usr/local/include/htmlcxx -L/usr/local/lib -lhtmlcx
 
 all: indexing bsearch 
 
-indexing: main.o tokenizer.o inverted_index.o func.o document.o stopwords.o inverted_index_anchor.o linkmap.o # graph.o
-	g++ -std=c++11 Document.o func.o Inverted_Index.o Inverted_Index_Anchor.o Tokenizer.o Stopwords.o linkmap.o main.o $(FLAGS) -o indexing 
+indexing: main.o tokenizer.o inverted_index.o func.o document.o stopwords.o inverted_index_anchor.o linkmap.o graph.o
+	g++ -std=c++11 Document.o func.o Inverted_Index.o Inverted_Index_Anchor.o Tokenizer.o Stopwords.o linkmap.o graph.o main.o $(FLAGS) -o indexing 
 
 main.o: main.cpp lib/indexer/Tokenizer.h lib/common/func.h lib/indexer/Inverted_Index.h lib/indexer/Inverted_Index_Anchor.h lib/common/Document.h lib/common/linkmap.h
 	g++ -std=c++11 $(FLAGS) -c main.cpp
@@ -20,8 +20,8 @@ func.o: lib/common/func.cpp lib/common/func.h
 document.o: lib/common/Document.cpp lib/common/Document.h lib/common/func.h lib/common/linkmap.h
 	g++ -std=c++11 $(FLAGS) -c lib/common/Document.cpp
 
-# graph.o: lib/search/graph.cpp lib/search/graph.h lib/common/func.h lib/common/Document.h
-	# g++ -std=c++11 $(FLAGS) -c lib/search/graph.cpp
+graph.o: lib/search/graph.cpp lib/search/graph.h lib/common/func.h lib/common/Document.h lib/common/linkmap.h
+	g++ -std=c++11 $(FLAGS) -c lib/search/graph.cpp
 
 stopwords.o: lib/common/Stopwords.cpp lib/common/Stopwords.h lib/common/func.h
 	g++ -std=c++11 $(FLAGS) -c lib/common/Stopwords.cpp
