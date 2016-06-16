@@ -1,4 +1,4 @@
-#include "../common/func.h"			// Defines are here
+#include "../common/func.h"         // Defines are here
 #include "../common/Document.h"
 #include "../common/Stopwords.h"
 
@@ -31,7 +31,7 @@ int main(int argc, const char* argv[]) {
 		getline(cin, query);
 
 		if (query == "q"){
-			cout << endl << "Exiting..." << endl;			
+			cout << endl << "Exiting..." << endl;           
 			break;
 		}
 
@@ -99,11 +99,11 @@ int main(int argc, const char* argv[]) {
 
 vector<int> instersection(vector<int> &v1, vector<int> &v2){
 
-    vector<int> v3;
+	vector<int> v3;
 
-    set_intersection(v1.begin(),v1.end(),v2.begin(),v2.end(),back_inserter(v3));
+	set_intersection(v1.begin(),v1.end(),v2.begin(),v2.end(),back_inserter(v3));
 
-    return v3;
+	return v3;
 }
 
 void load_doc_id(vector<string>& doc_id){
