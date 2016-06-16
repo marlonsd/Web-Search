@@ -2,7 +2,35 @@
 
 Search::Search(){
 	this->vocabulary = {};
+	this->top_docs = {};
+	this->reset_distance();
 	this->import_vocabulary();
+}
+
+void Search::reset_distance(){
+	for (int i = 0; i < 4; i++){
+		this->previous[i] = 0;
+	}
+}
+
+void Search::distance_rest(vector<int>& v){
+
+	if (v[1] != 0){
+		this->previous[2] = 0;
+		this->previous[3] = 0;
+	}
+
+	if (v[0] != 0){
+		this->previous[1] = 0;
+		this->previous[2] = 0;
+		this->previous[3] = 0;
+	}
+
+	for (int i = 0; i < 4; i++){
+		v[i] = v[i] + this->previous[i];
+		this->previous[i] = v[i];
+	}
+
 }
 
 void Search::import_vocabulary(){

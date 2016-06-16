@@ -14,8 +14,14 @@ struct Ranking{
 	double rank;
 };
 
+struct rank_comp {
+	bool operator()(Ranking A, Ranking B) {
+		return (A.rank > B.rank);
+	}
+};
+
 class Search {
-private:
+protected:
 	/* < word,
 			< word id,
 				word,
@@ -26,12 +32,19 @@ private:
 		>
 	*/
 	unordered_map<string, Vocabulary> vocabulary;	
+	int previous[4];
+
+	priority_queue<Ranking, vector<Ranking>, rank_comp> top_docs;
 
 	void import_vocabulary();
+
+	void reset_distance();
+	void distance_rest(vector<int>& v);
+
 public:
 	Search();
 	
-	virtual vector<Ranking> search(string querry);
+	virtual priority_queue<Ranking, vector<Ranking>, rank_comp> search(string querry);
 };
 
 #endif

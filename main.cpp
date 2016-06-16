@@ -164,7 +164,7 @@ int main(int argc, const char* argv[]) {
 	index.sorted_index();
 	anchor_index.sorted_index();
 
-	network.print();
+	// network.print();
 
 	exit(0);
 }

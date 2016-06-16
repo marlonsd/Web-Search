@@ -45,7 +45,7 @@ remove_o:
 	# g++ -std=c++11 Document.o func.o Inverted_Index.o Inverted_Index_Anchor.o Tokenizer.o Stopwords.o linkmap.o graph.o boolean_search.o $(FLAGS) -o search
 
 # main_search.o:
-	g++
+	# g++
 
 # Run in ubuntu: export LD_LIBRARY_PATH="/usr/local/lib"
 #ulimit -n MAX OPEN FILE
