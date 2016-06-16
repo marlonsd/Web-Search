@@ -1,5 +1,11 @@
 #include "../common/func.h"			// Defines are here
+#include "../common/Document.h"
+#include "../common/Stopwords.h"
+
 #include "../indexer/Inverted_Index.h"
+#include "../indexer/Inverted_Index_Anchor.h"
+
+#include "../search/graph.h"
 
 vector<int> instersection(vector<int> &v1, vector<int> &v2);
 void load_doc_id(vector<string>& doc_id);

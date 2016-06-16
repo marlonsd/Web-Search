@@ -24,6 +24,12 @@ InvertedIndex::InvertedIndex(Tokenizer& t, int index){
 	this->indexing(t, index);
 }
 
+InvertedIndex::InvertedIndex(Document doc, int index){
+	InvertedIndex();
+
+	this->indexing(doc, index);
+}
+
 void InvertedIndex::reset_distance(){
 	for (int i = 0; i < 4; i++){
 		this->previous[i] = 0;
@@ -132,6 +138,11 @@ bool InvertedIndex::read_line(ifstream& file, vector<int>& v, streampos pos, int
 }
 
 // Indexing
+void InvertedIndex::indexing(Document doc, int index){
+	Tokenizer t(doc.get_text(), Stopwords::instance()->get_value());
+	this->indexing(t, index);
+}
+
 void InvertedIndex::indexing(Tokenizer& t, int index){
 	unordered_set<string> docs_words;
 

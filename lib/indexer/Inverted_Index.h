@@ -3,6 +3,8 @@
 
 #include "../common/func.h"
 #include "../common/Document.h"
+#include "../common/Stopwords.h"
+
 #include "Tokenizer.h"
 
 using namespace std;
@@ -52,8 +54,10 @@ protected:
 public:
 	InvertedIndex();
 	InvertedIndex(Tokenizer& t, int index = 0);
+	InvertedIndex(Document doc, int index = 0);
 
 	void indexing(Tokenizer& t, int index = 0);
+	void indexing(Document doc, int index = 0);
 
 	void sorted_index();
 	

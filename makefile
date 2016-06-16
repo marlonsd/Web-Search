@@ -1,6 +1,6 @@
 FLAGS += -funsigned-char -I /usr/local/include/htmlcxx -L/usr/local/lib -lhtmlcxx
 
-all: indexing bsearch 
+all: indexing
 
 indexing: main.o tokenizer.o inverted_index.o func.o document.o stopwords.o inverted_index_anchor.o linkmap.o graph.o
 	g++ -std=c++11 Document.o func.o Inverted_Index.o Inverted_Index_Anchor.o Tokenizer.o Stopwords.o linkmap.o graph.o main.o $(FLAGS) -o indexing 
@@ -8,7 +8,7 @@ indexing: main.o tokenizer.o inverted_index.o func.o document.o stopwords.o inve
 main.o: main.cpp lib/indexer/Tokenizer.h lib/common/func.h lib/indexer/Inverted_Index.h lib/indexer/Inverted_Index_Anchor.h lib/common/Document.h lib/common/linkmap.h
 	g++ -std=c++11 $(FLAGS) -c main.cpp
 
-inverted_index.o: lib/indexer/Inverted_Index.cpp lib/indexer/Inverted_Index.h lib/indexer/Tokenizer.h lib/common/func.h lib/common/Document.h
+inverted_index.o: lib/indexer/Inverted_Index.cpp lib/indexer/Inverted_Index.h lib/indexer/Tokenizer.h lib/common/func.h lib/common/Stopwords.h lib/common/Document.h
 	g++ -std=c++11 $(FLAGS) -c lib/indexer/Inverted_Index.cpp
 
 tokenizer.o: lib/indexer/Tokenizer.cpp lib/indexer/Tokenizer.h lib/common/func.h lib/common/Document.h
@@ -29,16 +29,16 @@ stopwords.o: lib/common/Stopwords.cpp lib/common/Stopwords.h lib/common/func.h
 linkmap.o: lib/common/linkmap.cpp lib/common/linkmap.h lib/common/func.h
 	g++ -std=c++11 $(FLAGS) -c lib/common/linkmap.cpp
 
-inverted_index_anchor.o: lib/indexer/Inverted_Index_Anchor.cpp lib/indexer/Inverted_Index_Anchor.h lib/indexer/Tokenizer.h lib/common/func.h lib/common/Document.h lib/common/linkmap.h
+inverted_index_anchor.o: lib/indexer/Inverted_Index_Anchor.cpp lib/indexer/Inverted_Index_Anchor.h lib/indexer/Tokenizer.h lib/common/func.h lib/common/Document.h lib/common/Stopwords.h
 	g++ -std=c++11 $(FLAGS) -c lib/indexer/Inverted_Index_Anchor.cpp
 
 clean:
 	rm *.o indexing search
 
-bsearch: bsearch.o tokenizer.o inverted_index.o func.o
-	g++ -std=c++11 func.o Inverted_Index.o Tokenizer.o boolean_search.o $(FLAGS) -o search
+bsearch: bsearch.o tokenizer.o inverted_index.o func.o document.o stopwords.o inverted_index_anchor.o linkmap.o graph.o
+	g++ -std=c++11 Document.o func.o Inverted_Index.o Inverted_Index_Anchor.o Tokenizer.o Stopwords.o linkmap.o graph.o boolean_search.o $(FLAGS) -o search
 
-bsearch.o: lib/search/boolean_search.cpp lib/indexer/Tokenizer.h lib/common/func.h lib/indexer/Inverted_Index.h lib/common/Document.h
+bsearch.o: lib/search/boolean_search.cpp lib/indexer/Tokenizer.h lib/common/func.h lib/indexer/Inverted_Index.h lib/indexer/Inverted_Index_Anchor.h lib/common/Document.h lib/common/linkmap.h
 	g++ -std=c++11 $(FLAGS) -c lib/search/boolean_search.cpp
 
 dir:

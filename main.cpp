@@ -138,15 +138,8 @@ int main(int argc, const char* argv[]) {
 							
 							network.add_url(doc);
 
-							Tokenizer t(doc.get_text(), Stopwords::instance()->get_value());
-							index.indexing(t, file_index);
-
-							// for (auto link : doc.get_links()){
-							// 	Tokenizer l(link.second, Stopwords::instance()->get_value());
-							// 	// TODO: Change URLs id
-							// 	anchor_index.indexing(l, file_index);
-							// }
-
+							// Tokenizer t(doc.get_text(), Stopwords::instance()->get_value());
+							index.indexing(doc, file_index);
 							anchor_index.indexing(doc);
 
 							file_index++;
