@@ -309,6 +309,8 @@ void InvertedIndex::sorted_index(){
 	cout << "Total of files: " << this->n_dumps << endl << endl;
 
 
+	this->vocabulary_init();
+
 	while(i < this->n_dumps){
 		int n_files;
 		fstream out;
@@ -409,16 +411,31 @@ void InvertedIndex::sorted_index(){
 void InvertedIndex::vocabulary_dump(Vocabulary item, streampos pos){
 
 	fstream f;
-	double idf = log2((double) this->total_docs/item.total_docs);
+	// double idf = log2((double) this->total_docs/item.total_docs);
 
 	f.open(VOCABULARY_FILE_NAME, ios::out | ios::app);
 
 	// word, index position, ni, idf
-	f << item.word << " " << pos << " " << item.total_docs << " " << idf << endl;
+	f << item.word << " " << pos << " " << item.total_docs << " " << item.total_docs << endl;
 
 	f.close();
 
 }
+
+// Resets vocabulary file
+// and saves the total number of docs
+void InvertedIndex::vocabulary_init(){
+
+	fstream f;
+
+	f.open(VOCABULARY_FILE_NAME, ios::out);
+
+	f << this->total_docs;
+
+	f.close();
+
+}
+
 
 // Loads vocabulary from file
 void InvertedIndex::load_vocabulary(){
@@ -429,6 +446,10 @@ void InvertedIndex::load_vocabulary(){
 	if (f.is_open()){
 
 		InvertedIndex();
+
+		if (!f.eof()){
+			f >> this->total_docs;
+		}
 
 		while (!f.eof()){
 			Vocabulary item;

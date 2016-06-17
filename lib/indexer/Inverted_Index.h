@@ -50,6 +50,8 @@ protected:
 	bool read_line(fstream& file, vector<int>& v, streampos pos = 0, int it = 4);
 	bool read_line(ifstream& file, vector<int>& v, streampos pos = 0, int it = 4);
 
+	void vocabulary_init();
+
 
 public:
 	InvertedIndex();

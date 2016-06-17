@@ -110,7 +110,6 @@ void InvertedIndexAnchor::sorted_index(){
 		memory_dump();
 	}
 
-
 	cout << "Saving anchor text index\n";
 	cout << "Total of files evaluated: " << this->total_docs << endl;
 	cout << "Total tokens: " << this->total_size_index << " " << this->total_token << endl;
@@ -118,6 +117,7 @@ void InvertedIndexAnchor::sorted_index(){
 	cout << "Memory Limit: " << (MEMORY_LIMITE/INDEX_LINE_SIZE) << endl;
 	cout << "Total of files: " << this->n_dumps << endl << endl;
 
+	this->vocabulary_init();
 
 	while(i < this->n_dumps){
 		int n_files;
@@ -223,12 +223,26 @@ void InvertedIndexAnchor::sorted_index(){
 void InvertedIndexAnchor::vocabulary_dump(Vocabulary item, streampos pos){
 
 	fstream f;
-	double idf = log2((double) this->total_docs/item.total_docs);
+	// double idf = log2((double) this->total_docs/item.total_docs);
 
 	f.open(ANCHOR_VOCABULARY_FILE_NAME, ios::out | ios::app);
 
 	// word, index position, ni, idf
-	f << item.word << " " << pos << " " << item.total_docs << " " << idf << endl;
+	f << item.word << " " << pos << " " << item.total_docs << " " << item.total_docs << endl;
+
+	f.close();
+
+}
+
+// Resets vocabulary file
+// and saves the total number of docs
+void InvertedIndexAnchor::vocabulary_init(){
+
+	fstream f;
+
+	f.open(ANCHOR_VOCABULARY_FILE_NAME, ios::out);
+
+	f << this->total_docs;
 
 	f.close();
 

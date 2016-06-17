@@ -11,6 +11,9 @@
 using namespace std;
 
 class InvertedIndexAnchor : public InvertedIndex {
+protected:
+	void vocabulary_init();
+
 public:
 	InvertedIndexAnchor();
 	InvertedIndexAnchor(Document doc);
