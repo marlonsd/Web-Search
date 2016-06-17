@@ -2,10 +2,12 @@
 
 // Constructors
 PriorityQueue::PriorityQueue(){
+	this->list = {};
 }
 
 // Destructor
 PriorityQueue::~PriorityQueue(){
+	this->clear();
 }
 
 void PriorityQueue::push(Ranking item){
