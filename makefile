@@ -15,7 +15,7 @@ tokenizer.o: lib/indexer/Tokenizer.cpp lib/indexer/Tokenizer.h lib/common/func.h
 	g++ -std=c++11 $(FLAGS) -c lib/indexer/Tokenizer.cpp
 
 func.o: lib/common/func.cpp lib/common/func.h
-	g++ -std=c++11 $(FLAGS) -c lib/common/func.cpp		
+	g++ -std=c++11 $(FLAGS) -c lib/common/func.cpp
 
 document.o: lib/common/Document.cpp lib/common/Document.h lib/common/func.h lib/common/linkmap.h
 	g++ -std=c++11 $(FLAGS) -c lib/common/Document.cpp
@@ -41,8 +41,11 @@ dir:
 remove_o:
 	rm *.o
 
-# search: main_search.o func.o document.o stopwords.o inverted_index.o inverted_index_anchor.o graph.o
-	# g++ -std=c++11 Document.o func.o Inverted_Index.o Inverted_Index_Anchor.o Tokenizer.o Stopwords.o linkmap.o graph.o boolean_search.o $(FLAGS) -o search
+# search: main_search.o func.o document.o stopwords.o inverted_index.o inverted_index_anchor.o graph.o heap.o
+	# g++ -std=c++11 PriorityQueue.o Document.o func.o Inverted_Index.o Inverted_Index_Anchor.o Tokenizer.o Stopwords.o linkmap.o graph.o boolean_search.o $(FLAGS) -o search
+
+heap.o: lib/common/PriorityQueue.cpp lib/common/PriorityQueue.h
+	g++ -std=c++11 $(FLAGS) -c lib/common/PriorityQueue.cpp
 
 # main_search.o:
 	# g++
