@@ -3,22 +3,12 @@
 
 #include "../common/func.h"
 #include "../common/Document.h"
+#include "../common/PriorityQueue.h"
 
 #include "../indexer/Inverted_Index.h"
 #include "../indexer/Inverted_Index_Anchor.h"
 
 using namespace std;
-
-struct Ranking{
-	unsigned int id;
-	double rank;
-};
-
-struct rank_comp {
-	bool operator()(Ranking A, Ranking B) {
-		return (A.rank > B.rank);
-	}
-};
 
 class Search {
 protected:
@@ -31,20 +21,30 @@ protected:
 			>
 		>
 	*/
-	unordered_map<string, Vocabulary> vocabulary;	
+	unordered_map<string, Vocabulary>* vocabulary;
+
+	unordered_map<string, Vocabulary> text_vocabulary;
+	unordered_map<string, Vocabulary> anchor_vocabulary;
+
 	int previous[4];
 
-	priority_queue<Ranking, vector<Ranking>, rank_comp> top_docs;
+	unsigned int* total_docs;
+	unsigned int text_total_docs;
+	unsigned int anchor_total_docs;
+
+	bool anchor;
 
 	void import_vocabulary();
+	void set_searcher();
+	void change_researcher();
 
 	void reset_distance();
 	void distance_rest(vector<int>& v);
 
 public:
-	Search();
+	Search(bool a = false);
 	
-	virtual priority_queue<Ranking, vector<Ranking>, rank_comp> search(string querry);
+	virtual PriorityQueue search(string querry);
 };
 
 #endif
