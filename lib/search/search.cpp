@@ -15,23 +15,6 @@ Search::Search(bool a){
 	this->set_searcher();
 }
 
-Search::~Search(){
-	this->text_vocabulary.clear();
-	this->anchor_vocabulary.clear();
-
-	this->text_total_docs = 0;
-	this->anchor_total_docs = 0;
-
-	anchor = false;
-
-	free(this->total_docs);
-	free(this->vocabulary);
-
-	free(&this->previous);
-
-	free(this->total_docs);
-}
-
 void Search::set_searcher(){
 	if (this->anchor){
 		this->vocabulary = &this->anchor_vocabulary;

@@ -22,4 +22,6 @@ int main(int argc, const char* argv[]) {
 	bool first = true;
 	vector<string> doc_id;
 	Search searcher;
+
+	return 0;
 }

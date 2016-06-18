@@ -98,6 +98,72 @@ void InvertedIndexAnchor::indexing(Tokenizer& t, unsigned int index){
 	}
 }
 
+// Saves all data stored in this->inverted_index in a file
+// Data is sorted base on word_id and document_id
+void InvertedIndexAnchor::memory_dump(){
+
+	bool test;
+	int count = 0, index_size = this->inverted_index.size();
+	fstream f, sorted_f;
+
+	f.open(ANCHOR_INDEX_AUX_FILE_NAME, ios::out | ios::binary);
+
+	// Generating tuples and saving in file
+	// < word_id, doc_id, freq, pos >
+	for (auto word : this->vocabulary){
+		for (auto document : this->inverted_index[word.first]){
+			int list_size = document.position.size();
+			for (int pos : document.position){
+				this->write_line(word.second, document.file_index, list_size, pos, f);
+				count++;
+			}
+		}
+	}
+
+	f.close();
+
+	this->inverted_index.clear();
+	this->memory_usage = 0;
+
+	f.open(ANCHOR_INDEX_AUX_FILE_NAME, ios::in | ios::binary);
+	sorted_f.open(ANCHOR_INDEX_BACKUP_FILE_NAME+to_string(this->n_dumps)+".bin", ios::out | ios::binary);
+
+	string value;
+	vector<vector<int>> all_lines;
+
+	// Loading tuples
+	for (int i = 0; i < count; i++){
+		vector<int> aux;
+
+		test = this->read_line(f, aux);
+
+		if (test){
+			all_lines.push_back(aux);
+		}
+	}
+
+	// Sorting tuples
+	sort(begin(all_lines), end(all_lines),
+		[](const vector<int>& A, vector<int>& B) {
+			return (
+				(A[0] < B[0]) ||									// Sorting by word id
+				((A[0] == B[0]) && (A[1] < B[1])) ||				// Sorting by document id
+				((A[0] == B[0]) && (A[1] == B[1]) && (A[3] < B[3]))	// Sorting by position
+				);
+		});
+
+	// Saving sorted tuples
+	for (vector<int> s : all_lines){
+		this->write_line(s, sorted_f);
+	}
+
+	f.close();
+	sorted_f.close();
+
+	this->total_size_index += count;
+	this->n_dumps++;
+}
+
 // Creates one index containing all tokens
 // Uses sort-based multiway merge
 void InvertedIndexAnchor::sorted_index(){
@@ -165,7 +231,7 @@ void InvertedIndexAnchor::sorted_index(){
 			aux = min_heap.top();
 			min_heap.pop();
 
-			// cout << aux[1] << " " << this->sorted_map[aux[1]].filename << endl;
+			// cout << aux[1] << endl;
 
 			// If last file:
 			// add word to vocabulary;
@@ -203,7 +269,7 @@ void InvertedIndexAnchor::sorted_index(){
 
 			// Deleting temp files
 			string filename = ANCHOR_INDEX_BACKUP_FILE_NAME+to_string(i-n_files+j);
-			// remove(filename.c_str());
+			remove(filename.c_str());
 		}
 
 		out.close();

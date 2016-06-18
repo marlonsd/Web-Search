@@ -43,7 +43,6 @@ protected:
 
 public:
 	Search(bool a = false);
-	~Search();
 	
 	PriorityQueue search(string querry);
 };
