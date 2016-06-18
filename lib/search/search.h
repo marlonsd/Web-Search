@@ -43,8 +43,9 @@ protected:
 
 public:
 	Search(bool a = false);
+	~Search();
 	
-	virtual PriorityQueue search(string querry);
+	PriorityQueue search(string querry);
 };
 
 #endif

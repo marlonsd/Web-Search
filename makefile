@@ -41,8 +41,11 @@ dir:
 remove_o:
 	rm *.o
 
-search: main_search.o func.o document.o stopwords.o inverted_index.o inverted_index_anchor.o graph.o heap.o search.o v_search.o
-	g++ -std=c++11 PriorityQueue.o Document.o func.o Inverted_Index.o Inverted_Index_Anchor.o Tokenizer.o Stopwords.o linkmap.o graph.o main_search.o $(FLAGS) -o search
+search: main_search.o func.o document.o stopwords.o inverted_index.o inverted_index_anchor.o graph.o heap.o search.o v_search.o linkmap.o tokenizer.o
+	g++ -std=c++11 PriorityQueue.o Document.o func.o Inverted_Index.o Inverted_Index_Anchor.o Tokenizer.o Stopwords.o search.o vectorialsearch.o linkmap.o graph.o main_search.o $(FLAGS) -o search
+
+main_search.o: lib/search/main_search.cpp lib/indexer/Tokenizer.h lib/common/func.h lib/indexer/Inverted_Index.h lib/indexer/Inverted_Index_Anchor.h lib/common/Document.h lib/common/linkmap.h lib/common/Stopwords.h lib/common/PriorityQueue.h lib/search/graph.h lib/search/search.h lib/search/vectorialsearch.h
+	g++ -std=c++11 $(FLAGS) -c lib/search/main_search.cpp
 
 heap.o: lib/common/PriorityQueue.cpp lib/common/PriorityQueue.h
 	g++ -std=c++11 $(FLAGS) -c lib/common/PriorityQueue.cpp
@@ -52,9 +55,6 @@ search.o: lib/search/search.cpp lib/search/search.h lib/common/PriorityQueue.h l
 
 v_search.o: lib/search/vectorialsearch.cpp lib/search/vectorialsearch.h lib/search/search.h lib/common/PriorityQueue.h lib/common/func.h lib/common/Document.h lib/indexer/Inverted_Index.h lib/indexer/Inverted_Index_Anchor.h
 	g++ -std=c++11 $(FLAGS) -c lib/search/vectorialsearch.cpp
-
-main_search.o: lib/search/main_search.cpp lib/indexer/Tokenizer.h lib/common/func.h lib/indexer/Inverted_Index.h lib/indexer/Inverted_Index_Anchor.h lib/common/Document.h lib/common/linkmap.h lib/common/PriorityQueue.h lib/search/search.h lib/search/vectorialsearch.h
-	g++ -std=c++11 $(FLAGS) -c lib/search/main_search.cpp
 
 # Run in ubuntu: export LD_LIBRARY_PATH="/usr/local/lib"
 #ulimit -n MAX OPEN FILE
