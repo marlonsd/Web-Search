@@ -36,7 +36,7 @@ clean:
 	rm *.o indexing search
 
 dir:
-	mkdir util/htmls util/index util/index/split util/index/anchor util/index/anchor/split
+	mkdir util/htmls util/index util/index/split util/index/anchor util/index/anchor/split util/pagerank
 
 remove_o:
 	rm *.o

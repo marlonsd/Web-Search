@@ -165,8 +165,9 @@ int main(int argc, const char* argv[]) {
 	anchor_index.sorted_index();
 
 	// network.print();
+	network.dump();
 
-	exit(0);
+	return 0;
 }
 
 void resetingOutputFiles(){

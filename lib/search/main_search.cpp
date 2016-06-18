@@ -22,6 +22,10 @@ int main(int argc, const char* argv[]) {
 	bool first = true;
 	vector<string> doc_id;
 	Search searcher;
+	Graph network;
+
+	// network.restore();
+	// network.print();
 
 	return 0;
 }

@@ -48,6 +48,8 @@
  
 #define ANCHOR_DOC_ID_FILE_NAME "util/index/anchor/doc_id"
 
+#define GRAPH_FILENAME "util/pagerank/graph"
+
 // Max OS open files
 #define MAX_OS_OPEN_FILE 4000
 

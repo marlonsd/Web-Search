@@ -140,3 +140,54 @@ void Graph::print(){
  	cout << endl;
 
 }
+
+void Graph::dump(){
+	ofstream out;
+
+	out.open(GRAPH_FILENAME, ios::out);
+
+	for (auto link : this->links){
+		out << "*" << " " << link.first << '\n';
+		out << link.second.collected << '\n';
+		out << link.second.in_links << '\n';
+		out << link.second.out_links.size() << '\n';
+		for (auto out_link : link.second.out_links){
+			out << out_link << '\n';
+		}
+	}
+
+	out.close();
+}
+
+void Graph::restore(){
+	string aux;
+	ifstream f;
+	int link, out_link, loop = 0;
+
+	f.open(GRAPH_FILENAME, ios::out);
+
+	if(f.is_open()){
+		Graph();	
+
+		while(!f.eof()){
+			Node node;
+
+			f >> aux;
+
+			if (aux == "*"){
+				f >> link;
+				f >> node.collected;
+				f >> node.in_links;
+				f >> loop;
+				for(int i = 0; i < loop; i++){
+					f >> out_link;
+					node.out_links.push_back(out_link);
+				}
+
+				this->links[link] = node;
+			}
+		}
+	}
+
+	f.close();
+}
