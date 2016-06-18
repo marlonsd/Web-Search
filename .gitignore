@@ -6,5 +6,6 @@ indexing
 search
 util/htmls/*
 aux_file
+util/*
 util/index/*
 !util/stopwords/*
