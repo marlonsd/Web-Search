@@ -9,3 +9,5 @@ aux_file
 util/*
 util/index/*
 !util/stopwords/*
+!lib/*
+lib/.DS_Store
