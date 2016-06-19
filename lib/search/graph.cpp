@@ -47,6 +47,7 @@ void Graph::add_url(Document doc){
 
 	for (auto e : doc.get_links()){
 		this->links[url].out_links.push_back(e.first);
+		cout << '\t' << e.first << endl;
 		this->increase_inlink(e.first);
 	}
 
@@ -146,13 +147,27 @@ void Graph::dump(){
 
 	out.open(GRAPH_FILENAME, ios::out);
 
-	for (auto link : this->links){
-		out << "*" << " " << link.first << '\n';
-		out << link.second.collected << '\n';
-		out << link.second.in_links << '\n';
-		out << link.second.out_links.size() << '\n';
-		for (auto out_link : link.second.out_links){
-			out << out_link << '\n';
+	// for (auto link : this->links){
+	// 	out << "*" << " " << link.first << '\n';
+	// 	out << link.second.collected << '\n';
+	// 	out << link.second.in_links << '\n';
+	// 	out << link.second.out_links.size() << '\n';
+	// 	for (auto out_link : link.second.out_links){
+	// 		out << out_link << '\n';
+	// 	}
+	// }
+
+	for (int i = this->links.size()-1; i >= 0; i--){
+		Node link = this->links[i]; 
+		if (link.collected){
+			out << "*" << " " << i << '\n';
+			out << link.collected << '\n';
+			out << link.in_links << '\n';	
+			for (unsigned int out_link : link.out_links){
+				if (this->links[out_link].collected){
+					out << out_link << '\n';
+				}
+			}
 		}
 	}
 
@@ -167,7 +182,7 @@ void Graph::restore(){
 	f.open(GRAPH_FILENAME, ios::out);
 
 	if(f.is_open()){
-		Graph();	
+		Graph();
 
 		while(!f.eof()){
 			Node node;
