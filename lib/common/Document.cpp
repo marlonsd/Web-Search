@@ -62,7 +62,6 @@ void Document::parser(const string& doc){
 							anchor_text += it->text();
 						}
 					}
-
 					unsigned int normal_url = LinkMap::instance()->get_value(htmlcxx::HTML::convert_link(attrib.second, url));
 
 					// Initialize normal_url, in case it doesnt existe already

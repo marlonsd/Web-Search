@@ -26,7 +26,7 @@ public:
 
 	void add_value(string url, bool processed = false);
 
-	unsigned int get_value(string url);
+	unsigned int get_value(const string url);
 	string get_value(unsigned int url);
 
 	ProcessedFile get_node(string url);

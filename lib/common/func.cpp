@@ -116,7 +116,8 @@ unordered_set<string> load_stop_words(string path){
 }
 
 // Normalizes URL, removing "www." and last "/"
-string getNormalizedUrl(string url){
+string getNormalizedUrl(const string url){
+	string new_url = url;
 	string delimitation("www.");
 
 	size_t found = url.find(delimitation); // Locate the position where "www." starts in the url
@@ -124,16 +125,15 @@ string getNormalizedUrl(string url){
 	if (found!=std::string::npos){
 		// Teste if "www." starts in the beginning of the url, or after "http://" or "https://"
 		if ((!found)||(found >= 7 && found <= 8)){
-			url = url.erase(found,delimitation.size());
+			new_url = new_url.erase(found,delimitation.size());
 		}
 	}
 
-	while (url.back() == '/' || url.back() == ' '){
-		url.pop_back();
+	while (new_url.back() == '/' || new_url.back() == ' '){
+		new_url.pop_back();
 	}
 
-	string new_url = url;
 	new_url.erase(std::remove_if(new_url.begin(), new_url.end(),[](char x){return std::isspace(x);}),new_url.end());
 
-	return url;
+	return new_url;
 }

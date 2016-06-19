@@ -21,7 +21,7 @@ void Graph::node(const unsigned int url){
 
 	if(this->links.find(url) == this->links.end()){
 		Node aux;
-		aux.in_links = 0;
+		aux.in_links = {};
 		aux.out_links = {};
 		aux.collected = false;
 
@@ -30,11 +30,12 @@ void Graph::node(const unsigned int url){
 
 }
 
-void Graph::increase_inlink(const unsigned int url){
+void Graph::increase_inlink(const unsigned int url, const unsigned int origin){
 
 	this->node(url);
 
-	this->links[url].in_links++;
+	// this->links[url].in_links++;
+	this->links[url].in_links.insert(origin);
 
 }
 
@@ -47,8 +48,7 @@ void Graph::add_url(Document doc){
 
 	for (auto e : doc.get_links()){
 		this->links[url].out_links.push_back(e.first);
-		cout << '\t' << e.first << endl;
-		this->increase_inlink(e.first);
+		this->increase_inlink(e.first, url);
 	}
 
 }
@@ -81,7 +81,7 @@ unsigned int Graph::get_number_inbound_links(unsigned int url){
 		return 0;
 	}
 
-	return this->links[url].in_links;
+	return this->links[url].in_links.size();
 }
 
 unsigned int Graph::get_number_inbound_links(Document doc){
@@ -131,7 +131,7 @@ void Graph::print(){
 
 	for (auto e : this->links){
 		cout << e.first << "\n";
-		cout << "\t In links: " << e.second.in_links << endl;
+		cout << "\t In links: " << e.second.in_links.size() << endl;
 		cout << "\t Out links ["<< e.second.out_links.size() <<"] : " << endl;
 		for (unsigned int link : e.second.out_links){
 			cout << "\t\t" << link <<endl;
@@ -162,10 +162,16 @@ void Graph::dump(){
 		if (link.collected){
 			out << "*" << " " << i << '\n';
 			out << link.collected << '\n';
-			out << link.in_links << '\n';	
+			out << link.out_links.size() << '\n';
 			for (unsigned int out_link : link.out_links){
 				if (this->links[out_link].collected){
 					out << out_link << '\n';
+				}
+			}
+			out << link.in_links.size() << '\n';
+			for (unsigned int in_link : link.in_links){
+				if (this->links[in_link].collected){
+					out << in_link << '\n';
 				}
 			}
 		}
@@ -192,11 +198,16 @@ void Graph::restore(){
 			if (aux == "*"){
 				f >> link;
 				f >> node.collected;
-				f >> node.in_links;
+				// f >> node.in_links;
 				f >> loop;
 				for(int i = 0; i < loop; i++){
 					f >> out_link;
 					node.out_links.push_back(out_link);
+				}
+				f >> loop;
+				for(int i = 0; i < loop; i++){
+					f >> out_link;
+					node.in_links.insert(out_link);
 				}
 
 				this->links[link] = node;

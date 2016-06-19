@@ -11,19 +11,19 @@ using namespace std;
 
 struct Node{
 	bool collected;
-	unsigned int in_links;
 	vector<unsigned int> out_links;
+	unordered_set<unsigned int> in_links;
 };
 
 class Graph {
-private:
+protected:
 	unordered_map<unsigned int, Node> links; 		// <URL, <Count inbound link, List of outbound links>>
 
 	// unordered_map<string, unsigned int> links_map;
 	// unsigned int global_links_counter;
 
 	void node(const unsigned int url);
-	void increase_inlink(const unsigned int url);
+	void increase_inlink(const unsigned int url, const unsigned int origin);
 
 public:
 	Graph();

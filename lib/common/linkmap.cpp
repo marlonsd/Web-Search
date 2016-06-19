@@ -7,7 +7,7 @@ LinkMap::LinkMap(){
 }
 
 
-unsigned int LinkMap::get_value(string url){
+unsigned int LinkMap::get_value(const string url){
 	string new_url = getNormalizedUrl(url);
 
 	if (this->link_map.find(new_url) == this->link_map.end()){
@@ -47,6 +47,10 @@ string LinkMap::get_value(unsigned int url){
 
 void LinkMap::add_value(string url, bool processed){
 	string new_url = getNormalizedUrl(url);
+
+	if (this->link_map.find(new_url) != this->link_map.end()){
+		return;
+	}
 	
 	this->link_map[new_url].id = this->count;
 	this->link_map[new_url].processed = processed;
@@ -54,6 +58,7 @@ void LinkMap::add_value(string url, bool processed){
 	this->inverse.push_back(new_url);
 
 	this->count++;
+
 }
 
 void LinkMap::clear(){
@@ -68,8 +73,12 @@ void LinkMap::dump(){
 
 	f.open(ANCHOR_DOC_ID_FILE_NAME, ios::out);
 
-	for (auto link : link_map){
-		f << link.first << " " << link.second.processed << '\n';
+	// for (auto link : link_map){
+	// 	f << link.first << " " << link.second.processed << " " << link.second.id <<  '\n';
+	// }
+
+	for (string link : inverse){
+		f << link << " " << this->link_map[link].processed << '\n';
 	}
 
 	f.close();
