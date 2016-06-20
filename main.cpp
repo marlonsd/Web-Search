@@ -18,7 +18,7 @@ void parsing_anchor_text(const string& doc, Tokenizer& t, const unordered_set<st
 Stopwords *Stopwords::s_instance = 0;
 LinkMap *LinkMap::s_instance = 0;
 
-int main(int argc, const char* argv[]) {  
+int main(int argc, const char* argv[]) {
 	vector<string> files;
 	fstream input, doc_id;
 	string acc, url, last_read = "";
@@ -135,7 +135,7 @@ int main(int argc, const char* argv[]) {
 							// parsing(acc, t, stopwords);
 
 							Document doc(acc, url);
-							
+
 							network.add_url(doc);
 
 							// Tokenizer t(doc.get_text(), Stopwords::instance()->get_value());
@@ -172,7 +172,7 @@ int main(int argc, const char* argv[]) {
 
 void resetingOutputFiles(){
 	ofstream output;
-	
+
 	output.open(INDEX_AUX_FILE_NAME, ios::out);
 	output.close();
 

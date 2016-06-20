@@ -17,17 +17,22 @@ struct Page {
 
 class Pagerank {
 private:
-	unordered_map<unsigned int, Page> graph; 		// <URL, <Count inbound link, List of outbound links>>
+	unordered_map<unsigned int, Page> graph; 		// <URL, <rank, # outbound links, list of inlinks>>
 	double d;
+	double epsilon;
 	double initial_value;
 
 	void load_graph();
-	void compute_rank();
-	void compute_rank(int max_it);
+	void compute_rank(unsigned int max_it = 0);
+
+	bool condition(double error, unsigned int it = 0, unsigned int max_it = 0);
 
 public:
 
-	Pagerank(double initial_value = 1.0, double d = 0.85, int max_it = -1);
+	Pagerank(double initial_value = 1.0, double d = 0.85, double epsilon = 0.0001, unsigned int max_it = 0);
+
+	double get_rank(unsigned int page);
+	Page get_page(unsigned int page);
 
 };
 

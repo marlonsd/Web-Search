@@ -12,6 +12,7 @@
 #include <cstdlib>
 #include <queue>
 #include <deque>
+#include <cmath>
 #include <dirent.h>
 
 #define MEMORY_LIMITE 250000000 // (bytes)
@@ -19,7 +20,7 @@
 
 /* <word id, doc id, frequency of word, position>
  * <int, int, int, int>
- * 4*4 
+ * 4*4
  * 36
 */
 #define INDEX_LINE_SIZE 32
@@ -45,7 +46,7 @@
 #define ANCHOR_INDEX_SORTED_FILE_NAME "util/index/anchor/sorted_index.bin"
 
 #define ANCHOR_VOCABULARY_FILE_NAME "util/index/anchor/vocabulary"
- 
+
 #define ANCHOR_DOC_ID_FILE_NAME "util/index/anchor/doc_id"
 
 #define GRAPH_FILENAME "util/pagerank/graph"

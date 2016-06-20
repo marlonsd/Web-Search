@@ -1,26 +1,27 @@
 #include "pagerank.h"
 
-Pagerank::Pagerank(double initial_value, double d, int max_it){
-	this->graph = {};
-	this->initial_value = initial_value;
-	this->d = d;
+Pagerank::Pagerank(double initial_value, double d, double epsilon, unsigned int max_it){
+	std::cout << "Creating pagerank" << std::endl;
 
+	this->d = d;
+	this->graph = {};
+	this->epsilon = epsilon;
+	this->initial_value = initial_value;
+
+	std::cout << "Loading graph" << std::endl;
 	this->load_graph();
 
-	if (max_it > 0){
-		this->compute_rank(max_it);
-	} else {
-		this->compute_rank();
-	}
+	std::cout << "Computing rank" << std::endl;
+
+	this->compute_rank(max_it);
 }
 
 void Pagerank::load_graph(){
 	bool c;
 	string aux;
-	unsigned int out_link;
-	int link, loop = 0, trash;
-
 	ifstream f;
+	int link, loop = 0;
+	unsigned int in_link;
 
 	f.open(GRAPH_FILENAME, ios::out);
 
@@ -33,24 +34,22 @@ void Pagerank::load_graph(){
 			f >> aux;
 
 			if (aux == "*"){
-				node.value = this->initial_value;
-
 				f >> link;
 				f >> c;
-				f >> trash;
 
 				f >> node.out_links;
 				for(int i = 0; i < node.out_links; i++){
-					f >> out_link;
+					f >> in_link;
 				}
 
 				f >> loop;
 				for(int i = 0; i < loop; i++){
-					f >> out_link;
-					node.in_links.push_back(out_link);
+					f >> in_link;
+					node.in_links.push_back(in_link);
 				}
 
-				this->links[link] = node;
+				node.value = this->initial_value;
+				this->graph[link] = node;
 			}
 		}
 	}
@@ -58,36 +57,55 @@ void Pagerank::load_graph(){
 	f.close();
 }
 
-void Pagerank::compute_rank(){
-	double sum_rank;
+void Pagerank::compute_rank(unsigned int max_it){
+	double sum_rank, error;
 	unordered_map<unsigned int, Page> new_graph;
 
 	bool cond = true;
-	int it = 0;
+	unsigned int it = 0;
 
 	while(cond){
 		cond = false;
 
 		for (auto page : this->graph){
+			error = 0.0;
 			sum_rank = 0.0;
 
 			for (unsigned int i : page.second.in_links){
 				sum_rank += (this->graph[i].value / this->graph[i].out_links);
 			}
 
-			new_graph[page.first] = (this->d * sum_rank) + (1.0 - this->d);
+			new_graph[page.first].value = (this->d * sum_rank) + (1.0 - this->d);
 
-			cond = cond | (new_graph[page.first] != this->graph[page.first]);
+			error += abs(new_graph[page.first].value - this->graph[page.first].value);
 		}
-
-
 
 		this->graph.clear();
 		this->graph = new_graph;
+
+		cond = this->condition(error, it, max_it);
+
+		it++;
 	}
 
 }
 
-void Pagerank::compute_rank(int max_it){
-	
+// Calculates stop criteria:
+//    abs(PR_i+1 - PR_i) <= epsilon
+bool Pagerank::condition(double error, unsigned int it, unsigned int max_it){
+	bool cond = error <= this->epsilon;
+
+	if (max_it > 0){
+		cond = cond | (it < max_it);
+	}
+
+	return !cond;
+}
+
+double Pagerank::get_rank(unsigned int page){
+	return this->graph[page].value;
+}
+
+Page Pagerank::get_page(unsigned int page){
+	return this->graph[page];
 }

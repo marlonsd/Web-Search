@@ -131,10 +131,13 @@ void Graph::print(){
 
 	for (auto e : this->links){
 		cout << e.first << "\n";
-		cout << "\t In links: " << e.second.in_links.size() << endl;
+		cout << "\t In links ["<< e.second.in_links.size() <<"] : " << endl;
+		for (unsigned int link : e.second.in_links){
+			cout << "\t\t<-- " << link <<endl;
+		}
 		cout << "\t Out links ["<< e.second.out_links.size() <<"] : " << endl;
 		for (unsigned int link : e.second.out_links){
-			cout << "\t\t" << link <<endl;
+			cout << "\t\t--> " << link <<endl;
 		}
 		cout << endl;
  	}

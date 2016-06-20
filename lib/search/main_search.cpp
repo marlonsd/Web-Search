@@ -8,11 +8,13 @@
 
 #include "../search/graph.h"
 #include "../search/search.h"
+#include "../search/vectorialsearch.h"
+#include "../search/pagerank.h"
 
 Stopwords *Stopwords::s_instance = 0;
 LinkMap *LinkMap::s_instance = 0;
 
-int main(int argc, const char* argv[]) {  
+int main(int argc, const char* argv[]) {
 	string query, token;
 	std::size_t found;
 	InvertedIndex index;
@@ -23,9 +25,9 @@ int main(int argc, const char* argv[]) {
 	vector<string> doc_id;
 	Search searcher;
 	Graph network;
+	Pagerank pagerank;
 
-	// network.restore();
-	// network.print();
+	network.restore();
 
 	return 0;
 }
