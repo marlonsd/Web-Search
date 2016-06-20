@@ -1,17 +1,12 @@
 #include "pagerank.h"
 
 Pagerank::Pagerank(double initial_value, double d, double epsilon, unsigned int max_it){
-	std::cout << "Creating pagerank" << std::endl;
-
 	this->d = d;
 	this->graph = {};
 	this->epsilon = epsilon;
 	this->initial_value = initial_value;
 
-	std::cout << "Loading graph" << std::endl;
 	this->load_graph();
-
-	std::cout << "Computing rank" << std::endl;
 
 	this->compute_rank(max_it);
 }
@@ -59,16 +54,16 @@ void Pagerank::load_graph(){
 
 void Pagerank::compute_rank(unsigned int max_it){
 	double sum_rank, error;
-	unordered_map<unsigned int, Page> new_graph;
+	unordered_map<unsigned int, Page> new_graph = this->graph;
 
 	bool cond = true;
 	unsigned int it = 0;
 
 	while(cond){
 		cond = false;
+		error = 0.0;
 
 		for (auto page : this->graph){
-			error = 0.0;
 			sum_rank = 0.0;
 
 			for (unsigned int i : page.second.in_links){
@@ -80,7 +75,6 @@ void Pagerank::compute_rank(unsigned int max_it){
 			error += abs(new_graph[page.first].value - this->graph[page.first].value);
 		}
 
-		this->graph.clear();
 		this->graph = new_graph;
 
 		cond = this->condition(error, it, max_it);
@@ -96,7 +90,7 @@ bool Pagerank::condition(double error, unsigned int it, unsigned int max_it){
 	bool cond = error <= this->epsilon;
 
 	if (max_it > 0){
-		cond = cond | (it < max_it);
+		cond = cond | (it >= max_it);
 	}
 
 	return !cond;

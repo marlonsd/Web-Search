@@ -25,7 +25,7 @@ int main(int argc, const char* argv[]) {
 	vector<string> doc_id;
 	Search searcher;
 	Graph network;
-	Pagerank pagerank;
+	Pagerank pagerank(1.0, 0.85, 0.0001, 15);
 
 	network.restore();
 
