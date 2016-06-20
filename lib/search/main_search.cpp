@@ -2,6 +2,7 @@
 #include "../common/Document.h"
 #include "../common/Stopwords.h"
 #include "../common/linkmap.h"
+#include "../common/PriorityQueue.h"
 
 #include "../indexer/Inverted_Index.h"
 #include "../indexer/Inverted_Index_Anchor.h"
@@ -23,11 +24,20 @@ int main(int argc, const char* argv[]) {
 	vector<int> all_files;
 	bool first = true;
 	vector<string> doc_id;
-	Search searcher;
+	VectorialSearch searcher;
 	Graph network;
-	Pagerank pagerank(1.0, 0.85, 0.0001, 15);
+	// Pagerank pagerank(1.0, 0.85, 0.0001, 15);
 
-	network.restore();
+	// network.restore();
+
+	cout << "Doing research" << endl;
+
+	PriorityQueue t = searcher.search("porridge");
+
+	while (t.size()){
+		Ranking item = t.pop();
+		cout << item.id << " " << item.rank << endl;
+	}
 
 	return 0;
 }
