@@ -197,7 +197,7 @@ void InvertedIndexAnchor::sorted_index(){
 			final = true;
 		} else {
 			// Intercalation
-			n_files = ((MAX_OS_OPEN_FILE - 1) < (MEMORY_LIMITE/INDEX_LINE_SIZE) ? 
+			n_files = ((MAX_OS_OPEN_FILE - 1) < (MEMORY_LIMITE/INDEX_LINE_SIZE) ?
 						MAX_OS_OPEN_FILE - 1 :
 						(MEMORY_LIMITE/INDEX_LINE_SIZE));
 
@@ -205,7 +205,7 @@ void InvertedIndexAnchor::sorted_index(){
 			this->n_dumps++;
 		}
 
-		
+
 
 		fstream p[n_files];
 
@@ -237,7 +237,7 @@ void InvertedIndexAnchor::sorted_index(){
 			// add word to vocabulary;
 			// do compression
 			if (final){
-				if (this->vocabulary_order.size() && this->vocabulary_order[0].id == aux[0]){			
+				if (this->vocabulary_order.size() && this->vocabulary_order[0].id == aux[0]){
 					// Each line occupates 16 bytes
 					this->vocabulary_dump(this->vocabulary_order[0], out.tellp());
 					this->vocabulary_order.pop_front();
@@ -245,7 +245,7 @@ void InvertedIndexAnchor::sorted_index(){
 
 				this->distance_diff(aux);
 			}
-			
+
 			// Saving smallest tuple
 			this->write_line(aux, out);
 
@@ -294,7 +294,7 @@ void InvertedIndexAnchor::vocabulary_dump(Vocabulary item, streampos pos){
 	f.open(ANCHOR_VOCABULARY_FILE_NAME, ios::out | ios::app);
 
 	// word, index position, ni, idf
-	f << item.word << " " << pos << " " << item.total_docs << " " << item.total_docs << endl;
+	f << item.word << " " << pos << " " << item.total_docs << " " << item.total_docs << '\n';
 
 	f.close();
 
@@ -308,7 +308,7 @@ void InvertedIndexAnchor::vocabulary_init(){
 
 	f.open(ANCHOR_VOCABULARY_FILE_NAME, ios::out);
 
-	f << this->total_docs;
+	f << this->total_docs << '\n';
 
 	f.close();
 
@@ -331,7 +331,7 @@ void InvertedIndexAnchor::load_vocabulary(){
 			// word, index position, ni, N/ni
 			f >> item.word >> pos >> item.total_docs >> item.idf;
 			item.file_pos = (streampos) pos;
-			
+
 			if (item.word.size()){
 				this->vocabulary[item.word] = this->word_index;
 
@@ -385,12 +385,12 @@ vector<FileList> InvertedIndexAnchor::get_list(string& token){
 			temp.position.push_back(line[3]);
 
 			// Repeats the exact number of times token appers in the doc
-			for (int r = 0; r < rep - 1 && test; r++ ){				
+			for (int r = 0; r < rep - 1 && test; r++ ){
 
 				test = this->read_line(f, line);
 				this->distance_rest(line);
 
-				temp.position.push_back(line[3]);						
+				temp.position.push_back(line[3]);
 			}
 
 			list.push_back(temp);

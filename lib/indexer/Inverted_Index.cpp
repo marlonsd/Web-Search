@@ -64,12 +64,12 @@ void InvertedIndex::write_line(vector<int> values, fstream& file, vector<int>::s
 	if (values.size() > min){
 		std::copy(values.begin(), min+values.begin(), std::back_inserter(aux));
 	} else {
-		aux = values;		
+		aux = values;
 	}
 
 
 	for (int value : aux){
-		file.write((char*) &value, sizeof(value));	
+		file.write((char*) &value, sizeof(value));
 	}
 }
 
@@ -81,12 +81,12 @@ void InvertedIndex::write_line(vector<int> values, ofstream& file, vector<int>::
 	if (values.size() > min){
 		std::copy(values.begin(), min+values.begin(), std::back_inserter(aux));
 	} else {
-		aux = values;		
+		aux = values;
 	}
 
 
 	for (int value : aux){
-		file.write((char*) &value, sizeof(value));	
+		file.write((char*) &value, sizeof(value));
 	}
 }
 
@@ -323,7 +323,7 @@ void InvertedIndex::sorted_index(){
 			final = true;
 		} else {
 			// Intercalation
-			n_files = ((MAX_OS_OPEN_FILE - 1) < (MEMORY_LIMITE/INDEX_LINE_SIZE) ? 
+			n_files = ((MAX_OS_OPEN_FILE - 1) < (MEMORY_LIMITE/INDEX_LINE_SIZE) ?
 						MAX_OS_OPEN_FILE - 1 :
 						(MEMORY_LIMITE/INDEX_LINE_SIZE));
 
@@ -332,7 +332,7 @@ void InvertedIndex::sorted_index(){
 			this->n_dumps++;
 		}
 
-		
+
 
 		fstream p[n_files];
 
@@ -361,7 +361,7 @@ void InvertedIndex::sorted_index(){
 			// add word to vocabulary;
 			// do compression
 			if (final){
-				if (this->vocabulary_order.size() && this->vocabulary_order[0].id == aux[0]){			
+				if (this->vocabulary_order.size() && this->vocabulary_order[0].id == aux[0]){
 					// Each line occupates 16 bytes
 					this->vocabulary_dump(this->vocabulary_order[0], out.tellp());
 					this->vocabulary_order.pop_front();
@@ -369,7 +369,7 @@ void InvertedIndex::sorted_index(){
 
 				this->distance_diff(aux);
 			}
-			
+
 			// Saving smallest tuple
 			this->write_line(aux, out);
 
@@ -416,7 +416,7 @@ void InvertedIndex::vocabulary_dump(Vocabulary item, streampos pos){
 	f.open(VOCABULARY_FILE_NAME, ios::out | ios::app);
 
 	// word, index position, ni, idf
-	f << item.word << " " << pos << " " << item.total_docs << " " << item.total_docs << endl;
+	f << item.word << " " << pos << " " << item.total_docs << " " << item.total_docs << '\n';
 
 	f.close();
 
@@ -430,7 +430,7 @@ void InvertedIndex::vocabulary_init(){
 
 	f.open(VOCABULARY_FILE_NAME, ios::out);
 
-	f << this->total_docs;
+	f << this->total_docs << '\n';
 
 	f.close();
 
@@ -458,7 +458,7 @@ void InvertedIndex::load_vocabulary(){
 			// word, index position, ni, N/ni
 			f >> item.word >> pos >> item.total_docs >> item.idf;
 			item.file_pos = (streampos) pos;
-			
+
 			if (item.word.size()){
 				this->vocabulary[item.word] = this->word_index;
 
@@ -512,12 +512,12 @@ vector<FileList> InvertedIndex::get_list(string& token){
 			temp.position.push_back(line[3]);
 
 			// Repeats the exact number of times token appers in the doc
-			for (int r = 0; r < rep - 1 && test; r++ ){				
+			for (int r = 0; r < rep - 1 && test; r++ ){
 
 				test = this->read_line(f, line);
 				this->distance_rest(line);
 
-				temp.position.push_back(line[3]);						
+				temp.position.push_back(line[3]);
 			}
 
 			list.push_back(temp);
@@ -533,7 +533,7 @@ void InvertedIndex::distance_diff(vector<int>& v){
 
 	// v[0] = Term index
 	// v[1] = Doc index
-	// v[2] = Term freq at doc 
+	// v[2] = Term freq at doc
 	// v[3] = Pos at doc
 
 	if (v[1] != this->previous[1]){
