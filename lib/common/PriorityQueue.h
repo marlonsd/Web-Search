@@ -13,7 +13,7 @@ struct Ranking{
 
 struct rank_comp {
 	bool operator()(Ranking A, Ranking B) {
-		return (A.rank > B.rank);
+		return (A.rank < B.rank);
 	}
 };
 
@@ -25,13 +25,13 @@ private:
 public:
 	PriorityQueue();
 	~PriorityQueue();
-	
+
 	void push(Ranking url);
 	Ranking pop();
 
 	int size();
 	bool empty();
-	
+
 	Ranking getFromVector(int i);
 	Ranking popFromVector();
 	void clear();

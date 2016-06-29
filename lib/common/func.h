@@ -40,6 +40,8 @@
 
 #define DOC_ID_FILE_NAME "util/index/doc_id"
 
+#define DOC_WD_FILE_NAME "util/index/w_d"
+
 // Anchor text
 #define ANCHOR_INDEX_AUX_FILE_NAME "util/index/anchor/aux_index.bin"
 #define ANCHOR_INDEX_BACKUP_FILE_NAME "util/index/anchor/split/backup_index"
@@ -48,6 +50,8 @@
 #define ANCHOR_VOCABULARY_FILE_NAME "util/index/anchor/vocabulary"
 
 #define ANCHOR_DOC_ID_FILE_NAME "util/index/anchor/doc_id"
+
+#define ANCHOR_DOC_WD_FILE_NAME "util/index/w_d"
 
 #define GRAPH_FILENAME "util/pagerank/graph"
 

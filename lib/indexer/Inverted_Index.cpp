@@ -404,6 +404,8 @@ void InvertedIndex::sorted_index(){
 
 	// Saves text file without the usage of comprassion
 	this->rest();
+
+	this->wd_computing();
 }
 
 // Saves info in the vocabulary file
@@ -643,5 +645,68 @@ void InvertedIndex::to_text(){
 
 
 	input.close();
+	output.close();
+}
+
+void InvertedIndex::wd_computing(){
+	bool test;
+	double w_t;
+	vector<int> aux;
+	int word_id, doc_id, freq, pos;
+	// int previous_word_id = 0, previous_doc_id = 0;
+
+	ifstream input;
+	ofstream output;
+
+	input.open(INDEX_SORTED_FILE_NAME, ios::in);
+
+	unordered_map<unsigned int, double> w_d;
+
+	this->load_vocabulary();
+
+	if (input.is_open()){
+		this->reset_distance();
+		// test = this->read_line(word_id, doc_id, freq, pos, input);
+		test = this->read_line(input, aux);
+
+		while (test){
+
+			this->distance_rest(aux);
+			word_id = aux[0]; doc_id = aux[1]; freq = aux[2]; pos = aux[3];
+
+			w_t = log2(1.0 + (this->total_docs / (this->vocabulary_order[word_id].idf)));
+
+			// doc_id += previous_doc_id;
+
+			if(w_d.find(doc_id) == w_d.end()){
+				w_d[doc_id] = 0.0;
+			}
+
+			w_d[doc_id] += pow((1.0 + log2(freq)) * w_t,2);
+
+			for (int i = 0; i < (freq - 1) && !input.eof(); i++){
+				// this->read_line(word_id, doc_id, freq, pos, input);
+				test = this->read_line(input, aux);
+			}
+
+			// test = this->read_line(word_id, doc_id, freq, pos, input);
+			test = this->read_line(input, aux);
+		}
+	}
+
+	input.close();
+
+	this->vocabulary.clear();
+
+	output.open(DOC_WD_FILE_NAME, ios::out);
+
+	if (output.is_open()){
+		output << w_d.size() << '\n';
+
+		for (auto wd : w_d){
+			output << wd.first << " " << sqrt(wd.second) << '\n';
+		}
+	}
+
 	output.close();
 }

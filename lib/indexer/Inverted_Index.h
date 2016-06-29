@@ -51,6 +51,7 @@ protected:
 	bool read_line(ifstream& file, vector<int>& v, streampos pos = 0, int it = 4);
 
 	void vocabulary_init();
+	void wd_computing();
 
 
 public:
@@ -62,7 +63,7 @@ public:
 	void indexing(Document doc, int index = 0);
 
 	void sorted_index();
-	
+
 	void vocabulary_dump(Vocabulary item, streampos pos);
 
 	vector<FileList> get_list(string& token);

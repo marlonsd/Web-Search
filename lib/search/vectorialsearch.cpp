@@ -1,11 +1,21 @@
 #include "vectorialsearch.h"
 
 VectorialSearch::VectorialSearch(bool a){
+	ifstream input;
+
 	if (a){
+		this->w_d = NULL;
+
 		Search(true);
+		input.open(ANCHOR_DOC_WD_FILE_NAME, ios::in);
+		this->load_w_d(input);
 	} else {
 		Search(false);
+		input.open(DOC_WD_FILE_NAME, ios::in);
+		this->load_w_d(input);
 	}
+
+	input.close();
 }
 
 void VectorialSearch::read_line(int& word_id, int& doc_id, int& freq, int& pos, ifstream& index){
@@ -26,7 +36,6 @@ PriorityQueue VectorialSearch::search(string query){
 	int word_id, doc_id, freq, pos;
 
 	unordered_map<unsigned int, double> acc;
-	unordered_map<unsigned int, double> w_d;
 
 	std::cout << "Processing query: " << query  << std::endl;
 
@@ -45,7 +54,7 @@ PriorityQueue VectorialSearch::search(string query){
 	// TODO: Accumulate tfidf of documents in order to have vectorial product
 	while(t.size() > 0){
 		token = t.getToken();
-		std::cout << token << std::endl;
+		std::cout << "\tProcessing token: " << token << std::endl;
 
 		if(token.size() > 0){
 
@@ -80,13 +89,6 @@ PriorityQueue VectorialSearch::search(string query){
 					}
 					acc[doc_id] += w_dt;
 
-					// Acc W_d
-					if(w_d.find(doc_id) == w_d.end()){
-						w_d[doc_id] = 0.0;
-					}
-
-					w_d[doc_id] += pow(w_dt, 2.0);
-
 					for (int i = 0; i < (freq - 1) && !index.eof(); i++){
 						this->read_line(word_id, doc_id, freq, pos, index);
 						std::cout << "\t";
@@ -104,7 +106,9 @@ PriorityQueue VectorialSearch::search(string query){
 					// item.second => acc[doc_id]
 
 					rank.id = item.first;
-					rank.rank = acc[rank.id] / sqrt(w_d[rank.id]);
+					rank.rank = acc[rank.id] / this->w_d[rank.id];
+					std::cout << "rank value: " << item.second << " " << (w_d[rank.id]) << std::endl;
+					std::cout << "rank value: " << acc[rank.id] / this->w_d[rank.id] << std::endl;
 
 					top.push(rank);
 
@@ -116,4 +120,27 @@ PriorityQueue VectorialSearch::search(string query){
 	index.close();
 
 	return top;
+}
+
+void VectorialSearch::load_w_d(ifstream& input){
+	int id, size;
+	double value;
+
+	if (input.is_open()){
+
+		input >> size;
+
+		this->w_d = new double[size];
+
+		// Just to be sure that all documents will have some w_d
+		for (int i; i < size; i++){
+			this->w_d[i] = 0.0;
+		}
+
+		while(!input.eof()){
+			input >> id >> value;
+			this->w_d[id] = value;
+			std::cout << "id: " << id << " value: " << value << std::endl;
+		}
+	}
 }
