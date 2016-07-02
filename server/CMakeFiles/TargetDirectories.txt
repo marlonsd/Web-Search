@@ -1,3 +1,0 @@
-/Users/msdias/Documents/Universidade Federal de Minas Gerais/2016 1/Information Retrieval/TP3/Web-Search/server/test/CMakeFiles/parse_test.dir
-/Users/msdias/Documents/Universidade Federal de Minas Gerais/2016 1/Information Retrieval/TP3/Web-Search/server/CMakeFiles/http_examples.dir
-/Users/msdias/Documents/Universidade Federal de Minas Gerais/2016 1/Information Retrieval/TP3/Web-Search/server/CMakeFiles/https_examples.dir
