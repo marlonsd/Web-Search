@@ -1,8 +1,117 @@
-<html>
-    <head>
-        <title>Simple-Web-Server html-file</title>
-    </head>
-    <body>
-        This is the content of index.html
-    </body>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Search Engine</title>
+
+    <link type="text/css" rel="stylesheet" href="css/main.css"  media="screen,projection"/>
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+    
+    <link rel="stylesheet" href="css/bootstrap-tagsinput.css">
+    <link type="text/css" href="css/nouislider.min.css" rel="stylesheet">
+
+    <!--Import table.css-->
+    <link href="css/jquery.dataTables.min.css" type="text/css" rel="stylesheet" media="screen,projection">
+
+    <link type="text/css" href="css/angular-chart.css" rel="stylesheet">
+  </head>   
+
+  <body>
+    
+    <!-- Nav bar -->
+
+      <div class="navbar-fixed">
+        <nav>
+          <div class="nav-wrapper  blue lighten-2">
+            <a href="index.php" class="brand-logo">Search Engine</a>
+          </div>
+        </nav>
+      </div>
+
+    <!-- End nav bar -->
+
+    <!-- HTML PAGE START HERE -->
+
+    <div class= "ctr-p">
+      <div class="row valign center">
+        <div class="col s12"><p>s12</p></div>
+        <div class="col s12 m4 l2"><p>s12 m4</p></div>
+        <div class="col s12 m4 l8"><p>Search Engine</p></div>
+        <div class="col s12 m4 l2"><p>s12 m4</p></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <form class="col s10" id="searchForm">
+        <div class="row">
+          <div class="input-field col s12">
+            <input placeholder="Type your search" id="first_name" type="text" class="validate ">
+            <label for="first_name">Search</label>
+          </div>
+        </div>
+      </form>
+
+      <div class="row">
+        <center>
+          <button id="cadastrarButton" class="waves-effect waves-light btn blue lighten-2" type="submit" background="black">
+            <i class="material-icons prefix">search</i>
+          </button>
+        </center>  
+      </div>
+    </div>
+
+
+    <!-- HTML PAGE END HERE -->
+
+    <!-- Footer starts -->
+    <footer class="page-footer  blue lighten-2">
+      <div class="container">
+        <div class="row">
+          <div class="col l4 s12">
+            <h5 class="white-text">Search Engine</h5>
+            <p class="grey-text text-lighten-4">This search engine is part of an assignment from Information Retrieval course of Federal University of Minas Gerais.</p>
+          </div>
+          <div class="col l4 s12" style="visibility: hidden">
+            <h5 class="white-text">Contact</h5>
+            <ul>
+              <li><p class="grey-text text-lighten-3">Marlon Dias - <a class="grey-text text-lighten-3" href="mailto:mdsdias@dcc.ufmg.br">msdias@dcc.ufmg.br</a></p></li>          
+            </ul>
+          </div>
+          <div class="col l4 s12">
+            <h5 class="white-text">Contact</h5>
+            <ul>
+              <li><p class="grey-text text-lighten-3">Marlon Dias - <a class="grey-text text-lighten-3" href="mailto:mdsdias@dcc.ufmg.br">msdias@dcc.ufmg.br</a></p></li>          
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        <div class="container">
+        © 2016 Copyright
+        <!-- <a class="grey-text text-lighten-4 right" href="#!">Mais links</a> -->
+        </div>
+      </div>
+    </footer>
+    <!-- Footer ends -->
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/materialize.js"></script>
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-tagsinput-angular.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-tagsinput.min.js"></script>
+
+    <script type="text/javascript">
+      $( document ).ready(function(){
+        //$("#descricao").attr('data-error','The name field is required');
+
+      $(".button-collapse").sideNav();
+
+
+      });
+
+    </script>
+  </body>
 </html>

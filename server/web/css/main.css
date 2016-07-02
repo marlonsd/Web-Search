@@ -1,0 +1,249 @@
+/* label focus color */
+ .input-field input:focus + label {
+   color: #64b5f6 !important;
+ }
+ /* label underline focus color */
+ .row .input-field input:focus {
+   border-bottom: 1px solid #64b5f6  !important;
+   box-shadow: 0 1px 0 0 #64b5f6  !important
+ }
+
+
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1 0 auto;
+  }
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../font/material-design-icons/MaterialIcons-Regular.eot"); /* For IE6-8 */
+  src: local('Material Icons'),
+       local('MaterialIcons-Regular'),
+       url("../font/material-design-icons/MaterialIcons-Regular.woff2") format('woff2'),
+       url("../font/material-design-icons/MaterialIcons-Regular.woff") format('woff'),
+       url("../font/material-design-icons/MaterialIcons-Regular.ttf") format('truetype');
+}
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
+html{height: 100%;}
+body {min-height: 100%;}
+.z-depth-3{box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24) !important}
+/*** Home ***/
+.containerSize{width: 85%;}
+#dashboard{margin-bottom: 0;}
+#dashboard .card-action a{color:#2bbbad;}
+#dashboard .row{margin-bottom: 0;}
+#jMetrics{height: 20%;display: block;margin-top: 2%}
+
+/*** Dashboard ***/
+.flat-text{height: 25px;
+width: 80%;
+background-color: rgba(0, 0, 0, 0.15);
+display: block;
+margin: 27px auto;}
+#menu{background-color: #e0f2f1;position: fixed;}
+#content{float: right;margin-bottom: 20px;margin-top: 20px;margin-right: 20px;}
+
+/*** Login Page ***/
+ 
+/** Perfil **/
+#user {position: relative; left: 50%; width: 50%;}
+#avatar{position: relative; left: 25%;}
+#editar {position: relative; left: 87%;}
+#confirmar {position: relative; width: 50%;}
+#borda {position: relative; border: 1px solid #000000; width: 50%; left: 50%; height: 30%;}
+
+/*** Help ***/
+#help #faq{margin-bottom: 40px;}
+/*** Nova Comparacao e ranking ***/
+#novaComparacao .row{margin-bottom: 35px}
+#novaComparacao .progress{margin: 70px 0;width: 50%}
+#novaComparacao #projetos .row{padding-top: 40px}
+#novaComparacao #selecionados {padding-top: 40px}
+#novaComparacao #comparar{width: 40%;margin: 30px 0 50px 0;}
+#novaComparacao #gerarXML{width: 30%;margin: 30px 0 50px 0;}
+#novaComparacao #dit{margin-top: 7.7%;}
+#novaComparacao #nClasses{margin-top: 7.7%;}
+#novaComparacao #nMetodos{margin-top: 7.7%;}
+#novaComparacao .badge{background-color: #2bbbad; box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);line-height: 25px !important;border-radius: 50%;min-width: 25px !important;color:white !important;font-size: 12px !important;margin-top: 10px !important;}
+#novaComparacao #projetosTab{border-right: 2px solid #80cbc4 !important;}
+
+#novaComparacao #projetosTab .a {
+    color: #2bbbad;
+}
+
+#novaComparacao .tabs .indicator{ background-color:#80cbc4; }
+#novaComparacao .tabs .tab a { color: #26a69a; }
+#novaComparacao .tabs .tab a:hover{ color: #b2dfdb; }
+
+#ranking .row{margin-bottom: 35px}
+#ranking .progress{margin: 70px 0;width: 50%}
+#ranking #projetos .row{padding-top: 40px}
+#ranking #selecionados {padding-top: 40px}
+#ranking #comparar{width: 40%;margin: 30px 0 50px 0;}
+#ranking #dit{margin-top: 7.7%;}
+#ranking #nClasses{margin-top: 7.7%;}
+#ranking #nMetodos{margin-top: 7.7%;}
+
+#ranking .tabs .indicator{ background-color:#80cbc4; }
+#ranking .tabs .tab a { color: #26a69a; }
+#ranking .tabs .tab a:hover{ color: #b2dfdb; }
+
+#comparar{float:right;}
+#fechar{float:right;}
+#gerarXML{float:left;}
+#select{color:#26a69a;}
+#novaComparacao .tabs{margin-top: 0px;}
+
+
+#jMetricsLogo{margin: 30px 30px;}
+#jMetricsDetalhamento{margin-top: 2%;}
+#jMetricsDetalhamento .row{margin-left: 0px}
+#jMetricsDetalhamentoDesktop{margin-right:0.5%;width: 49%;}
+#jMetricsDetalhamentoWeb{margin-left:0.5%;width: 49%;}
+
+#noSelectedProjects {
+  width: 600px;
+  height: 230px;
+}
+
+#oneSelectedProject {
+  width: 600px%;
+  height: 230px%;
+}
+
+/*** Login ***/
+#login{margin-left: 5%;margin-top: 2%}
+#login .s3{width: 35%}
+#login .s9{width: 60%}
+#login h5{padding: 5% 0;}
+#cadastrar #cadastrarForm{margin-left: 10%;}
+#login #formlogin{margin-left: 10%;}
+#formlogin .input-field{margin-top: 10% !important;}
+/*** navbar ***/
+
+.brand-logo{margin-left: 5%;}
+
+/*** Inserir projeto ***/
+#inserirTitulo{font-size: 25px;padding-top: 30px}
+#inserir{margin-top: 1%;padding-bottom: 1%;}
+#inserir form{ width:100%;}
+#inserir .row{margin-bottom: 20px;}
+#formProgress{display: none; width: 60%;margin-left: 20%;margin-top: 10%;}
+
+#enviarProjeto{float:right;}
+
+/*** Visualizar projeto ***/
+.collapsible-body{overflow-x: auto;}
+#metricaProjeto{width: 100% !important}
+#classes{width: 100% !important}
+
+/*** Gerenciar projeto ***/
+#gerenciar .container{width:95%}
+#gerenciar #tabela_projeto{margin-bottom:3% }
+/*** Gráfico ***/
+.chart-legend li span {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 5px;
+  }
+
+/*** Footer ***/
+
+/*** Dropdown ***/
+.dropdown-content {
+  /*background-color: #FFFFFF;*/
+  /*margin: 0;*/
+  /*display: none;*/
+  /*min-width: 300px;  Changed this to accomodate content width */
+  /*max-height: auto;*/
+  margin-left: -17px; /* Add this to keep dropdown in line with edge of navbar */
+  overflow: hidden; /* Changed this from overflow-y:auto; to overflow:hidden; */
+  /*opacity: 0;*/
+  /*position: absolute;*/
+  /*white-space: nowrap;*/
+  /*z-index: 1;*/
+  /*will-change: width, height;*/
+}
+
+/*** Buscar ***/
+#search{width: 60% !important;margin-left: 20%;margin-top: 1%;}
+#search input{width: 100% !important;margin: 0;}
+
+
+#historico .submit a {color:#26a69a;}
+
+#gerenciar #tabela_projeto a {color:#26a69a;}
+#gerenciar .delete {color:#26a69a;}
+
+/*** MENU ***/
+.avatar {border-radius: 50% 50% 50% 50%; margin-top: 15px;width: 160px;width: 160px}
+
+/*** Tree ***/
+.css-treeview{margin-top: 15px;}
+.css-treeview ul,.css-treeview li{padding: 0;margin: 0;list-style: none;margin-top: 3px;}
+.css-treeview input{position: absolute;opacity: 0;}
+.css-treeview a{color:#616161;text-decoration: none;}
+.css-treeview input + label + ul{margin: 0 0 0 70px;}
+.css-treeview input + label + ul{display: none;}
+.css-treeview label,.css-treeview label::before{cursor: pointer;}
+.css-treeview label{color:#9e9e9e;}
+.css-treeview input:disabled + label{cursor: default;}
+.css-treeview input:checked:not(:disabled) + label + ul{display: block;}
+.css-treeview label,.css-treeview label::before{}
+.css-treeview label,.css-treeview a,.css-treeview label::before{display: inline-block;height: 16px;line-height: 16px;vertical-align: middle;}
+.css-treeview label{background-position: 18px 0;}
+.css-treeview label::before{content: "";width: 16px;margin: 0 22px 0 0;vertical-align: middle;background-position: 0 -32px;}
+.css-treeview input:checked + label::before{background-position: 0 -16px;}
+/* webkit adjacent element selector bugfix */
+@media screen and (-webkit-min-device-pixel-ratio:0)
+{
+  .css-treeview 
+  {
+    -webkit-animation: webkit-adjacent-element-selector-bugfix infinite 1s;
+  }
+  
+  @-webkit-keyframes webkit-adjacent-element-selector-bugfix 
+  {
+    from 
+    { 
+      padding: 0;
+    } 
+    to 
+    { 
+      padding: 0;
+    }
+  }
+}
