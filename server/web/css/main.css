@@ -8,6 +8,9 @@
    box-shadow: 0 1px 0 0 #64b5f6  !important
  }
 
+.span.lever.blue.lighten-2::after{
+  background-color: #64b5f6;
+}
 
 body {
     display: flex;

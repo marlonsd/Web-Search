@@ -35,7 +35,7 @@
 
     <!-- HTML PAGE START HERE -->
 
-    <div class= "ctr-p">
+    <div class= "row">
       <div class="row valign center">
         <div class="col s12"><p>s12</p></div>
         <div class="col s12 m4 l2"><p>s12 m4</p></div>
@@ -56,10 +56,42 @@
 
       <div class="row">
         <center>
-          <button id="cadastrarButton" class="waves-effect waves-light btn blue lighten-2" type="submit" background="black">
-            <i class="material-icons prefix">search</i>
-          </button>
+          <button id="cadastrarButton" class="btn-floating btn-large waves-effect waves-light btn blue lighten-2" type="submit" background="black">
+            <i class="material-icons prefix">search</i></button>
         </center>  
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="row valign center">
+        <div class="col s12 m4 l2">a</div>
+        <div class="col s12 m4 l8">
+          <div class="row">
+            <div class="col s6">
+              <form action="#">
+                <center>Cossine Similarity</center><br />
+                <div class="col s6">
+                  <input class="with-gap" name="group1" type="radio" id="text" />
+                  <label for="text">Text</label>
+                </div>
+                <div class="col s6">
+                  <input class="with-gap" name="group1" type="radio" id="anchor" />
+                  <label for="anchor">Anchor</label>
+                </div>
+              </form>
+            </div>
+            <div class="switch col s6">
+                <center>PageRank</center> <br \>
+              <label>
+                Off
+                <input type="checkbox">
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="col s12 m4 l2">a</div>
       </div>
     </div>
 
@@ -83,8 +115,8 @@
           <div class="col l4 s12">
             <h5 class="white-text">Contact</h5>
             <ul>
-              <li><p class="grey-text text-lighten-3">Marlon Dias - <a class="grey-text text-lighten-3" href="mailto:mdsdias@dcc.ufmg.br">msdias@dcc.ufmg.br</a></p></li>    
-              <li><a class="grey-text text-lighten-3" href="https://github.com/marlonsd/Web-Search">Github</a></p></li>      
+              <li><p class="grey-text text-lighten-3">Marlon Dias - <a class="grey-text text-lighten-3" href="mailto:mdsdias@dcc.ufmg.br">msdias@dcc.ufmg.br</a></p></li>
+              <li><a class="grey-text text-lighten-3" href="mailto:mdsdias@dcc.ufmg.br">Github</a></p></li>
             </ul>
           </div>
         </div>
@@ -92,7 +124,6 @@
       <div class="footer-copyright">
         <div class="container">
         © 2016 Copyright
-        <!-- <a class="grey-text text-lighten-4 right" href="#!">Mais links</a> -->
         </div>
       </div>
     </footer>
