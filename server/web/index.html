@@ -37,10 +37,9 @@
 
     <div class= "row">
       <div class="row valign center">
-        <div class="col s12"><p>s12</p></div>
-        <div class="col s12 m4 l2"><p>s12 m4</p></div>
-        <div class="col s12 m4 l8"><p>Search Engine</p></div>
-        <div class="col s12 m4 l2"><p>s12 m4</p></div>
+        <div class="col s12"><p></p></div>
+        <div class="col s12"><p></p></div>
+        <div class="col s12"><p><h5><font color="#616161">Search Engine</font></h5></p></div>
       </div>
     </div>
 
@@ -64,34 +63,34 @@
 
     <div class="row">
       <div class="row valign center">
-        <div class="col s12 m4 l2">a</div>
+        <div class="col s12 m4 l2"><p /></div>
         <div class="col s12 m4 l8">
           <div class="row">
             <div class="col s6">
               <form action="#">
-                <center>Cossine Similarity</center><br />
+                <center><font color='#616161'>Cossine Similarity</font></center><br />
                 <div class="col s6">
-                  <input class="with-gap" name="group1" type="radio" id="text" />
-                  <label for="text">Text</label>
+                  <input class="with-gap" name="group1" type="radio" id="text" checked />
+                  <label for="text"><font color="#616161">Text</font></label>
                 </div>
                 <div class="col s6">
                   <input class="with-gap" name="group1" type="radio" id="anchor" />
-                  <label for="anchor">Anchor</label>
+                  <label for="anchor"><font color="#616161">Anchor</font></label>
                 </div>
               </form>
             </div>
             <div class="switch col s6">
-                <center>PageRank</center> <br \>
+                <center><font color='#616161'>PageRank</font></center> <br \>
               <label>
-                Off
+                <font color="#616161">Off</font>
                 <input type="checkbox">
                 <span class="lever"></span>
-                On
+                <font color="#616161">On</font>
               </label>
             </div>
           </div>
         </div>
-        <div class="col s12 m4 l2">a</div>
+        <div class="col s12 m4 l2"><p /></div>
       </div>
     </div>
 
@@ -100,30 +99,50 @@
 
     <!-- Footer starts -->
     <footer class="page-footer  blue lighten-2">
-      <div class="container">
+      <!-- <div class="container"> -->
         <div class="row">
-          <div class="col l4 s12">
+          <div class="col s12 m4 l4">
             <h5 class="white-text">Search Engine</h5>
             <p class="grey-text text-lighten-4">This search engine is part of an assignment from Information Retrieval course of Federal University of Minas Gerais.</p>
           </div>
-          <div class="col l4 s12" style="visibility: hidden">
-            <h5 class="white-text">Contact</h5>
-            <ul>
-              <li><p class="grey-text text-lighten-3">Marlon Dias - <a class="grey-text text-lighten-3" href="mailto:mdsdias@dcc.ufmg.br">msdias@dcc.ufmg.br</a></p></li>          
-            </ul>
+          <div class="col s12 m4 l4" > <!-- style="visibility: hidden" -->
+            <div class="row">
+              <div class="col s4">
+                <center><h5 class="white-text">Author</h5></center>
+                <img class="img-circle" hspace="20px" width="100px" height="100px" src="img/about_images/marlon.jpg" />
+              </div>
+              <div class="col s6">
+                <div style="visibility: hidden">
+                <h5 class="white-text">Author</h5>
+                </div>
+                <p class="grey-text text-lighten-4">
+                  Marlon da Silva Dias<br />
+                  Master of Science Student <br />
+                  <a class="grey-text text-lighten-3" href="http://www.latin.dcc.ufmg.br/wp/" target="_blank">LATIN</a><br />
+                  <a class="grey-text text-lighten-3" href="http://ufmg.br" target="_blank">UFMG</a>
+                </p>
+              </div>
+            </div>
           </div>
-          <div class="col l4 s12">
+          <div class="col s12 m4 l4">
             <h5 class="white-text">Contact</h5>
-            <ul>
-              <li><p class="grey-text text-lighten-3">Marlon Dias - <a class="grey-text text-lighten-3" href="mailto:mdsdias@dcc.ufmg.br">msdias@dcc.ufmg.br</a></p></li>
-              <li><a class="grey-text text-lighten-3" href="mailto:mdsdias@dcc.ufmg.br">Github</a></p></li>
-            </ul>
+              <p class="grey-text text-lighten-3">Marlon Dias - <a class="grey-text text-lighten-3" href="mailto:mdsdias@dcc.ufmg.br" target="_blank">msdias@dcc.ufmg.br</a></p>
+              <div class="row valign left">
+                <a class="grey-text text-lighten-3" href="https://br.linkedin.com/in/msdias" target="_blank">
+                  <img src="img/icon/linkedin.png" alt="Logo" id="linkedin" />
+                </a>    <a class="grey-text text-lighten-3" href="https://github.com/marlonsd/Web-Search" target="_blank">
+                  <img src="img/icon/github-circle.png" alt="Logo" id="github" />  
+                </a>
+              </div>
           </div>
         </div>
-      </div>
+      <!-- </div> -->
+
       <div class="footer-copyright">
-        <div class="container">
-        © 2016 Copyright
+        <div class="row">
+          <div class="col s12 m4 l2">&copy; 2016 Copyright</div>
+          <div class="col s12 m4 l8"><center>Search Engine</center></div>
+          <div class="col s12 m4 l2" style="visibility: hidden">s12 m4</div>
         </div>
       </div>
     </footer>
