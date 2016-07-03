@@ -35,70 +35,86 @@
 
     <!-- HTML PAGE START HERE -->
 
-    <div class= "row">
-      <div class="row valign center">
-        <div class="col s12"><p></p></div>
-        <div class="col s12"><p></p></div>
-        <div class="col s12"><p><h5><font color="#616161">Search Engine</font></h5></p></div>
+    <div class="container">
+      <div class= "row">
+        <div class="row valign center">
+          <div class="col s12"><p></p></div>
+          <div class="col s12"><p></p></div>
+          <div class="col s12"><p></p></div>
+          <div class="col s12"><p><h5><font color="#616161">Search Engine</font></h5></p></div>
+          <div class="col s12"><p></p></div>
+          <div class="col s12"><p></p></div>
+        </div>
       </div>
     </div>
 
-    <div class="row">
-      <form class="col s10" id="searchForm">
-        <div class="row">
-          <div class="input-field col s12">
-            <input placeholder="Type your search" id="first_name" type="text" class="validate ">
-            <label for="first_name">Search</label>
-          </div>
-        </div>
-      </form>
-
+    <div class="container">
       <div class="row">
-        <center>
-          <button id="cadastrarButton" class="btn-floating btn-large waves-effect waves-light btn blue lighten-2" type="submit" background="black">
-            <i class="material-icons prefix">search</i></button>
-        </center>  
+        <div class="col s12 m4 l10">
+          <form id="searchForm">
+            <!-- <div class="input-field col s12"> -->
+              <input placeholder="Type your search" id="first_name" type="text" class="validate grey lighten-5 ">
+              <label for="first_name"></label>
+            <!-- </div> -->
+          </form>
+        </div>
+
+        <div class="col s12 m4 l2 valign center">
+          <!-- <center> -->
+            <button id="cadastrarButton" class="btn-floating btn-large waves-effect waves-light btn blue lighten-2" type="submit" background="black">
+              <i class="material-icons prefix">search</i></button>
+          <!-- </center>   -->
+        </div>
       </div>
     </div>
 
-    <div class="row">
-      <div class="row valign center">
-        <div class="col s12 m4 l2"><p /></div>
-        <div class="col s12 m4 l8">
-          <div class="row">
-            <div class="col s6">
-              <form action="#">
-                <center><font color='#616161'>Cossine Similarity</font></center><br />
-                <div class="col s6">
-                  <input class="with-gap" name="group1" type="radio" id="text" checked />
-                  <label for="text"><font color="#616161">Text</font></label>
-                </div>
-                <div class="col s6">
-                  <input class="with-gap" name="group1" type="radio" id="anchor" />
-                  <label for="anchor"><font color="#616161">Anchor</font></label>
-                </div>
-              </form>
-            </div>
-            <div class="switch col s6">
-                <center><font color='#616161'>PageRank</font></center> <br \>
-              <label>
-                <font color="#616161">Off</font>
-                <input type="checkbox">
-                <span class="lever"></span>
-                <font color="#616161">On</font>
-              </label>
+    <div class="row"></div>
+
+    <div class="container">
+      <div class="row">
+        <div class="row valign center">
+          <div class="col s12 m4 l2"><p></p></div>
+          <div class="col s12 m4 l8">
+            <div class="row">
+              <div class="col s6">
+                <form action="#">
+                  <center><font color='#616161'>Cossine Similarity</font></center><br />
+                  <div class="col s6">
+                    <input class="with-gap" name="group1" type="radio" id="text" checked />
+                    <label for="text"><font color="#616161">Text</font></label>
+                  </div>
+                  <div class="col s6">
+                    <input class="with-gap" name="group1" type="radio" id="anchor" />
+                    <label for="anchor"><font color="#616161">Anchor</font></label>
+                  </div>
+                </form>
+              </div>
+              <div class="switch col s6">
+                  <center><font color='#616161'>PageRank</font></center> <br \>
+                <label>
+                  <font color="#616161">Off</font>
+                  <input type="checkbox">
+                  <span class="lever"></span>
+                  <font color="#616161">On</font>
+                </label>
+              </div>
             </div>
           </div>
+          <div class="col s12 m4 l2"><p></p></div>
         </div>
-        <div class="col s12 m4 l2"><p /></div>
       </div>
     </div>
 
+    <div class="container">
+      <div class= "row">
+        <div class="row valign center"></div>
+      </div>
+    </div>
 
     <!-- HTML PAGE END HERE -->
 
     <!-- Footer starts -->
-    <footer class="page-footer  blue lighten-2">
+    <footer class="page-footer blue lighten-2">
       <!-- <div class="container"> -->
         <div class="row">
           <div class="col s12 m4 l4">
