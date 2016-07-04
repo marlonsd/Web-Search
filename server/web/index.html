@@ -199,6 +199,19 @@
 
           request.open('POST', '/json');
           request.send(fd);
+
+          $.ajax({
+            type: "POST",
+            url: "/json", 
+            data: fd,
+            contentType: "application/json; charset=utf-8", 
+            timeout: 3000, 
+            processdata: true, 
+            success: post_function_Ok,
+            error: post_function_Nok
+          });
+
+
               
         });
 
