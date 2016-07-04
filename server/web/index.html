@@ -50,20 +50,16 @@
 
     <div class="container">
       <div class="row">
-        <div class="col s12 m4 l10">
+        <div class="col s12 m4 l12">
           <form id="searchForm">
-            <!-- <div class="input-field col s12"> -->
-              <input placeholder="Type your search" id="first_name" type="text" class="validate grey lighten-5 ">
-              <label for="first_name"></label>
-            <!-- </div> -->
+            <div class="input-field col s12 m4 l10">
+              <input class="validate grey lighten-5" placeholder="Type your search" type="text" name="to_search" id="to_search">
+            </div>
+            <div class="col s12 m4 l2 valign center">
+              <button id="cadastrarButton" class="btn-floating btn-large waves-effect waves-light btn blue lighten-2" type="submit" background="black">
+                <i class="material-icons prefix">search</i></button>
+            </div>
           </form>
-        </div>
-
-        <div class="col s12 m4 l2 valign center">
-          <!-- <center> -->
-            <button id="cadastrarButton" class="btn-floating btn-large waves-effect waves-light btn blue lighten-2" type="submit" background="black">
-              <i class="material-icons prefix">search</i></button>
-          <!-- </center>   -->
         </div>
       </div>
     </div>
@@ -93,7 +89,7 @@
                   <center><font color='#616161'>PageRank</font></center> <br \>
                 <label>
                   <font color="#616161">Off</font>
-                  <input type="checkbox">
+                  <input type="checkbox" id="pagerank">
                   <span class="lever"></span>
                   <font color="#616161">On</font>
                 </label>
@@ -174,8 +170,55 @@
       $( document ).ready(function(){
         //$("#descricao").attr('data-error','The name field is required');
 
-      $(".button-collapse").sideNav();
+        $(".button-collapse").sideNav();
 
+
+        $("#searchForm").submit(function(){
+
+          console.log('here');
+
+          var fd = document.getElementById('searchForm');
+
+          if(document.getElementById('text').checked) {
+            console.log('text');
+            fd.append('cossin','text');
+          } else {
+            if(document.getElementById('anchor').checked){
+              console.log('anchor');
+              fd.append('cossine','anchor');
+            }
+          }
+
+          if(document.getElementById('pagerank').checked) {
+            console.log('pagerank on');
+            fd.append('pagerank',true);
+          } else {
+            console.log('pagerank off');
+            fd.append('pagerank',false);
+          }
+
+          $.ajax({
+                url: "test.html",
+                type: "POST",
+                data: fd,
+                enctype: 'multipart/form-data',
+                processData: false,  // tell jQuery not to process the data
+                contentType: false,
+                error: function(){
+                  console.log("eroo");
+                }  // tell jQuery not to set contentType
+            }).done(function( data ) { 
+              console.log(data);
+              if(data == 1){
+                Materialize.toast('O tamanho da imagem exedeu o permitido, tente novamente.', 4000);
+              }else if(data == 0){
+                Materialize.toast('Cadastro atualizado com sucesso.', 4000);
+              }else if(data == -1){
+                Materialize.toast('Falha ao atualizar cadastro, tente novamente.', 4000);
+              }
+            });
+              
+        });
 
       });
 
