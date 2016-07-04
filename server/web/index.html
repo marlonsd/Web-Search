@@ -197,26 +197,8 @@
             fd.append('pagerank',false);
           }
 
-          $.ajax({
-                url: "/json",
-                type: "POST",
-                data: fd,
-                enctype: 'multipart/form-data',
-                processData: false,  // tell jQuery not to process the data
-                contentType: false,
-                error: function(){
-                  console.log("eroo");
-                }  // tell jQuery not to set contentType
-            }).done(function( data ) { 
-              console.log(data);
-              if(data == 1){
-                Materialize.toast('O tamanho da imagem exedeu o permitido, tente novamente.', 4000);
-              }else if(data == 0){
-                Materialize.toast('Cadastro atualizado com sucesso.', 4000);
-              }else if(data == -1){
-                Materialize.toast('Falha ao atualizar cadastro, tente novamente.', 4000);
-              }
-            });
+          request.open('POST', '/json');
+          request.send(fd);
               
         });
 
