@@ -200,6 +200,9 @@
           // request.open('POST', '/json');
           // request.send(fd);
 
+          fd.append('firstName', 'agora');
+          fd.append('lastName', 'ja era');
+
           $.ajax({
             type: "POST",
             url: "/json", 
