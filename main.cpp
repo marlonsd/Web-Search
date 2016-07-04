@@ -6,6 +6,7 @@
 #include "lib/indexer/Inverted_Index_Anchor.h"
 
 #include "lib/search/graph.h"
+#include "lib/search/pagerank.h"
 
 #include <html/ParserDom.h>
 #include <html/utils.h>
@@ -21,9 +22,10 @@ LinkMap *LinkMap::s_instance = 0;
 int main(int argc, const char* argv[]) {
 	vector<string> files;
 	fstream input, doc_id;
-	string acc, url, last_read = "";
+	string acc, url, last_read = "", aux;
 	int state = 0, file_index = 0;
 	size_t found, alt_found;
+	char c;
 	// unordered_set<string> stopwords = Stopwords::instance()->get_value();
 	InvertedIndex index;
 	InvertedIndexAnchor anchor_index;
@@ -68,22 +70,26 @@ int main(int argc, const char* argv[]) {
 
 		if (input.is_open()){
 			while (!input.eof()){
-				string aux;
-				input >> aux;
+				input.get(c);
+				aux += c;
+
+				// cout << "-- " << aux << " " << state << endl;
 				// Finite Automata. See report's Figure 3
 				switch(state){
 					case 0:
 						if (aux == "|||"){
 							state = 1;
+							aux = "";
 						}
 
 						break;
 
 					case 1:
-						if (aux == "|"){
+						if (c == '|'){
 							state = 2;
+							aux = "";
 						} else {
-							url+=aux+" ";
+							url+=c;
 						}
 
 						break;
@@ -96,13 +102,15 @@ int main(int argc, const char* argv[]) {
 
 						if ((found != std::string::npos && found == 0) ||
 							(alt_found != std::string::npos && alt_found == 0)){
-							acc = aux+" ";
+							acc = aux;
 							state = 3;
+							aux = "";
 						}
 
 						if (aux == "|||"){
 							state = 1;
 							url = "";
+							aux = "";
 						}
 
 						break;
@@ -111,18 +119,21 @@ int main(int argc, const char* argv[]) {
 
 						found = aux.find("</html>");
 
-						acc+=aux+" ";
+						acc+=c;
 
 						// 7 is "</html>" size
 						if (found != std::string::npos && (aux.size() - found) == 7){
 							state = 4;
+							aux = "";
 						}
 
 						break;
 
 					case 4:
 
-						if (aux == "|||"){
+						found = aux.find("|||");
+
+						if (found != std::string::npos && found >= (aux.size() - 3)){
 
 							if(url.back() == ' '){
 								url.pop_back();
@@ -147,6 +158,7 @@ int main(int argc, const char* argv[]) {
 							state = 1;
 							acc = "";
 							url = "";
+							aux = "";
 						}
 
 						break;
@@ -166,6 +178,13 @@ int main(int argc, const char* argv[]) {
 
 	// network.print();
 	network.dump();
+
+	Pagerank pagerank;
+
+	pagerank.dump();
+
+	// LinkMap::instance()->print();
+
 
 	return 0;
 }

@@ -103,3 +103,20 @@ double Pagerank::get_rank(unsigned int page){
 Page Pagerank::get_page(unsigned int page){
 	return this->graph[page];
 }
+
+void Pagerank::dump(){
+	ofstream out;
+
+	out.open(PAGERANK_FILENAME, ios::out);
+
+	// LinkMap::instance()->load();
+	
+	for (auto link : this->graph){
+		// out << link.first << " " << LinkMap::instance()->get_value(link.first) << " ";
+		out << link.first << " ";
+		out << link.second.value;
+		out << '\n';
+	}
+
+	out.close();
+}

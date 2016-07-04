@@ -34,6 +34,8 @@ public:
 	double get_rank(unsigned int page);
 	Page get_page(unsigned int page);
 
+	void dump();
+
 };
 
 #endif

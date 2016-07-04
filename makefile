@@ -2,10 +2,10 @@ FLAGS += -funsigned-char -I /usr/local/include/htmlcxx -L/usr/local/lib -lhtmlcx
 
 all: indexing search
 
-indexing: main.o tokenizer.o inverted_index.o func.o document.o stopwords.o inverted_index_anchor.o linkmap.o graph.o
-	g++ -std=c++11 Document.o func.o Inverted_Index.o Inverted_Index_Anchor.o Tokenizer.o Stopwords.o linkmap.o graph.o main.o $(FLAGS) -o indexing
+indexing: main.o tokenizer.o inverted_index.o func.o document.o stopwords.o inverted_index_anchor.o linkmap.o graph.o pagerank.o
+	g++ -std=c++11 Document.o func.o Inverted_Index.o Inverted_Index_Anchor.o Tokenizer.o Stopwords.o linkmap.o graph.o pagerank.o main.o $(FLAGS) -o indexing
 
-main.o: main.cpp lib/indexer/Tokenizer.h lib/common/func.h lib/indexer/Inverted_Index.h lib/indexer/Inverted_Index_Anchor.h lib/common/Document.h lib/common/linkmap.h
+main.o: main.cpp lib/indexer/Tokenizer.h lib/common/func.h lib/indexer/Inverted_Index.h lib/indexer/Inverted_Index_Anchor.h lib/common/Document.h lib/common/linkmap.h lib/search/pagerank.h
 	g++ -std=c++11 $(FLAGS) -c main.cpp
 
 inverted_index.o: lib/indexer/Inverted_Index.cpp lib/indexer/Inverted_Index.h lib/indexer/Tokenizer.h lib/common/func.h lib/common/Stopwords.h lib/common/Document.h
@@ -44,7 +44,7 @@ remove_o:
 search: main_search.o func.o pagerank.o document.o stopwords.o inverted_index.o inverted_index_anchor.o graph.o heap.o search.o v_search.o linkmap.o tokenizer.o
 	g++ -std=c++11 PriorityQueue.o Document.o pagerank.o func.o Inverted_Index.o Inverted_Index_Anchor.o Tokenizer.o Stopwords.o search.o vectorialsearch.o linkmap.o graph.o main_search.o $(FLAGS) -o search
 
-main_search.o: lib/search/main_search.cpp lib/indexer/Tokenizer.h lib/common/func.h lib/indexer/Inverted_Index.h lib/indexer/Inverted_Index_Anchor.h lib/common/Document.h lib/common/linkmap.h lib/common/Stopwords.h lib/common/PriorityQueue.h lib/search/graph.h lib/search/search.h lib/search/vectorialsearch.h
+main_search.o: lib/search/main_search.cpp lib/indexer/Tokenizer.h lib/common/func.h lib/indexer/Inverted_Index.h lib/indexer/Inverted_Index_Anchor.h lib/common/Document.h lib/common/linkmap.h lib/common/Stopwords.h lib/common/PriorityQueue.h lib/search/graph.h lib/search/search.h lib/search/vectorialsearch.h lib/search/pagerank.h
 	g++ -std=c++11 $(FLAGS) -c lib/search/main_search.cpp
 
 heap.o: lib/common/PriorityQueue.cpp lib/common/PriorityQueue.h

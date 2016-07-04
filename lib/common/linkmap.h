@@ -37,6 +37,8 @@ public:
 
 	void dump();
 
+	void print();
+
 	static LinkMap *instance(){
 		if (!s_instance){
 			s_instance = new LinkMap();

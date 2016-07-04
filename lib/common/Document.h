@@ -30,6 +30,8 @@ public:
 	string get_title();
 	unordered_map<unsigned int, string> get_links();	// <URL, Anchor text>
 
+	void print();
+
 };
 
 #endif

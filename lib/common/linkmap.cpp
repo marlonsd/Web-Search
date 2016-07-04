@@ -68,6 +68,14 @@ void LinkMap::clear(){
 	LinkMap();
 }
 
+void LinkMap::print(){
+
+	for (string link : inverse){
+		cout << link << " " << this->link_map[link].processed << '\n';
+	}
+
+}
+
 void LinkMap::dump(){
 	ofstream f;
 

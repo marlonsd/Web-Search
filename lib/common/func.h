@@ -55,6 +55,8 @@
 
 #define GRAPH_FILENAME "util/pagerank/graph"
 
+#define PAGERANK_FILENAME "util/pagerank/pagerank"
+
 // Max OS open files
 #define MAX_OS_OPEN_FILE 4000
 

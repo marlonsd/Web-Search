@@ -108,3 +108,18 @@ string Document::get_title(){
 unordered_map<unsigned int, string> Document::get_links(){
 	return this->links;
 }
+
+void Document::print(){
+	cout << "Printing doc" << endl;
+
+	cout << "URL: " << this->url << endl;
+	cout << "Title: " << this->title << endl;
+	cout << "Content: " << this->text << endl;
+	cout << "Links:" << endl;
+	for (auto link : this->links){
+		cout << '\t';
+		cout << link.first << " => " << link.second << endl;
+
+	}
+	cout << endl;
+}
