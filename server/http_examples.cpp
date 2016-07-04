@@ -51,6 +51,8 @@ int main() {
     //  "age": 25
     //}
     server.resource["^/json$"]["POST"]=[](shared_ptr<HttpServer::Response> response, shared_ptr<HttpServer::Request> request) {
+        cout<<"doing json" << endl;
+
         try {
             ptree pt;
             read_json(request->content, pt);
