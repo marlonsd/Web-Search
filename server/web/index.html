@@ -191,14 +191,14 @@
 
           if(document.getElementById('pagerank').checked) {
             console.log('pagerank on');
-            fd.append('pagerank',true);
+            fd.append('pagerank','t');
           } else {
             console.log('pagerank off');
-            fd.append('pagerank',false);
+            fd.append('pagerank','f');
           }
 
-          request.open('POST', '/json');
-          request.send(fd);
+          // request.open('POST', '/json');
+          // request.send(fd);
 
           $.ajax({
             type: "POST",
