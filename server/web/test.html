@@ -4,5 +4,30 @@
     </head>
     <body>
         This is the content of test.html
+
+
+        <form id='test-form'>
+			Input1: <input name='input1'><br>
+			Input2: <input name='input2'><br>
+			<input type='submit'>
+		</form>
+		<script>
+			var testForm = document.getElementById('test-form');
+			testForm.onsubmit = function(event) {
+				event.preventDefault();
+
+				var request = new XMLHttpRequest();
+				// POST to httpbin which returns the POST data as JSON
+				request.open('POST', 'json', /* async = */ false);
+
+				var formData = new FormData(document.getElementById('test-form'));
+				request.send(formData);
+
+				console.log(request.response);
+			}
+		</script>
+
     </body>
 </html>
+
+

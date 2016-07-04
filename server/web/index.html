@@ -160,11 +160,11 @@
     </footer>
     <!-- Footer ends -->
 
-<!--     // <script type="text/javascript" src="js/jquery.js"></script>
-    // <script type="text/javascript" src="js/materialize.js"></script>
-    // <script type="text/javascript" src="js/angular.min.js"></script>
-    // <script type="text/javascript" src="js/bootstrap-tagsinput-angular.min.js"></script>
-    // <script type="text/javascript" src="js/bootstrap-tagsinput.min.js"></script> -->
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/materialize.js"></script>
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-tagsinput-angular.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-tagsinput.min.js"></script>
 
     <script type="text/javascript">
       $( document ).ready(function(){
@@ -177,7 +177,7 @@
 
           console.log('here');
 
-          // var fd = document.getElementById('searchForm');
+          var fd = new FormData(document.getElementById('searchForm'));
 
           if(document.getElementById('text').checked) {
             console.log('text');
@@ -208,6 +208,12 @@
             url: "/json", 
             data: fd,
             contentType: "application/json; charset=utf-8"
+            error: function(){
+              console.log("ERROR");
+            }
+          }).done(function(){
+            console.log('done');
+            window.location = "test.html";
           });
 
 
