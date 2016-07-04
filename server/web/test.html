@@ -16,21 +16,12 @@
 			testForm.onsubmit = function(event) {
 				event.preventDefault();
 
-				var formData = new FormData(document.getElementById('test-form'));
-				
+				var request = new XMLHttpRequest();
+				// POST to httpbin which returns the POST data as JSON
+				request.open("POST", "/json");
 
-				$.ajax({
-		            type: "POST",
-		            url: "http://localhost:8080/json", 
-		            data: formData,
-		            contentType: "application/json; charset=utf-8"
-		            error: function(){
-		              console.log("ERROR");
-		            }
-		          }).done(function(){
-		            console.log('done');
-		            window.location = "test.html";
-		          });
+				var formData = new FormData(document.getElementById('test-form'));
+				request.send(formData);
 
 				console.log(request.response);
 			}
