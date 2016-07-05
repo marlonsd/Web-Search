@@ -21,7 +21,7 @@ LinkMap *LinkMap::s_instance = 0;
 
 int main(int argc, const char* argv[]) {
 	vector<string> files;
-	fstream input, doc_id;
+	fstream input, doc_id, doc_title;
 	string acc, url, last_read = "", aux;
 	int state = 0, file_index = 0;
 	size_t found, alt_found;
@@ -60,6 +60,8 @@ int main(int argc, const char* argv[]) {
 	files = list_dir_files(DIRNAME);
 
 	doc_id.open(DOC_ID_FILE_NAME, ios::out);
+	doc_title.open(DOC_TITLE_FILE_NAME, ios::out);
+
 
 	// cout << "reading (ms),tokenizing (ms),indexing (ms),#files,total time (s), sorting, voc dump" << endl;
 
@@ -172,7 +174,7 @@ int main(int argc, const char* argv[]) {
 							acc = "";
 							url = "";
 							aux = "";
-							doc.print();
+							doc_title << doc.get_title() << endl;
 						}
 
 						break;

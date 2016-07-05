@@ -27,8 +27,8 @@
 
 #define LOCAL_VOCABULARY_SIZE 30000 //(bytes)
 
-#define DIRNAME "util/htmls/"
-// #define DIRNAME "/run/media/msdias/34761DFB761DBE94/full_collection/output/official/"
+// #define DIRNAME "util/htmls/"
+#define DIRNAME "/run/media/msdias/34761DFB761DBE94/full_collection/output/official/"
 
 #define STOPWORDS_PATH "util/stopwords/"
 
@@ -40,6 +40,8 @@
 #define VOCABULARY_FILE_NAME "util/index/vocabulary"
 
 #define DOC_ID_FILE_NAME "util/index/doc_id"
+#define DOC_TITLE_FILE_NAME "util/index/doc_title"
+#define DOC_SNIPPET_FILE_NAME "util/index/doc_snippet"
 
 #define DOC_WD_FILE_NAME "util/index/w_d"
 
