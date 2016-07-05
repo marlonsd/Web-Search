@@ -27,8 +27,8 @@
 
 #define LOCAL_VOCABULARY_SIZE 30000 //(bytes)
 
-// #define DIRNAME "util/htmls/"
-#define DIRNAME "/run/media/msdias/34761DFB761DBE94/full_collection/output/official/"
+#define DIRNAME "util/htmls/"
+// #define DIRNAME "/run/media/msdias/34761DFB761DBE94/full_collection/output/official/"
 
 #define STOPWORDS_PATH "util/stopwords/"
 

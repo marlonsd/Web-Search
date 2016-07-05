@@ -108,11 +108,11 @@ int main() {
     };
 
     // Something like that
-    // server.resource["^/(#([0-9])+)"]["GET"]=[&server](shared_ptr<HttpServer::Response> response, shared_ptr<HttpServer::Request> request) {
-    //     string number=request->path_match[0];
-    //     cout << "SUCCESS" << endl;
-    //     *response << "HTTP/1.1 200 OK\r\nContent-Length: " << number.length() << "\r\n\r\n" << number;
-    // };
+    server.resource["^/search/(--[a-z]+=([a-z]|[0-9])+)$"]["GET"]=[&server](shared_ptr<HttpServer::Response> response, shared_ptr<HttpServer::Request> request) {
+        string number=request->path_match[0];
+        cout << "SUCCESS" << " " << number << endl;
+        *response << "HTTP/1.1 200 OK\r\nContent-Length: " << number.length() << "\r\n\r\n" << number;
+    };
     
     //Default GET-example. If no other matches, this anonymous function will be called. 
     //Will respond with content in the web/-directory, and its subdirectories.
