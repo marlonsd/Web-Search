@@ -51,17 +51,25 @@ int main() {
     //  "age": 25
     //}
     server.resource["^/json$"]["POST"]=[](shared_ptr<HttpServer::Response> response, shared_ptr<HttpServer::Request> request) {
-        cout<<"doing json" << endl;
+        cout << "Treating json" << endl;
 
         try {
             ptree pt;
             read_json(request->content, pt);
 
-            string name=pt.get<string>("firstName")+" "+pt.get<string>("lastName");
+            // string name=pt.get<string>("firstName")+" "+pt.get<string>("lastName");
+            // cout << name << endl;
 
-            *response << "HTTP/1.1 200 OK\r\nContent-Length: " << name.length() << "\r\n\r\n" << name;
+            string query = pt.get<string>("to_search");
+            string cossine = pt.get<string>("cossine");
+
+            cout << "Query: " << query << endl;
+            cout << "Cossine: " << cossine << endl;
+
+            *response << "HTTP/1.1 200 OK\r\nContent-Length: " << query.length() << "\r\n\r\n" << query;
         }
         catch(exception& e) {
+            cout << "Not found" << endl;
             *response << "HTTP/1.1 400 Bad Request\r\nContent-Length: " << strlen(e.what()) << "\r\n\r\n" << e.what();
         }
     };
@@ -85,8 +93,6 @@ int main() {
     //GET-example for the path /match/[number], responds with the matched string in path (number)
     //For instance a request GET /match/123 will receive: 123
     server.resource["^/match/([0-9]+)$"]["GET"]=[&server](shared_ptr<HttpServer::Response> response, shared_ptr<HttpServer::Request> request) {
-        cout << "Doing match" << endl;
-
         string number=request->path_match[1];
         *response << "HTTP/1.1 200 OK\r\nContent-Length: " << number.length() << "\r\n\r\n" << number;
     };
@@ -100,6 +106,13 @@ int main() {
         });
         work_thread.detach();
     };
+
+    // Something like that
+    // server.resource["^/(#([0-9])+)"]["GET"]=[&server](shared_ptr<HttpServer::Response> response, shared_ptr<HttpServer::Request> request) {
+    //     string number=request->path_match[0];
+    //     cout << "SUCCESS" << endl;
+    //     *response << "HTTP/1.1 200 OK\r\nContent-Length: " << number.length() << "\r\n\r\n" << number;
+    // };
     
     //Default GET-example. If no other matches, this anonymous function will be called. 
     //Will respond with content in the web/-directory, and its subdirectories.
@@ -150,16 +163,16 @@ int main() {
     this_thread::sleep_for(chrono::seconds(1));
     
     //Client examples
-    HttpClient client("localhost:8080");
-    auto r1=client.request("GET", "/match/123");
-    cout << r1->content.rdbuf() << endl;
+    // HttpClient client("localhost:8080");
+    // auto r1=client.request("GET", "/match/123");
+    // cout << r1->content.rdbuf() << endl;
 
-    string json_string="{\"firstName\": \"John\",\"lastName\": \"Smith\",\"age\": 25}";
-    auto r2=client.request("POST", "/string", json_string);
-    cout << r2->content.rdbuf() << endl;
+    // string json_string="{\"firstName\": \"John\",\"lastName\": \"Smith\",\"age\": 25}";
+    // auto r2=client.request("POST", "/string", json_string);
+    // cout << r2->content.rdbuf() << endl;
     
-    auto r3=client.request("POST", "/json", json_string);
-    cout << r3->content.rdbuf() << endl;
+    // auto r3=client.request("POST", "/json", json_string);
+    // cout << r3->content.rdbuf() << endl;
         
     server_thread.join();
     

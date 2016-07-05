@@ -7,10 +7,11 @@
 
 
         <form id='test-form'>
-			Input1: <input name='firstName'><br>
-			Input2: <input name='lastName'><br>
+			Input1: <input name='firstName' id='firstName'><br>
+			Input2: <input name='lastName' id='lastName'><br>
 			<input type='submit'>
 		</form>
+		<button type="submit" form="test-form" value="Submit">Butaum</button>
 		<script>
 			var testForm = document.getElementById('test-form');
 			testForm.onsubmit = function(event) {
@@ -18,12 +19,14 @@
 
 				var request = new XMLHttpRequest();
 				// POST to httpbin which returns the POST data as JSON
-				request.open("POST", "/json");
+				var string_json = '{"firstName": "'+document.getElementById('firstName').value+'","lastName": "'+document.getElementById('lastName').value+'","age": 24}'
+				request.open("POST", "json", string_json);
 
 				var formData = new FormData(document.getElementById('test-form'));
-				request.send(formData);
+				request.send(string_json);
 
 				console.log(request.response);
+				console.log(document.getElementById('firstName').value);
 			}
 		</script>
 

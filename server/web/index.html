@@ -26,7 +26,7 @@
       <div class="navbar-fixed">
         <nav>
           <div class="nav-wrapper  blue lighten-2">
-            <a href="index.php" class="brand-logo">Search Engine</a>
+            <a href="index.html" class="brand-logo">Search Engine</a>
           </div>
         </nav>
       </div>
@@ -55,11 +55,12 @@
             <div class="input-field col s12 m4 l10">
               <input class="validate grey lighten-5" placeholder="Type your search" type="text" name="to_search" id="to_search">
             </div>
-            <div class="col s12 m4 l2 valign center">
-              <button id="cadastrarButton" class="btn-floating btn-large waves-effect waves-light btn blue lighten-2" type="submit" background="black">
-                <i class="material-icons prefix">search</i></button>
-            </div>
           </form>
+            <div class="col s12 m4 l2 valign center">
+              <button class="btn-floating btn-large waves-effect waves-light btn blue lighten-2" type="submit" background="black" form="searchForm" value="Submit">
+                <i class="material-icons prefix">search</i>
+              </button>
+            </div>
         </div>
       </div>
     </div>
@@ -167,60 +168,53 @@
     <script type="text/javascript" src="js/bootstrap-tagsinput.min.js"></script>
 
     <script type="text/javascript">
-      $( document ).ready(function(){
+
+    	var GET = {};
+        var query = window.location.search.substring(1).split("&");
+    
+      $( document ).ready(function() {
         //$("#descricao").attr('data-error','The name field is required');
 
         $(".button-collapse").sideNav();
 
 
-        $("#searchForm").submit(function(){
+	    searchForm.onsubmit = function(event) {
+	        event.preventDefault();
 
-          console.log('here');
+	        var string_json = '{"to_search": "'+document.getElementById('to_search').value+'"';
 
-          var fd = new FormData(document.getElementById('searchForm'));
+	        // console.log(request.response);
+	     
+	        if(document.getElementById('text').checked) {
+	        	string_json += ',"cossine": "text"';
+	        	console.log('text');
+	        } else {
+	        	string_json += ',"cossine": "anchor"';
+	        	console.log('anchor');
+	        }
 
-          if(document.getElementById('text').checked) {
-            console.log('text');
-            fd.append('cossin','text');
-          } else {
-            if(document.getElementById('anchor').checked){
-              console.log('anchor');
-              fd.append('cossine','anchor');
-            }
-          }
+	        if(document.getElementById('pagerank').checked) {
+	        	string_json += ',"pagerank": true';
+	        	console.log('pagerank on');
+	        } else {
+	        	string_json += ',"pagerank": false';
+	        	console.log('pagerank off');
+	        }
 
-          if(document.getElementById('pagerank').checked) {
-            console.log('pagerank on');
-            fd.append('pagerank','t');
-          } else {
-            console.log('pagerank off');
-            fd.append('pagerank','f');
-          }
+	        string_json += '}'
 
-          // request.open('POST', '/json');
-          // request.send(fd);
+	        console.log("POST-content:");
+	        console.log(string_json);
 
-          fd.append('firstName', 'agora');
-          fd.append('lastName', 'ja era');
+	        // POST to httpbin which returns the POST data as JSON
+	        var request = new XMLHttpRequest();
+	        request.open("POST", "/json", string_json);
+	        request.send(string_json);
 
-          $.ajax({
-            type: "POST",
-            url: "/json", 
-            data: fd,
-            contentType: "application/json; charset=utf-8"
-            error: function(){
-              console.log("ERROR");
-            }
-          }).done(function(){
-            console.log('done');
-            window.location = "test.html";
-          });
+	        console.log(request.response);
+	    }
 
-
-              
         });
-
-      });
 
     </script>
   </body>
