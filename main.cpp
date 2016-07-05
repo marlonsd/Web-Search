@@ -66,6 +66,8 @@ int main(int argc, const char* argv[]) {
 	for (string file : files){
 		input.open(DIRNAME+file, ios::in);
 
+		cout << "File: " << DIRNAME+file << endl;
+
 		state = 0;
 
 		if (input.is_open()){
@@ -100,14 +102,25 @@ int main(int argc, const char* argv[]) {
 						found = aux.find("<html");
 						alt_found = aux.find("<!doctype");
 
-						if ((found != std::string::npos && found == 0) ||
-							(alt_found != std::string::npos && alt_found == 0)){
+
+						if (found != std::string::npos || alt_found != std::string::npos){
+							while(found != 0 && alt_found != 0){
+								aux.erase(0,1);
+
+								found = aux.find("<html");
+								alt_found = aux.find("<!doctype");
+
+							}
+
 							acc = aux;
 							state = 3;
 							aux = "";
+
 						}
 
-						if (aux == "|||"){
+						found = aux.find("|||");
+
+						if (found != std::string::npos && found >= (aux.size() - 3)){
 							state = 1;
 							url = "";
 							aux = "";
@@ -159,6 +172,7 @@ int main(int argc, const char* argv[]) {
 							acc = "";
 							url = "";
 							aux = "";
+							doc.print();
 						}
 
 						break;
