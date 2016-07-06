@@ -35,8 +35,6 @@ void InvertedIndexAnchor::indexing(Tokenizer& t, unsigned int index){
 		this->total_docs++;
 	}
 
-	cout << "Adding " << t.size() << " tokens to " << index << endl;
-
 	// Iterating through tokens
 	int word_id = 0;
 	while (t.size() > 0){

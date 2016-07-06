@@ -190,7 +190,7 @@ int main(int argc, const char* argv[]) {
 						aux = "";
 						doc_title << doc.get_title() << endl;
 						// cout << doc.get_title() << endl;
-						doc.print();
+						// doc.print();
 						// exit(0);
 					}
 					temp = "";
@@ -217,7 +217,9 @@ int main(int argc, const char* argv[]) {
 	// network.print();
 	network.dump();
 
+	cout << "Calculating pagerank..." << endl;
 	Pagerank pagerank;
+	cout << "Pagerank done" << endl;
 
 	pagerank.dump();
 
