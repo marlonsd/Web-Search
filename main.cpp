@@ -22,7 +22,7 @@ LinkMap *LinkMap::s_instance = 0;
 int main(int argc, const char* argv[]) {
 	vector<string> files;
 	fstream input, doc_id, doc_title;
-	string acc, url, last_read = "", aux;
+	string acc, url, last_read = "", aux, buffer;
 	int state = 0, file_index = 0;
 	size_t found, alt_found;
 	char c;
@@ -73,113 +73,234 @@ int main(int argc, const char* argv[]) {
 		state = 0;
 
 		if (input.is_open()){
-			while (!input.eof()){
-				input.get(c);
-				aux += c;
+		
+			aux="";
 
-				// cout << "-- " << aux << " " << state << endl;
-				// Finite Automata. See report's Figure 3
-				switch(state){
-					case 0:
-						if (aux == "|||"){
-							state = 1;
-							aux = "";
-						}
+			while(!input.eof() || buffer.size() > 0){
+				
+				input >> aux;
 
-						break;
-
-					case 1:
-						if (c == '|'){
-							state = 2;
-							aux = "";
-						} else {
-							url+=c;
-						}
-
-						break;
-
-					case 2:
-						transform(aux.begin(), aux.end(), aux.begin(), ::tolower);
-
-						found = aux.find("<html");
-						alt_found = aux.find("<!doctype");
-
-
-						if (found != std::string::npos || alt_found != std::string::npos){
-							while(found != 0 && alt_found != 0){
-								aux.erase(0,1);
-
-								found = aux.find("<html");
-								alt_found = aux.find("<!doctype");
-
-							}
-
-							acc = aux;
-							state = 3;
-							aux = "";
-
-						}
-
-						found = aux.find("|||");
-
-						if (found != std::string::npos && found >= (aux.size() - 3)){
-							state = 1;
-							url = "";
-							aux = "";
-						}
-
-						break;
-
-					case 3:
-
-						found = aux.find("</html>");
-
-						acc+=c;
-
-						// 7 is "</html>" size
-						if (found != std::string::npos && (aux.size() - found) == 7){
-							state = 4;
-							aux = "";
-						}
-
-						break;
-
-					case 4:
-
-						found = aux.find("|||");
-
-						if (found != std::string::npos && found >= (aux.size() - 3)){
-
-							if(url.back() == ' '){
-								url.pop_back();
-							}
-
-							doc_id << url << endl;
-
-							// parsing_anchor_text(acc, t, stopwords, url);
-
-							// parsing(acc, t, stopwords);
-
-							Document doc(acc, url);
-
-							network.add_url(doc);
-
-							// Tokenizer t(doc.get_text(), Stopwords::instance()->get_value());
-							index.indexing(doc, file_index);
-							anchor_index.indexing(doc);
-
-							file_index++;
-
-							state = 1;
-							acc = "";
-							url = "";
-							aux = "";
-							doc_title << doc.get_title() << endl;
-						}
-
-						break;
+				if (aux.size() > 0){
+					buffer+=aux+" ";
 				}
+				// cout << aux;
+
+				if (state == 0){
+					found = buffer.find("|||");
+
+					if (found != std::string::npos){
+						buffer.erase(0,found+3);
+
+						state = 1;
+					} else {
+						if(input.eof()){
+							buffer = "";
+						}
+					}
+				}
+
+				if (state == 1){
+
+					// if (buffer.size() > 0){
+					// 	while(isspace(buffer.at(0))){
+					// 		buffer.erase(0,1);
+					// 	}
+					// }
+
+					buffer.erase(buffer.begin(), std::find_if(buffer.begin(), buffer.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
+
+					found = buffer.find("|");
+
+					if (found != std::string::npos){
+						// cout << "State 1" << endl;
+						url = buffer;
+						url.erase(found, buffer.size());
+						// cout << url;
+						buffer.erase(0, found+1);
+						// cout << "\t" << buffer << endl;
+						state = 2;
+					}
+				}
+
+				if (state == 2){
+					// cout << "State 2" << endl;
+					found = buffer.find("<html");
+					alt_found = buffer.find("<!doctype");
+
+					if (found != std::string::npos || alt_found != std::string::npos){
+						state = 3;
+
+						if (alt_found != std::string::npos){
+							found = alt_found;
+						}
+
+						if(found > 0){
+							buffer.erase(0,found);
+							// cout << "\t" << buffer << endl;
+						}
+
+						// acc = buffer;
+					}
+				}
+
+				if (state == 3){
+					// cout << "State 3" << endl;
+					// acc+=buffer;
+
+					found = buffer.find("</html>");
+
+					if (found != std::string::npos){
+						acc = buffer;
+						acc.erase(found+7, acc.size());
+						buffer.erase(0,found+7);
+						cout << buffer << endl;
+
+						if(url.back() == ' '){
+							url.pop_back();
+						}
+
+						doc_id << url << endl;
+
+						// parsing_anchor_text(acc, t, stopwords, url);
+
+						// parsing(acc, t, stopwords);
+
+						Document doc(acc, url);
+
+						network.add_url(doc);
+
+						// Tokenizer t(doc.get_text(), Stopwords::instance()->get_value());
+						index.indexing(doc, file_index);
+						anchor_index.indexing(doc);
+
+						file_index++;
+
+						state = 0;
+						acc = "";
+						url = "";
+						aux = "";
+						doc_title << doc.get_title() << endl;
+						cout << doc.get_title() << endl;
+						doc.print();
+						// exit(0);
+					}
+				}
+
 			}
+
+			// while (!input.eof()){
+			// 	if state == 0 || state == 1
+			// 		input.get(c);
+			// 		aux += c;
+			// 	else
+			// 		input >> aux;
+
+			// 	// cout << "-- " << aux << " " << state << endl;
+			// 	// Finite Automata. See report's Figure 3
+			// 	switch(state){
+			// 		case 0:
+			// 			if (aux == "|||"){
+			// 				state = 1;
+			// 				aux = "";
+			// 			}
+
+			// 			break;
+
+			// 		case 1:
+			// 			if (c == '|'){
+			// 				state = 2;
+			// 				aux = "";
+			// 			} else {
+			// 				url+=c;
+			// 			}
+
+			// 			break;
+
+			// 		case 2:
+			// 			transform(aux.begin(), aux.end(), aux.begin(), ::tolower);
+
+			// 			found = aux.find("<html");
+			// 			alt_found = aux.find("<!doctype");
+
+
+			// 			if (found != std::string::npos || alt_found != std::string::npos){
+			// 				aux.erase(0,found);
+
+			// 				// while(found != 0 && alt_found != 0){
+			// 				// 	aux.erase(0,1);
+
+			// 				// 	found = aux.find("<html");
+			// 				// 	alt_found = aux.find("<!doctype");
+
+			// 				// }
+
+			// 				acc = aux;
+			// 				state = 3;
+			// 				aux = "";
+
+			// 			}
+
+			// 			found = aux.find("|||");
+
+			// 			if (found != std::string::npos && found >= (aux.size() - 3)){
+			// 				state = 1;
+			// 				url = "";
+			// 				aux = "";
+			// 			}
+
+			// 			break;
+
+			// 		case 3:
+
+			// 			found = aux.find("</html>");
+
+			// 			acc+=c;
+
+			// 			// 7 is "</html>" size
+			// 			if (found != std::string::npos && (aux.size() - found) == 7){
+			// 				state = 4;
+			// 				aux = "";
+			// 			}
+
+			// 			break;
+
+			// 		case 4:
+
+			// 			found = aux.find("|||");
+
+						// if (found != std::string::npos && found >= (aux.size() - 3)){
+
+						// 	if(url.back() == ' '){
+						// 		url.pop_back();
+						// 	}
+
+						// 	doc_id << url << endl;
+
+						// 	// parsing_anchor_text(acc, t, stopwords, url);
+
+						// 	// parsing(acc, t, stopwords);
+
+						// 	Document doc(acc, url);
+
+						// 	network.add_url(doc);
+
+						// 	// Tokenizer t(doc.get_text(), Stopwords::instance()->get_value());
+						// 	index.indexing(doc, file_index);
+						// 	anchor_index.indexing(doc);
+
+						// 	file_index++;
+
+						// 	state = 1;
+						// 	acc = "";
+						// 	url = "";
+						// 	aux = "";
+						// 	doc_title << doc.get_title() << endl;
+						// 	doc.print();
+						// }
+
+			// 			break;
+			// 	}
+			// }
 		}
 
 		input.close();
