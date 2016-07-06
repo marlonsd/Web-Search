@@ -50,10 +50,10 @@
 
     <div class="container">
       <div class="row">
-        <div class="col s12 m4 l12">
-          <form id="searchForm" action="#">
+        <div class="col s12">
+          <form id='searchForm' action="#">
             <div class="input-field col s12 m4 l10">
-              <input class="validate grey lighten-5" placeholder="Type your search" type="text" name="to_search" id="to_search">
+              <input class="validate grey lighten-5" placeholder="Type your search" type="text" name='to_search' id='to_search'>
             </div>
             <div class="col s12 m4 l2 valign center">
               <button class="btn-floating btn-large waves-effect waves-light btn blue lighten-2" type="submit" background="black" value="Submit">
@@ -77,11 +77,11 @@
                 <!-- <form action="#"> -->
                   <center><font color='#616161'>Cossine Similarity</font></center><br />
                   <div class="col s6">
-                    <input class="with-gap" name="group1" type="radio" id="text" checked />
+                    <input class="with-gap" name="text" type="radio" id="text" checked />
                     <label for="text"><font color="#616161">Text</font></label>
                   </div>
                   <div class="col s6">
-                    <input class="with-gap" name="group1" type="radio" id="anchor" />
+                    <input class="with-gap" name="anchor" type="radio" id="anchor" />
                     <label for="anchor"><font color="#616161">Anchor</font></label>
                   </div>
                 <!-- </form> -->
@@ -90,7 +90,7 @@
                   <center><font color='#616161'>PageRank</font></center> <br \>
                 <label>
                   <font color="#616161">Off</font>
-                  <input type="checkbox" id="pagerank">
+                  <input type="checkbox" id="pagerank" name="pagerank">
                   <span class="lever"></span>
                   <font color="#616161">On</font>
                 </label>
@@ -172,8 +172,6 @@
       $( document ).ready(function() {
         //$("#descricao").attr('data-error','The name field is required');
 
-        $(".button-collapse").sideNav();
-
   	    // $("#searchForm").submit(function(event) {
   	    //     event.preventDefault();
 
@@ -237,25 +235,24 @@
        //     //  console.log(request.response);
        //     });
 
-        $("#searchForm").submit(function( event ) {
-          // var string_json = '{"to_search": "'+document.getElementById('firstName').value+'","cossine": "'+document.getElementById('lastName').value+'","age": 24}';
-          var string_json = '{"to_search": "Marlon","cossine": "Dias","age": 24}';
-          $.ajax({        
-              type: "POST",
-              url: "/json",
-              // data: {to_search:$('#to_search').val(),cossine: anchor,pagerank: pagerank},              
-              data: string_json,
-              dataType: "json",  // tell jQuery not to process the data                          
-              error: function (request, status, error) {
-                console.log('ERRADO '+request.responseText+error+status);
-              }
+          $('#searchForm').submit(function( event ) {
+            // var string_json = '{"to_search": "'+document.getElementById('firstName').value+'","cossine": "'+document.getElementById('lastName').value+'","age": 24}';
+            var string_json = '{"to_search": "Marlon","cossine": "Dias","age": 24}';
+            $.ajax({        
+                type: "POST",
+                url: "/json",
+                // data: {to_search:$('#to_search').val(),cossine: anchor,pagerank: pagerank},              
+                data: string_json,
+                // dataType: "json",  // tell jQuery not to process the data                          
+                error: function (request, status, error) {
+                  console.log('ERRADO '+request.responseText+error+status);
+                }
             }).done(function( data ) { 
-              console.log("Server's answer:");
-              console.log(data);       
+                console.log("Server's answer: "+data);
             });              
-            return false;
-        });
 
+            return false;
+          });
        });
     </script>
   </body>
