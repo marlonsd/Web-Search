@@ -2,7 +2,7 @@
 #define PAGERANK_H
 
 #include "../common/func.h"
-#include "../common/Document.h"
+// #include "../common/Document.h"
 #include "../common/linkmap.h"
 
 #include "graph.h"

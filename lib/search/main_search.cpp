@@ -1,5 +1,5 @@
+#include <sstream>
 #include "../common/func.h"			// Defines are here
-#include "../common/Document.h"
 #include "../common/Stopwords.h"
 #include "../common/linkmap.h"
 #include "../common/PriorityQueue.h"
@@ -7,13 +7,16 @@
 #include "../indexer/Inverted_Index.h"
 #include "../indexer/Inverted_Index_Anchor.h"
 
-#include "../search/graph.h"
-#include "../search/search.h"
 #include "../search/vectorialsearch.h"
-#include "../search/pagerank.h"
+
+#define ANCHOR_TEXT 0.25
+#define PAGERANK 0.3
+
 
 Stopwords *Stopwords::s_instance = 0;
 LinkMap *LinkMap::s_instance = 0;
+
+string getclause();
 
 int main(int argc, const char* argv[]) {
 	string query, token;
@@ -25,20 +28,48 @@ int main(int argc, const char* argv[]) {
 	bool first = true;
 	vector<string> doc_id;
 	VectorialSearch searcher;
-	Graph network;
-	// Pagerank pagerank(1.0, 0.85, 0.0001, 15);
-	// exit(0);
-	// Pagerank pagerank;
-	// network.restore();
+	// Graph network;
 
-	// cout << "Doing research" << endl;
+	LinkMap::instance()->load();
 
-	// PriorityQueue t = searcher.search("porridge");
+	cout << "Query: ";
+	query = getclause();
 
-	// while (t.size()){
-		// Ranking item = t.pop();
-		// cout << item.id << " " << item.rank << endl;
-	// }
+	while(query != "-q"){
+		// query = "pease";
+
+		cout << query << endl;
+
+		PriorityQueue t = searcher.search(query, ANCHOR_TEXT, PAGERANK);
+
+		if (!t.size()){
+			cout << "No document found." << endl;
+		}
+
+
+		while (t.size()){
+			Ranking item = t.pop();
+			cout << LinkMap::instance()->get_value(item.id) << " " << item.rank << endl;
+		}
+		cout << endl << endl;
+
+		cout << "Query: ";
+		query = getclause();
+	}
 
 	return 0;
+}
+
+
+string getclause() {
+  string c;
+  string cl="";
+  std::string line;
+  std::getline(cin, line);
+  std::istringstream iss(line);
+  while ( iss >> c) {    
+    cl+=(c+ " ");
+  }
+  cl.pop_back();
+  return cl;
 }

@@ -12,9 +12,17 @@
 #include <vector>
 #include <algorithm>
 
+#include "src/searcher.h"
+
+// Stopwords *Stopwords::s_instance = 0;
+
+// Searcher searcher;
+
 using namespace std;
 //Added for the json-example:
 using namespace boost::property_tree;
+
+Searcher searcher;
 
 typedef SimpleWeb::Server<SimpleWeb::HTTP> HttpServer;
 typedef SimpleWeb::Client<SimpleWeb::HTTP> HttpClient;
@@ -24,6 +32,7 @@ void default_resource_send(const HttpServer &server, shared_ptr<HttpServer::Resp
                            shared_ptr<ifstream> ifs, shared_ptr<vector<char> > buffer);
 
 int main() {
+
     //HTTP-server at port 8080 using 1 thread
     //Unless you do more heavy non-threaded processing in the resources,
     //1 thread is usually faster than several threads
@@ -61,10 +70,18 @@ int main() {
             // cout << name << endl;
 
             string query = pt.get<string>("to_search");
-            string cossine = pt.get<string>("cossine");
+            double cossine = stod(pt.get<string>("cossine"));
+            double pagerank = stod(pt.get<string>("pagerank"));
 
             cout << "Query: " << query << endl;
             cout << "Cossine: " << cossine << endl;
+            cout << "Pagerank: " << pagerank << endl;
+
+            vector<int> result = searcher.search(query, cossine, pagerank);
+
+            for (auto r : result){
+                cout << r << endl;
+            }
 
             *response << "HTTP/1.1 200 OK\r\nContent-Length: " << query.length() << "\r\n\r\n" << query;
         }

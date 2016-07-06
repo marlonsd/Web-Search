@@ -33,10 +33,10 @@ void VectorialSearch::load_pagerank(){
 }
 
 
-PriorityQueue VectorialSearch::search(string query, double alpha, double gamma){
+priority_queue<Ranking, vector<Ranking>, comp> VectorialSearch::search(string query, double alpha, double gamma){
 	string token;
 	ifstream index;
-	PriorityQueue top;
+	priority_queue<Ranking, vector<Ranking>, comp> top;
 
 	// cout << alpha << " " << gamma << endl;
 
@@ -49,14 +49,20 @@ PriorityQueue VectorialSearch::search(string query, double alpha, double gamma){
 
 	ifstream input;
 
-	Tokenizer t(query, Stopwords::instance()->get_value());
+	vector<string> t;
+	
+	typedef boost::tokenizer<boost::char_separator<char>> tokenizer;
+	boost::char_separator<char> sep{" "};
+	tokenizer tok{query, sep};
+
+
 
 	// this->reset_distance();
 
 	// Calculating tfidf for each word in query
 	// TODO: Accumulate tfidf of documents in order to have vectorial product
-	while(t.size() > 0){
-		token = t.getToken();
+	for (auto& t: tok){
+		token = t;
 
 		if(token.size() > 0){
 

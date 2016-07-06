@@ -33,7 +33,7 @@ public:
 
 	bool get_processed_situation(string url);
 
-	void load();
+	void load(string rest_path = "");
 
 	void dump();
 

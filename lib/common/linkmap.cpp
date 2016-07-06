@@ -94,14 +94,14 @@ void LinkMap::dump(){
 	// this->clear();
 }
 
-void LinkMap::load(){
+void LinkMap::load(string rest_path){
 	bool b;
 	ifstream f;
 	string aux = "";
 
 	this->clear();
 
-	f.open(ANCHOR_DOC_ID_FILE_NAME, ios::in);
+	f.open(rest_path+ANCHOR_DOC_ID_FILE_NAME, ios::in);
 
 	if(f.is_open()){
 		while(!f.eof()){

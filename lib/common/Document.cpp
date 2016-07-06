@@ -16,10 +16,13 @@ Document::Document(const string& doc, const string url){
 }
 
 void Document::parser(const string& doc){
-	htmlcxx::HTML::ParserDom parser;
-	tree<htmlcxx::HTML::Node> dom = parser.parseTree(doc);
+	// htmlcxx::HTML::ParserDom parser;
+	HTML::ParserDom parser;
+	// tree<htmlcxx::HTML::Node> dom = parser.parseTree(doc);
+	tree<HTML::Node> dom = parser.parseTree(doc);
 
-	tree<htmlcxx::HTML::Node>::iterator it = dom.begin();
+	// tree<htmlcxx::HTML::Node>::iterator it = dom.begin();
+	tree<HTML::Node>::iterator it = dom.begin();
 
 	for (; it != dom.end(); ++it) {
 		if(it.node != 0 && dom.parent(it) != NULL){
@@ -62,7 +65,8 @@ void Document::parser(const string& doc){
 							anchor_text += it->text();
 						}
 					}
-					unsigned int normal_url = LinkMap::instance()->get_value(htmlcxx::HTML::convert_link(attrib.second, url));
+					// unsigned int normal_url = LinkMap::instance()->get_value(htmlcxx::HTML::convert_link(attrib.second, url));
+					unsigned int normal_url = LinkMap::instance()->get_value(HTML::convert_link(attrib.second, url));
 
 					// Initialize normal_url, in case it doesnt existe already
 					if (this->links.find(normal_url) == this->links.end()) {

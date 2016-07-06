@@ -1,3 +1,6 @@
+*/CMakeLists*
+lib/CMakeLists.txt
+*.a
 .DS_Store
 *.txt
 *.out

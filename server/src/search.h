@@ -1,11 +1,9 @@
 #ifndef SEARCH_H
 #define SEARCH_H
 
-#include "../common/func.h"
-// #include "../common/Document.h"
-#include "../common/PriorityQueue.h"
-#include "../indexer/Tokenizer.h"
-#include "../common/Stopwords.h"
+#include "util/func.h"
+// #include "util/Document.h"
+#include "util/Tokenizer.h"
 
 // #include "../indexer/Inverted_Index.h"
 // #include "../indexer/Inverted_Index_Anchor.h"
@@ -19,6 +17,18 @@ struct mVocabulary{
 	int total_docs;		// Total number of docs that contains "word"
 	double idf;			// "word"'s idf
 };
+
+struct Ranking{
+	unsigned int id;
+	double rank;
+};
+
+struct comp {
+	bool operator()(Ranking A, Ranking B) {
+		return (A.rank < B.rank);
+	}
+};
+
 
 class Search {
 protected:
@@ -57,7 +67,7 @@ protected:
 public:
 	Search(bool a = false);
 	
-	PriorityQueue search(string querry);
+	priority_queue<Ranking, vector<Ranking>, comp> search(string querry);
 };
 
 #endif

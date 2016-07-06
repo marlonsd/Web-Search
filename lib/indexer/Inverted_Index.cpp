@@ -334,7 +334,7 @@ void InvertedIndex::sorted_index(string temp_name){
 
 
 
-		fstream p[n_files];
+		fstream* p = new fstream[n_files];
 
 		// Evaliating from t to i+n_files
 		for (int j = 0; j < n_files; j++){
@@ -401,6 +401,8 @@ void InvertedIndex::sorted_index(string temp_name){
 		}
 
 		out.close();
+
+		delete [] p;
 	}
 
 	// Transforming binary to text

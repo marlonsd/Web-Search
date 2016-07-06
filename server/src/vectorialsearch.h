@@ -1,7 +1,12 @@
 #ifndef VECTORIALSEARCH_H
 #define VECTORIALSEARCH_H
 
-#include "../search/search.h"
+#include "search.h"
+
+#include <boost/tokenizer.hpp>
+#include <string>
+#include <iostream>
+
 
 using namespace std;
 
@@ -20,7 +25,7 @@ private:
 public:
 	VectorialSearch(bool a = false);
 
-	PriorityQueue search(string query, double alpha = 0.0, double gamma = 0.0);
+	priority_queue<Ranking, vector<Ranking>, comp> search(string query, double alpha = 0.0, double gamma = 0.0);
 };
 
 #endif

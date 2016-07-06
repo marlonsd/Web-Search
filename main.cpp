@@ -8,10 +8,6 @@
 #include "lib/search/graph.h"
 #include "lib/search/pagerank.h"
 
-#include <html/ParserDom.h>
-#include <html/utils.h>
-#include <html/Uri.h>
-
 void resetingOutputFiles();
 void parsing(const string& doc, Tokenizer& t, const unordered_set<string>& stopwords);
 void parsing_anchor_text(const string& doc, Tokenizer& t, const unordered_set<string>& stopwords, string url);

@@ -4,11 +4,13 @@
 #include "../common/func.h"
 #include "../common/linkmap.h"
 
+// #include <html/ParserDom.h>
 #include <html/ParserDom.h>
 #include <html/utils.h>
 #include <html/Uri.h>
 
 
+using namespace htmlcxx;
 using namespace std;
 
 class Document{

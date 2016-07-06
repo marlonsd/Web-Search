@@ -2,39 +2,33 @@
 #define SEARCHER_H
 
 #include "../common/func.h"			// Defines are here
-#include "../common/Document.h"
+// #include "../common/Document.h"
 #include "../common/Stopwords.h"
 #include "../common/linkmap.h"
 #include "../common/PriorityQueue.h"
 
-#include "../indexer/Inverted_Index.h"
-#include "../indexer/Inverted_Index_Anchor.h"
+// #include "../indexer/Inverted_Index.h"
+// #include "../indexer/Inverted_Index_Anchor.h"
+#include "../indexer/Tokenizer.h"
 
 #include "vectorialsearch.h"
+// #include "pagerank.h"
 
 using namespace std;
 
 class Searcher {
 private:
-	static Searcher *s_instance;
-	
-	Tokenizer tokens;
-
 	VectorialSearch searcher;
+	unordered_map<string, ProcessedFile> link_map;
 
-
-	Searcher();
+	// Pagerank pagerank;
+	void load();
+	void add_value(string url, bool processed);
 public:
 
-	string search();
+	Searcher();
 
-	static Searcher *instance(){
-		if (!s_instance){
-			s_instance = new Searcher();
-		}
-
-		return s_instance;
-	}
+	string search(string query, double alpha = 0.0, double gamma = 0.0);
 };
 
 #endif
