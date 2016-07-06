@@ -203,13 +203,14 @@
 
 	        string_json += '}'
 
-	        console.log("POST-content:");
-	        console.log(string_json);
-
 	        // POST to httpbin which returns the POST data as JSON
 	        var request = new XMLHttpRequest();
-	        request.open("POST", "/json", string_json);
+	        var a = request.open("POST", "/json", string_json);
 	        request.send(string_json);
+
+          console.log("POST-content:");
+          console.log(string_json);
+          console.log(a);
 
 	        console.log(request.response);
 	    }
