@@ -22,7 +22,7 @@
   <body>
     
     <!-- Nav bar -->
-
+    <header>
       <div class="navbar-fixed">
         <nav>
           <div class="nav-wrapper  blue lighten-2">
@@ -30,11 +30,12 @@
           </div>
         </nav>
       </div>
+    </header>
 
     <!-- End nav bar -->
 
     <!-- HTML PAGE START HERE -->
-
+    <main class="full-screen">
     <div class="container">
       <div class= "row">
         <div class="row valign center">
@@ -56,7 +57,7 @@
               <input class="validate grey lighten-5" placeholder="Type your search" type="text" name='to_search' id='to_search'>
             </div>
             <div class="col s12 m4 l2 valign center">
-              <button class="btn-floating btn-large waves-effect waves-light btn blue lighten-2" type="submit" background="black" value="Submit">
+              <button class="btn-floating btn-large waves-effect waves-light btn blue lighten-2" type="submit" background="black" value="Submit" >
                 <i class="material-icons prefix">search</i>
               </button>
             </div>
@@ -104,9 +105,11 @@
 
     <div class="container">
       <div class= "row">
-        <div class="row valign center" id='results'></div>
+        <div class="row valign center"> Results go here</div>
+        <div class="row valign center" id='results' name='results'></div>
       </div>
     </div>
+  </main>
 
     <!-- HTML PAGE END HERE -->
 
@@ -176,7 +179,9 @@
 
             console.log("In fuction with data: "+data);
 
-            var result = $('#results');      
+            $("#results").empty();
+
+            var result = $('#results');
 
             var box = "<div class='result-item'>" + data + "<br/> hu3 </div>";
             result.append(box);
@@ -191,6 +196,9 @@
           }
 
           $('#searchForm').submit(function( event ) {
+
+            $('#results').html = "";
+
             // var string_json = '{"to_search": "'+document.getElementById('firstName').value+'","cossine": "'+document.getElementById('lastName').value+'","age": 24}';
             var string_json = '{"to_search": "'+$('#to_search').val()+'","cossine": "Dias","age": 24}';
 
@@ -216,20 +224,22 @@
              console.log('pagerank off');
             }
 
-            $.ajax({        
-                type: "POST",
-                url: "/json",
-                data: {to_search:$('#to_search').val(),cossine: anchor,pagerank: pagerank},              
-                // data: string_json,
-                // dataType: "json",  // tell jQuery not to process the data                          
-                error: function (request, status, error) {
-                  console.log('ERRADO '+request.responseText+error+status);
-                }
-            }).done(function( data ) { 
-                console.log("Server's answer: "+data);
-                $("#result").fadeIn();
-                constructResult(data);
-            });
+            // $.ajax({        
+            //     type: "POST",
+            //     url: "/json",
+            //     data: {to_search:$('#to_search').val(),cossine: anchor,pagerank: pagerank},              
+            //     // data: string_json,
+            //     // dataType: "json",  // tell jQuery not to process the data                          
+            //     error: function (request, status, error) {
+            //       console.log('ERRADO '+request.responseText+error+status);
+            //     }
+            // }).done(function( data ) { 
+            //     console.log("Server's answer: "+data);
+            //     // $("#result").fadeIn();
+            //     constructResult(data);
+            // });
+
+            constructResult($('#to_search').val());
 
             return false;
           });

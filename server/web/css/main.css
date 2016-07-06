@@ -16,16 +16,29 @@
     border-radius: 50%;
 }
 
+html {
+   margin: 0px;
+   height: 100%;
+   width: 100%;
+}
+
 body {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-  }
+   margin: 0px;
+   min-height: 100%;
+   width: 100%;
+}
 
-  main {
-    flex: 1 0 auto;
-  }
-
+.full-screen {
+    display: table;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /*background: url(../img/bg.jpg) no-repeat center center scroll;*/
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
@@ -63,8 +76,8 @@ body {
   /* Support for IE. */
   font-feature-settings: 'liga';
 }
-html{height: 100%;}
-body {min-height: 100%;}
+/*html{height: 100%;}
+body {min-height: 100%;}*/
 .z-depth-3{box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24) !important}
 /*** Home ***/
 .containerSize{width: 85%;}
