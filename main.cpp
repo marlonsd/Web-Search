@@ -190,7 +190,7 @@ int main(int argc, const char* argv[]) {
 						aux = "";
 						doc_title << doc.get_title() << endl;
 						// cout << doc.get_title() << endl;
-						// doc.print();
+						doc.print();
 						// exit(0);
 					}
 					temp = "";
@@ -203,6 +203,8 @@ int main(int argc, const char* argv[]) {
 		cout << "File: " << DIRNAME+file << " finished" << endl;
 		index.sorted_index("temp/");
 		anchor_index.sorted_index("temp/");
+
+		network.dump("temp/");
 	}
 
 	doc_id.close();

@@ -115,3 +115,11 @@ int Tokenizer::size(){
 bool Tokenizer::empty(){
 	return this->tokens.empty();
 }
+
+void Tokenizer::print(){
+	cout << "Printing tokens" << endl;
+	for (string token : this->tokens){
+		cout << token << endl;
+	}
+	cout << "Printing done" << endl;
+}

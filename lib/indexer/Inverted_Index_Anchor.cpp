@@ -12,6 +12,7 @@ InvertedIndexAnchor::InvertedIndexAnchor(Document doc){
 
 // Indexing
 void InvertedIndexAnchor::indexing(Document doc){
+
 	for (auto item : doc.get_links()){
 		Tokenizer t(item.second, Stopwords::instance()->get_value());
 		this->indexing(t, item.first);
@@ -33,6 +34,8 @@ void InvertedIndexAnchor::indexing(Tokenizer& t, unsigned int index){
 	if (t.size() > 0){
 		this->total_docs++;
 	}
+
+	cout << "Adding " << t.size() << " tokens to " << index << endl;
 
 	// Iterating through tokens
 	int word_id = 0;

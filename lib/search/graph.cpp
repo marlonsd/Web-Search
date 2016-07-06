@@ -145,10 +145,10 @@ void Graph::print(){
 
 }
 
-void Graph::dump(){
+void Graph::dump(string temp_name){
 	ofstream out;
 
-	out.open(GRAPH_FILENAME, ios::out);
+	out.open(temp_name+GRAPH_FILENAME, ios::out);
 
 	// for (auto link : this->links){
 	// 	out << "*" << " " << link.first << '\n';

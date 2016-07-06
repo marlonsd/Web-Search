@@ -48,7 +48,7 @@ public:
 
 	void print();
 
-	void dump();
+	void dump(string temp_name="");
 	void restore();
 
 };

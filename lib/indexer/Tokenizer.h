@@ -30,6 +30,8 @@ public:
 
 	int size();
 	bool empty();
+
+	void print();
 };
 
 #endif
