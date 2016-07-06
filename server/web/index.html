@@ -178,23 +178,29 @@
         $(".button-collapse").sideNav();
 
 
-	    searchForm.onsubmit = function(event) {
+	    $('searchForm').submit(function(event) {
 	        event.preventDefault();
 
 	        var string_json = '{"to_search": "'+document.getElementById('to_search').value+'"';
 
 	        // console.log(request.response);
 	     
+          var cossine;
+          var pagerank = false;
+
 	        if(document.getElementById('text').checked) {
-	        	string_json += ',"cossine": "text"';
+	        	// string_json += ',"cossine": "text"';
+            cossine = text;
 	        	console.log('text');
 	        } else {
-	        	string_json += ',"cossine": "anchor"';
+	        	// string_json += ',"cossine": "anchor"';
+            cossine = anchor;
 	        	console.log('anchor');
 	        }
 
 	        if(document.getElementById('pagerank').checked) {
-	        	string_json += ',"pagerank": true';
+	        	// string_json += ',"pagerank": true';
+            pagerank = true;
 	        	console.log('pagerank on');
 	        } else {
 	        	string_json += ',"pagerank": false';
@@ -204,17 +210,17 @@
 	        string_json += '}'
 
           $.ajax({        
-            url: "/json",
-            type: "POST",
-            // data: {nome:$('#nome').val(),login: $('#email').val(),password: $('#password2').val()},              
-            data: string_json,
-            dataType: "json"  // tell jQuery not to process the data                          
-          }).done(function( data ) { 
-            console.log("Server's answer:");
-            console.log(data);       
-          });              
-          return false;
-        });
+              type: "POST",
+              url: "/json",
+              // data: {to_search:$('#to_search').val(),cossine: anchor,pagerank: pagerank},              
+              data: string_json,
+              dataType: "json"  // tell jQuery not to process the data                          
+            }).done(function( data ) { 
+              console.log("Server's answer:");
+              console.log(data);       
+            });              
+            return false;
+          });
 
 	        // POST to httpbin which returns the POST data as JSON
 	        // var request = new XMLHttpRequest();
