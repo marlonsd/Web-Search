@@ -16,7 +16,7 @@
 #include <cctype>
 #include <dirent.h>
 
-#define MEMORY_LIMITE 6000000000 // (bytes)
+#define MEMORY_LIMITE 1000000000 // (bytes)
 // #define MEMORY_LIMITE 160 // (bytes)
 
 /* <word id, doc id, frequency of word, position>
@@ -28,8 +28,8 @@
 
 #define LOCAL_VOCABULARY_SIZE 30000 //(bytes)
 
-// #define DIRNAME "util/htmls/"
-#define DIRNAME "/run/media/msdias/34761DFB761DBE94/full_collection/output/official/"
+#define DIRNAME "../../TP2/coleta_marlon/"
+// #define DIRNAME "/run/media/msdias/34761DFB761DBE94/full_collection/output/official/"
 
 #define STOPWORDS_PATH "util/stopwords/"
 

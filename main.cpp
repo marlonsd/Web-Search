@@ -124,10 +124,15 @@ int main(int argc, const char* argv[]) {
 
 				if (state == 2){
 					// cout << "State 2" << endl;
-					found = buffer.find("<html");
-					alt_found = buffer.find("<!doctype");
+
+					temp = buffer;
+					transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
+
+					found = temp.find("<html");
+					alt_found = temp.find("<!doctype");
 
 					if (found != std::string::npos || alt_found != std::string::npos){
+						temp = "";
 						state = 3;
 
 						if (alt_found != std::string::npos){
@@ -141,15 +146,19 @@ int main(int argc, const char* argv[]) {
 
 						// acc = buffer;
 					}
+					temp = "";
 				}
 
 				if (state == 3){
 					// cout << "State 3" << endl;
 					// acc+=buffer;
+					temp = buffer;
+					transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
 
-					found = buffer.find("</html>");
+					found = temp.find("</html>");
 
 					if (found != std::string::npos){
+						temp = "";
 						acc = buffer;
 						acc.erase(found+7, acc.size());
 						buffer.erase(0,found+7);
@@ -180,10 +189,11 @@ int main(int argc, const char* argv[]) {
 						url = "";
 						aux = "";
 						doc_title << doc.get_title() << endl;
-						cout << doc.get_title() << endl;
+						// cout << doc.get_title() << endl;
 						// doc.print();
 						// exit(0);
 					}
+					temp = "";
 				}
 
 			}
