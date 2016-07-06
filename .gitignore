@@ -11,6 +11,7 @@ util/index/*
 !util/stopwords/*
 !lib/*
 lib/.DS_Store
+temp/*
 
 # https://github.com/github/gitignore/blob/master/CMake.gitignore
 CMakeCache.txt
