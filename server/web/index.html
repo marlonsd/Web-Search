@@ -237,12 +237,35 @@
 
           $('#searchForm').submit(function( event ) {
             // var string_json = '{"to_search": "'+document.getElementById('firstName').value+'","cossine": "'+document.getElementById('lastName').value+'","age": 24}';
-            var string_json = '{"to_search": "Marlon","cossine": "Dias","age": 24}';
+            var string_json = '{"to_search": "'+$('#to_search').val()+'","cossine": "Dias","age": 24}';
+
+            var cossine;
+            var pagerank = false;
+
+            if(document.getElementById('text').checked) {
+              // string_json += ',"cossine": "text"';
+              cossine = 'text';
+             console.log('text');
+            } else {
+              // string_json += ',"cossine": "anchor"';
+              cossine = 'anchor';
+             console.log('anchor');
+            }
+
+            if(document.getElementById('pagerank').checked) {
+              // string_json += ',"pagerank": true';
+              pagerank = true;
+             console.log('pagerank on');
+            } else {
+             // string_json += ',"pagerank": false';
+             console.log('pagerank off');
+            }
+
             $.ajax({        
                 type: "POST",
                 url: "/json",
-                // data: {to_search:$('#to_search').val(),cossine: anchor,pagerank: pagerank},              
-                data: string_json,
+                data: {to_search:$('#to_search').val(),cossine: anchor,pagerank: pagerank},              
+                // data: string_json,
                 // dataType: "json",  // tell jQuery not to process the data                          
                 error: function (request, status, error) {
                   console.log('ERRADO '+request.responseText+error+status);
