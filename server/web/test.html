@@ -29,25 +29,26 @@
 			// 	console.log(document.getElementById('firstName').value);
 			// }
 
+			$( document ).ready(function() {
+				$('testForm').submit(function( event ) {
 
-			$('testForm').submit(function( event ) {
+					var string_json = '{"to_search": "'+document.getElementById('firstName').value+'","cossine": "'+document.getElementById('lastName').value+'","age": 24}'
 
-				var string_json = '{"to_search": "'+document.getElementById('firstName').value+'","cossine": "'+document.getElementById('lastName').value+'","age": 24}'
-
-	            $.ajax({        
-	                type: "POST",
-	                url: "/json",
-	                // data: {to_search:$('#to_search').val(),cossine: anchor,pagerank: pagerank},              
-	                data: string_json,
-	                dataType: "json"  // tell jQuery not to process the data                          
-	                error: function (request, status, error) {
-	                  console.log('ERRADO '+request.responseText+error+status);
-	                }
-	              }).done(function( data ) { 
-	                console.log("Server's answer:");
-	                console.log(data);       
-	              });              
-	              return false;
+		            $.ajax({        
+		                type: "POST",
+		                url: "/json",
+		                // data: {to_search:$('#to_search').val(),cossine: anchor,pagerank: pagerank},              
+		                data: string_json,
+		                dataType: "json"  // tell jQuery not to process the data                          
+		                error: function (request, status, error) {
+		                  console.log('ERRADO '+request.responseText+error+status);
+		                }
+		              }).done(function( data ) { 
+		                console.log("Server's answer:");
+		                console.log(data);       
+		              });              
+		              return false;
+		        });
 	        });
 		</script>
 
