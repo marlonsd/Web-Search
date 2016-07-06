@@ -240,7 +240,7 @@
             var string_json = '{"to_search": "'+$('#to_search').val()+'","cossine": "Dias","age": 24}';
 
             var cossine;
-            var pagerank = false;
+            var pagerank = 0;
 
             if(document.getElementById('text').checked) {
               // string_json += ',"cossine": "text"';
@@ -254,7 +254,7 @@
 
             if(document.getElementById('pagerank').checked) {
               // string_json += ',"pagerank": true';
-              pagerank = true;
+              pagerank = 1;
              console.log('pagerank on');
             } else {
              // string_json += ',"pagerank": false';
