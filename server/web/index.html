@@ -104,7 +104,7 @@
 
     <div class="container">
       <div class= "row">
-        <div class="row valign center"></div>
+        <div class="row valign center" id='results'></div>
       </div>
     </div>
 
@@ -272,10 +272,30 @@
                 }
             }).done(function( data ) { 
                 console.log("Server's answer: "+data);
-            });              
+                $("#result").fadeIn();
+                constructResult(data);
+            });
 
             return false;
           });
+
+          function constructResult(data) {
+            // var hrefNextPage;
+            // currPage = data.page;
+
+            var result = $('#results');      
+
+            var box = "<div class='result-item'>" + data + "<br/> hu3 </div>";
+            result.append(box);
+
+            // for (var i = 0; i < data.result.length; i++) {
+            //   var item = data.result[i];
+            //   var title = "<h4>" + item.title + "</h4>";
+            //   var content = "<p><a href='" + item.url + "' target='_blank'>" + item.url + "</a></p>";
+            //   var box = "<div class='result-item'>" + title + "<br/>" + content + "</div>";
+            //   result.append(box);
+            // };
+          }
        });
     </script>
   </body>
