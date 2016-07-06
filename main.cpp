@@ -153,7 +153,7 @@ int main(int argc, const char* argv[]) {
 						acc = buffer;
 						acc.erase(found+7, acc.size());
 						buffer.erase(0,found+7);
-						cout << buffer << endl;
+						// cout << buffer << endl;
 
 						if(url.back() == ' '){
 							url.pop_back();
@@ -181,7 +181,7 @@ int main(int argc, const char* argv[]) {
 						aux = "";
 						doc_title << doc.get_title() << endl;
 						cout << doc.get_title() << endl;
-						doc.print();
+						// doc.print();
 						// exit(0);
 					}
 				}
