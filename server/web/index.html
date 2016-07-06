@@ -174,7 +174,7 @@
 
         $(".button-collapse").sideNav();
 
-  	    $('searchForm').submit(function(event) {
+  	    $("#searchForm").submit(function(event) {
   	        event.preventDefault();
 
   	        var string_json = '{"to_search": "'+document.getElementById('to_search').value+'"';
@@ -204,7 +204,7 @@
   	        }
 
   	        string_json += '}'
-            
+
             $.ajax({        
                 type: "POST",
                 url: "/json",
