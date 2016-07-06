@@ -290,7 +290,7 @@ void InvertedIndex::memory_dump(){
 
 // Creates one index containing all tokens
 // Uses sort-based multiway merge
-void InvertedIndex::sorted_index(){
+void InvertedIndex::sorted_index(string temp_name){
 	int value, i = 0;
 	vector<int> aux(5);
 	bool test, final = false;
@@ -319,7 +319,7 @@ void InvertedIndex::sorted_index(){
 		if ((this->n_dumps - i) <= (MEMORY_LIMITE/INDEX_LINE_SIZE) && ((this->n_dumps - i) < (MAX_OS_OPEN_FILE - 1000))){
 			// If true, needs saving final sorted index
 			n_files = this->n_dumps - i;
-			out.open(INDEX_SORTED_FILE_NAME, ios::out | ios::binary);
+			out.open(temp_name+INDEX_SORTED_FILE_NAME, ios::out | ios::binary);
 			final = true;
 		} else {
 			// Intercalation
@@ -351,6 +351,8 @@ void InvertedIndex::sorted_index(){
 
 		this->reset_distance();
 
+		int voc_iterator = 0;
+
 		while (min_heap.size()){
 
 			// Getting smallest tuple
@@ -363,8 +365,8 @@ void InvertedIndex::sorted_index(){
 			if (final){
 				if (this->vocabulary_order.size() && this->vocabulary_order[0].id == aux[0]){
 					// Each line occupates 16 bytes
-					this->vocabulary_dump(this->vocabulary_order[0], out.tellp());
-					this->vocabulary_order.pop_front();
+					this->vocabulary_dump(this->vocabulary_order[voc_iterator], out.tellp());
+					voc_iterator++;
 				}
 
 				this->distance_diff(aux);
@@ -392,8 +394,10 @@ void InvertedIndex::sorted_index(){
 			p[j].close();
 
 			// Deleting temp files
-			string filename = INDEX_BACKUP_FILE_NAME+to_string(i-n_files+j);
-			remove(filename.c_str());
+			if (temp_name.size() == 0){
+				string filename = INDEX_BACKUP_FILE_NAME+to_string(i-n_files+j);
+				remove(filename.c_str());
+			}
 		}
 
 		out.close();

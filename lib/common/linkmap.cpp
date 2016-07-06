@@ -91,7 +91,7 @@ void LinkMap::dump(){
 
 	f.close();
 
-	this->clear();
+	// this->clear();
 }
 
 void LinkMap::load(){

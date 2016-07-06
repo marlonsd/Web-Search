@@ -22,7 +22,7 @@ LinkMap *LinkMap::s_instance = 0;
 int main(int argc, const char* argv[]) {
 	vector<string> files;
 	fstream input, doc_id, doc_title;
-	string acc, url, last_read = "", aux, buffer;
+	string acc, url, last_read = "", aux, buffer, temp;
 	int state = 0, file_index = 0;
 	size_t found, alt_found;
 	char c;
@@ -200,6 +200,9 @@ int main(int argc, const char* argv[]) {
 		}
 
 		input.close();
+		cout << "File: " << DIRNAME+file << " finished" << endl;
+		index.sorted_index("temp/");
+		anchor_index.sorted_index("temp/");
 	}
 
 	doc_id.close();

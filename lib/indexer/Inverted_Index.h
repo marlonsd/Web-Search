@@ -62,7 +62,7 @@ public:
 	void indexing(Tokenizer& t, int index = 0);
 	void indexing(Document doc, int index = 0);
 
-	void sorted_index();
+	void sorted_index(string temp_name = "");
 
 	void vocabulary_dump(Vocabulary item, streampos pos);
 
