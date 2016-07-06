@@ -185,17 +185,17 @@
             var pagerank = false;
 
   	        if(document.getElementById('text').checked) {
-  	        	// string_json += ',"cossine": "text"';
+  	        	string_json += ',"cossine": "text"';
               cossine = text;
   	        	console.log('text');
   	        } else {
-  	        	// string_json += ',"cossine": "anchor"';
+  	        	string_json += ',"cossine": "anchor"';
               cossine = anchor;
   	        	console.log('anchor');
   	        }
 
   	        if(document.getElementById('pagerank').checked) {
-  	        	// string_json += ',"pagerank": true';
+  	        	string_json += ',"pagerank": true';
               pagerank = true;
   	        	console.log('pagerank on');
   	        } else {
