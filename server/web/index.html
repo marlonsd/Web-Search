@@ -170,70 +170,25 @@
     <script type="text/javascript">
     
       $( document ).ready(function() {
-        //$("#descricao").attr('data-error','The name field is required');
+          function constructResult(data) {
+            // var hrefNextPage;
+            // currPage = data.page;
 
-  	    // $("#searchForm").submit(function(event) {
-  	    //     event.preventDefault();
+            console.log("In fuction with data: "+data);
 
-  	    //     var string_json = '{"to_search": "'+document.getElementById('to_search').value+'"';
+            var result = $('#results');      
 
-  	    //     // console.log(request.response);
-  	     
-       //      var cossine;
-       //      var pagerank = false;
+            var box = "<div class='result-item'>" + data + "<br/> hu3 </div>";
+            result.append(box);
 
-  	    //     if(document.getElementById('text').checked) {
-  	    //     	string_json += ',"cossine": "text"';
-       //        cossine = text;
-  	    //     	console.log('text');
-  	    //     } else {
-  	    //     	string_json += ',"cossine": "anchor"';
-       //        cossine = anchor;
-  	    //     	console.log('anchor');
-  	    //     }
-
-  	    //     if(document.getElementById('pagerank').checked) {
-  	    //     	string_json += ',"pagerank": true';
-       //        pagerank = true;
-  	    //     	console.log('pagerank on');
-  	    //     } else {
-  	    //     	string_json += ',"pagerank": false';
-  	    //     	console.log('pagerank off');
-  	    //     }
-
-  	    //     string_json += '}'
-
-       //      $.ajax({        
-       //          type: "POST",
-       //          url: "/json",
-       //          // data: {to_search:$('#to_search').val(),cossine: anchor,pagerank: pagerank},              
-       //          data: string_json,
-       //          dataType: "json",  // tell jQuery not to process the data                          
-       //          error: function (request, status, error) {
-       //            console.log('ERRADO '+request.responseText+error+status);
-       //          }
-       //        }).done(function( data ) { 
-       //          console.log("Server's answer:");
-       //          console.log(data);       
-       //        });              
-       //        return false;
-            
-
-  	    //     // POST to httpbin which returns the POST data as JSON
-  	    //     // var request = new XMLHttpRequest();
-  	    //     // request.open("POST", "/json", string_json);
-  	    //     // request.send(string_json);
-
-       //     //  console.log("POST-content:");
-       //     //  console.log(string_json);
-            
-       //     //  console.log("Server's answer:");
-  	    //     // console.log(request.response);
-
-       //     //  request.open("GET", "/work");
-       //     //  console.log("Server's answer:");
-       //     //  console.log(request.response);
-       //     });
+            // for (var i = 0; i < data.result.length; i++) {
+            //   var item = data.result[i];
+            //   var title = "<h4>" + item.title + "</h4>";
+            //   var content = "<p><a href='" + item.url + "' target='_blank'>" + item.url + "</a></p>";
+            //   var box = "<div class='result-item'>" + title + "<br/>" + content + "</div>";
+            //   result.append(box);
+            // };
+          }
 
           $('#searchForm').submit(function( event ) {
             // var string_json = '{"to_search": "'+document.getElementById('firstName').value+'","cossine": "'+document.getElementById('lastName').value+'","age": 24}';
@@ -278,24 +233,6 @@
 
             return false;
           });
-
-          function constructResult(data) {
-            // var hrefNextPage;
-            // currPage = data.page;
-
-            var result = $('#results');      
-
-            var box = "<div class='result-item'>" + data + "<br/> hu3 </div>";
-            result.append(box);
-
-            // for (var i = 0; i < data.result.length; i++) {
-            //   var item = data.result[i];
-            //   var title = "<h4>" + item.title + "</h4>";
-            //   var content = "<p><a href='" + item.url + "' target='_blank'>" + item.url + "</a></p>";
-            //   var box = "<div class='result-item'>" + title + "<br/>" + content + "</div>";
-            //   result.append(box);
-            // };
-          }
        });
     </script>
   </body>
