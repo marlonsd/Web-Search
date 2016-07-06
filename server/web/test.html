@@ -6,28 +6,48 @@
         This is the content of test.html
 
 
-        <form id='test-form'>
+        <form id='testForm' action="#">
 			Input1: <input name='firstName' id='firstName'><br>
 			Input2: <input name='lastName' id='lastName'><br>
-			<input type='submit'>
+			<button type="submit" form="test-form" value="Submit">Butaum</button>
 		</form>
-		<button type="submit" form="test-form" value="Submit">Butaum</button>
 		<script>
-			var testForm = document.getElementById('test-form');
-			testForm.onsubmit = function(event) {
-				event.preventDefault();
+			// var testForm = document.getElementById('test-form');
+			// testForm.onsubmit = function(event) {
+			// 	event.preventDefault();
 
-				var request = new XMLHttpRequest();
-				// POST to httpbin which returns the POST data as JSON
-				var string_json = '{"firstName": "'+document.getElementById('firstName').value+'","lastName": "'+document.getElementById('lastName').value+'","age": 24}'
-				request.open("POST", "json", string_json);
+			// 	var request = new XMLHttpRequest();
+			// 	// POST to httpbin which returns the POST data as JSON
+			// 	var string_json = '{"firstName": "'+document.getElementById('firstName').value+'","lastName": "'+document.getElementById('lastName').value+'","age": 24}'
+			// 	request.open("POST", "json", string_json);
 
-				var formData = new FormData(document.getElementById('test-form'));
-				request.send(string_json);
+			// 	var formData = new FormData(document.getElementById('test-form'));
+			// 	request.send(string_json);
 
-				console.log(request.response);
-				console.log(document.getElementById('firstName').value);
-			}
+			// 	console.log(request.response);
+			// 	console.log(document.getElementById('firstName').value);
+			// }
+
+
+			$('testForm').submit(function( event ) {
+
+				var string_json = '{"to_search": "'+document.getElementById('firstName').value+'","cossine": "'+document.getElementById('lastName').value+'","age": 24}'
+
+	            $.ajax({        
+	                type: "POST",
+	                url: "/json",
+	                // data: {to_search:$('#to_search').val(),cossine: anchor,pagerank: pagerank},              
+	                data: string_json,
+	                dataType: "json"  // tell jQuery not to process the data                          
+	                error: function (request, status, error) {
+	                  console.log('ERRADO '+request.responseText+error+status);
+	                }
+	              }).done(function( data ) { 
+	                console.log("Server's answer:");
+	                console.log(data);       
+	              });              
+	              return false;
+	        });
 		</script>
 
     </body>
