@@ -168,76 +168,74 @@
     <script type="text/javascript" src="js/bootstrap-tagsinput.min.js"></script>
 
     <script type="text/javascript">
-
-    	var GET = {};
-        var query = window.location.search.substring(1).split("&");
     
       $( document ).ready(function() {
         //$("#descricao").attr('data-error','The name field is required');
 
         $(".button-collapse").sideNav();
 
-      });
+  	    $('searchForm').submit(function(event) {
+  	        event.preventDefault();
 
+  	        var string_json = '{"to_search": "'+document.getElementById('to_search').value+'"';
 
-	    $('searchForm').submit(function(event) {
-	        event.preventDefault();
+  	        // console.log(request.response);
+  	     
+            var cossine;
+            var pagerank = false;
 
-	        var string_json = '{"to_search": "'+document.getElementById('to_search').value+'"';
+  	        if(document.getElementById('text').checked) {
+  	        	// string_json += ',"cossine": "text"';
+              cossine = text;
+  	        	console.log('text');
+  	        } else {
+  	        	// string_json += ',"cossine": "anchor"';
+              cossine = anchor;
+  	        	console.log('anchor');
+  	        }
 
-	        // console.log(request.response);
-	     
-          var cossine;
-          var pagerank = false;
+  	        if(document.getElementById('pagerank').checked) {
+  	        	// string_json += ',"pagerank": true';
+              pagerank = true;
+  	        	console.log('pagerank on');
+  	        } else {
+  	        	string_json += ',"pagerank": false';
+  	        	console.log('pagerank off');
+  	        }
 
-	        if(document.getElementById('text').checked) {
-	        	// string_json += ',"cossine": "text"';
-            cossine = text;
-	        	console.log('text');
-	        } else {
-	        	// string_json += ',"cossine": "anchor"';
-            cossine = anchor;
-	        	console.log('anchor');
-	        }
+  	        string_json += '}'
 
-	        if(document.getElementById('pagerank').checked) {
-	        	// string_json += ',"pagerank": true';
-            pagerank = true;
-	        	console.log('pagerank on');
-	        } else {
-	        	string_json += ',"pagerank": false';
-	        	console.log('pagerank off');
-	        }
+            $.ajax({        
+                type: "POST",
+                url: "/json",
+                // data: {to_search:$('#to_search').val(),cossine: anchor,pagerank: pagerank},              
+                data: string_json,
+                dataType: "json"  // tell jQuery not to process the data                          
+                error: function (request, status, error) {
+                  console.log('ERRADO '+request.responseText+error+status);
+                }
+              }).done(function( data ) { 
+                console.log("Server's answer:");
+                console.log(data);       
+              });              
+              return false;
+            
 
-	        string_json += '}'
+  	        // POST to httpbin which returns the POST data as JSON
+  	        // var request = new XMLHttpRequest();
+  	        // request.open("POST", "/json", string_json);
+  	        // request.send(string_json);
 
-          $.ajax({        
-              type: "POST",
-              url: "/json",
-              // data: {to_search:$('#to_search').val(),cossine: anchor,pagerank: pagerank},              
-              data: string_json,
-              dataType: "json"  // tell jQuery not to process the data                          
-            }).done(function( data ) { 
-              console.log("Server's answer:");
-              console.log(data);       
-            });              
-            return false;
-          });
+           //  console.log("POST-content:");
+           //  console.log(string_json);
+            
+           //  console.log("Server's answer:");
+  	        // console.log(request.response);
 
-	        // POST to httpbin which returns the POST data as JSON
-	        // var request = new XMLHttpRequest();
-	        // request.open("POST", "/json", string_json);
-	        // request.send(string_json);
-
-         //  console.log("POST-content:");
-         //  console.log(string_json);
-          
-         //  console.log("Server's answer:");
-	        // console.log(request.response);
-
-         //  request.open("GET", "/work");
-         //  console.log("Server's answer:");
-         //  console.log(request.response);
+           //  request.open("GET", "/work");
+           //  console.log("Server's answer:");
+           //  console.log(request.response);
+           });
        });
     </script>
   </body>
