@@ -126,7 +126,7 @@ int main(int argc, const char* argv[]) {
 					// cout << "State 2" << endl;
 
 					temp = buffer;
-					temp.erase(std::remove_if(temp.begin(), temp.end(), std::isspace), temp.end());
+					temp.erase(std::remove_if(temp.begin(), temp.end(),[](char x){return std::isspace(x);}),temp.end());
 					transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
 
 					found = temp.find("<html");
@@ -154,7 +154,8 @@ int main(int argc, const char* argv[]) {
 					// cout << "State 3" << endl;
 					// acc+=buffer;
 					temp = buffer;
-					temp.erase(std::remove_if(temp.begin(), temp.end(), std::isspace), temp.end());
+					temp.erase(std::remove_if(temp.begin(), temp.end(),[](char x){return std::isspace(x);}),temp.end());
+					// temp.erase(std::remove(temp.begin(),temp.end(),' '),temp.end());
 					transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
 
 					found = temp.find("</html>");
