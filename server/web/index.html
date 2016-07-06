@@ -59,8 +59,8 @@
               <button class="btn-floating btn-large waves-effect waves-light btn blue lighten-2" type="submit" background="black" value="Submit">
                 <i class="material-icons prefix">search</i>
               </button>
-            </form>
             </div>
+          </form>
         </div>
       </div>
     </div>
@@ -237,8 +237,9 @@
        //     //  console.log(request.response);
        //     });
 
-        $('#searchForm').submit(function( event ) {
-          var string_json = '{"to_search": "'+document.getElementById('firstName').value+'","cossine": "'+document.getElementById('lastName').value+'","age": 24}';
+        $("#searchForm").submit(function( event ) {
+          // var string_json = '{"to_search": "'+document.getElementById('firstName').value+'","cossine": "'+document.getElementById('lastName').value+'","age": 24}';
+          var string_json = '{"to_search": "Marlon","cossine": "Dias","age": 24}';
                 $.ajax({        
                     type: "POST",
                     url: "/json",
