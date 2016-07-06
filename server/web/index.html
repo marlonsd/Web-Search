@@ -205,14 +205,18 @@
 
 	        // POST to httpbin which returns the POST data as JSON
 	        var request = new XMLHttpRequest();
-	        var a = request.open("POST", "/json", string_json);
+	        request.open("POST", "/json", string_json);
 	        request.send(string_json);
 
           console.log("POST-content:");
           console.log(string_json);
-          console.log(a);
-
+          
+          console.log("Server's answer:");
 	        console.log(request.response);
+
+          request.open("GET", "/work");
+          console.log("Server's answer:");
+          console.log(request.response);
 	    }
 
         });
