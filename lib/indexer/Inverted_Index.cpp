@@ -309,7 +309,7 @@ void InvertedIndex::sorted_index(string temp_name){
 	cout << "Total of files: " << this->n_dumps << endl << endl;
 
 
-	this->vocabulary_init();
+	this->vocabulary_init(temp_name);
 
 	while(i < this->n_dumps){
 		int n_files;
@@ -363,9 +363,9 @@ void InvertedIndex::sorted_index(string temp_name){
 			// add word to vocabulary;
 			// do compression
 			if (final){
-				if (this->vocabulary_order.size() && this->vocabulary_order[0].id == aux[0]){
+				if (this->vocabulary_order.size() && this->vocabulary_order[voc_iterator].id == aux[0]){
 					// Each line occupates 16 bytes
-					this->vocabulary_dump(this->vocabulary_order[voc_iterator], out.tellp());
+					this->vocabulary_dump(this->vocabulary_order[voc_iterator], out.tellp(), temp_name);
 					voc_iterator++;
 				}
 
@@ -409,17 +409,17 @@ void InvertedIndex::sorted_index(string temp_name){
 	// Saves text file without the usage of comprassion
 	this->rest();
 
-	this->wd_computing();
+	this->wd_computing(temp_name);
 }
 
 // Saves info in the vocabulary file
 // Format: word index_position ni idf
-void InvertedIndex::vocabulary_dump(Vocabulary item, streampos pos){
+void InvertedIndex::vocabulary_dump(Vocabulary item, streampos pos, string temp_name){
 
 	fstream f;
 	// double idf = log2((double) this->total_docs/item.total_docs);
 
-	f.open(VOCABULARY_FILE_NAME, ios::out | ios::app);
+	f.open(temp_name+VOCABULARY_FILE_NAME, ios::out | ios::app);
 
 	// word, index position, ni, idf
 	f << item.word << " " << pos << " " << item.total_docs << " " << item.total_docs << '\n';
@@ -430,11 +430,11 @@ void InvertedIndex::vocabulary_dump(Vocabulary item, streampos pos){
 
 // Resets vocabulary file
 // and saves the total number of docs
-void InvertedIndex::vocabulary_init(){
+void InvertedIndex::vocabulary_init(string temp_name){
 
 	fstream f;
 
-	f.open(VOCABULARY_FILE_NAME, ios::out);
+	f.open(temp_name+VOCABULARY_FILE_NAME, ios::out);
 
 	f << this->total_docs << '\n';
 
@@ -451,6 +451,9 @@ void InvertedIndex::load_vocabulary(){
 
 	if (f.is_open()){
 
+		this->vocabulary.clear();
+		this->vocabulary_order.clear();
+
 		InvertedIndex();
 
 		if (!f.eof()){
@@ -463,6 +466,7 @@ void InvertedIndex::load_vocabulary(){
 
 			// word, index position, ni, N/ni
 			f >> item.word >> pos >> item.total_docs >> item.idf;
+
 			item.file_pos = (streampos) pos;
 
 			if (item.word.size()){
@@ -652,7 +656,7 @@ void InvertedIndex::to_text(){
 	output.close();
 }
 
-void InvertedIndex::wd_computing(){
+void InvertedIndex::wd_computing(string temp_name){
 	bool test;
 	double w_t;
 	vector<int> aux;
@@ -662,11 +666,15 @@ void InvertedIndex::wd_computing(){
 	ifstream input;
 	ofstream output;
 
-	input.open(INDEX_SORTED_FILE_NAME, ios::in);
+	// InvertedIndex();
+
+	input.open(temp_name+INDEX_SORTED_FILE_NAME, ios::in);
 
 	unordered_map<unsigned int, double> w_d;
 
-	this->load_vocabulary();
+	if (this->vocabulary.size() == 0){
+		this->load_vocabulary();
+	}
 
 	if (input.is_open()){
 		this->reset_distance();
@@ -678,7 +686,7 @@ void InvertedIndex::wd_computing(){
 			this->distance_rest(aux);
 			word_id = aux[0]; doc_id = aux[1]; freq = aux[2]; pos = aux[3];
 
-			w_t = log2(1.0 + (this->total_docs / (this->vocabulary_order[word_id].idf)));
+			w_t = log2(1.0 + (this->total_docs / (this->vocabulary_order[word_id].total_docs)));
 
 			// doc_id += previous_doc_id;
 
@@ -702,13 +710,13 @@ void InvertedIndex::wd_computing(){
 
 	this->vocabulary.clear();
 
-	output.open(DOC_WD_FILE_NAME, ios::out);
+	output.open(temp_name+DOC_WD_FILE_NAME, ios::out);
 
 	if (output.is_open()){
 		output << w_d.size() << '\n';
 
 		for (auto wd : w_d){
-			output << wd.first << " " << sqrt(wd.second) << '\n';
+			output << wd.first << " " << wd.second << '\n';
 		}
 	}
 

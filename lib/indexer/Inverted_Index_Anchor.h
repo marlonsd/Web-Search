@@ -12,8 +12,10 @@ using namespace std;
 
 class InvertedIndexAnchor : public InvertedIndex {
 protected:
-	void vocabulary_init();
+	void vocabulary_init(string temp_name);
 	void memory_dump();
+
+	void wd_computing(string temp_name="");
 
 public:
 	InvertedIndexAnchor();
@@ -24,7 +26,7 @@ public:
 
 	void sorted_index(string temp_name = "");
 	
-	void vocabulary_dump(Vocabulary item, streampos pos);
+	void vocabulary_dump(Vocabulary item, streampos pos, string temp_name="");
 
 	vector<FileList> get_list(string& token);
 

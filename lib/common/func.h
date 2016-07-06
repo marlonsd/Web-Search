@@ -56,7 +56,7 @@
 
 #define ANCHOR_DOC_ID_FILE_NAME "util/index/anchor/doc_id"
 
-#define ANCHOR_DOC_WD_FILE_NAME "util/index/w_d"
+#define ANCHOR_DOC_WD_FILE_NAME "util/index/anchor/w_d"
 
 #define GRAPH_FILENAME "util/pagerank/graph"
 

@@ -50,8 +50,8 @@ protected:
 	bool read_line(fstream& file, vector<int>& v, streampos pos = 0, int it = 4);
 	bool read_line(ifstream& file, vector<int>& v, streampos pos = 0, int it = 4);
 
-	void vocabulary_init();
-	void wd_computing();
+	void vocabulary_init(string temp_name);
+	void wd_computing(string temp_name="");
 
 
 public:
@@ -64,7 +64,7 @@ public:
 
 	void sorted_index(string temp_name = "");
 
-	void vocabulary_dump(Vocabulary item, streampos pos);
+	void vocabulary_dump(Vocabulary item, streampos pos, string temp_name = "");
 
 	vector<FileList> get_list(string& token);
 

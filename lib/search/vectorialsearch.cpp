@@ -7,10 +7,12 @@ VectorialSearch::VectorialSearch(bool a){
 		this->w_d = NULL;
 
 		Search(true);
+		cout << "Searching anchor text" << endl;
 		input.open(ANCHOR_DOC_WD_FILE_NAME, ios::in);
 		this->load_w_d(input);
 	} else {
 		Search(false);
+		cout << "Searching text" << endl;
 		input.open(DOC_WD_FILE_NAME, ios::in);
 		this->load_w_d(input);
 	}

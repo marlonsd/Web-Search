@@ -27,17 +27,18 @@ int main(int argc, const char* argv[]) {
 	VectorialSearch searcher;
 	Graph network;
 	// Pagerank pagerank(1.0, 0.85, 0.0001, 15);
-
+	// exit(0);
+	// Pagerank pagerank;
 	// network.restore();
 
-	cout << "Doing research" << endl;
+	// cout << "Doing research" << endl;
 
-	PriorityQueue t = searcher.search("porridge");
+	// PriorityQueue t = searcher.search("porridge");
 
-	while (t.size()){
-		Ranking item = t.pop();
-		cout << item.id << " " << item.rank << endl;
-	}
+	// while (t.size()){
+		// Ranking item = t.pop();
+		// cout << item.id << " " << item.rank << endl;
+	// }
 
 	return 0;
 }

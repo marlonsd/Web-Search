@@ -167,15 +167,15 @@ void Graph::dump(string temp_name){
 			out << link.collected << '\n';
 			out << link.out_links.size() << '\n';
 			for (unsigned int out_link : link.out_links){
-				if (this->links[out_link].collected){
+				// if (this->links[out_link].collected){
 					out << out_link << '\n';
-				}
+				// }
 			}
 			out << link.in_links.size() << '\n';
 			for (unsigned int in_link : link.in_links){
-				if (this->links[in_link].collected){
+				// if (this->links[in_link].collected){
 					out << in_link << '\n';
-				}
+				// }
 			}
 		}
 	}

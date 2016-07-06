@@ -184,7 +184,7 @@ void InvertedIndexAnchor::sorted_index(string temp_name){
 	cout << "Memory Limit: " << (MEMORY_LIMITE/INDEX_LINE_SIZE) << endl;
 	cout << "Total of files: " << this->n_dumps << endl << endl;
 
-	this->vocabulary_init();
+	this->vocabulary_init(temp_name);
 
 	while(i < this->n_dumps){
 		int n_files;
@@ -240,9 +240,9 @@ void InvertedIndexAnchor::sorted_index(string temp_name){
 			// add word to vocabulary;
 			// do compression
 			if (final){
-				if (this->vocabulary_order.size() && this->vocabulary_order[0].id == aux[0]){
+				if (this->vocabulary_order.size() && this->vocabulary_order[voc_iterator].id == aux[0]){
 					// Each line occupates 16 bytes
-					this->vocabulary_dump(this->vocabulary_order[voc_iterator], out.tellp());
+					this->vocabulary_dump(this->vocabulary_order[voc_iterator], out.tellp(), temp_name);
 					voc_iterator++;
 				}
 
@@ -287,16 +287,18 @@ void InvertedIndexAnchor::sorted_index(string temp_name){
 	this->rest();
 
 	LinkMap::instance()->dump();
+
+	this->wd_computing(temp_name);
 }
 
 // Saves info in the vocabulary file
 // Format: word index_position ni idf
-void InvertedIndexAnchor::vocabulary_dump(Vocabulary item, streampos pos){
+void InvertedIndexAnchor::vocabulary_dump(Vocabulary item, streampos pos, string temp_name){
 
 	fstream f;
 	// double idf = log2((double) this->total_docs/item.total_docs);
 
-	f.open(ANCHOR_VOCABULARY_FILE_NAME, ios::out | ios::app);
+	f.open(temp_name+ANCHOR_VOCABULARY_FILE_NAME, ios::out | ios::app);
 
 	// word, index position, ni, idf
 	f << item.word << " " << pos << " " << item.total_docs << " " << item.total_docs << '\n';
@@ -307,11 +309,11 @@ void InvertedIndexAnchor::vocabulary_dump(Vocabulary item, streampos pos){
 
 // Resets vocabulary file
 // and saves the total number of docs
-void InvertedIndexAnchor::vocabulary_init(){
+void InvertedIndexAnchor::vocabulary_init(string temp_name){
 
 	fstream f;
 
-	f.open(ANCHOR_VOCABULARY_FILE_NAME, ios::out);
+	f.open(temp_name+ANCHOR_VOCABULARY_FILE_NAME, ios::out);
 
 	f << this->total_docs << '\n';
 
@@ -327,7 +329,14 @@ void InvertedIndexAnchor::load_vocabulary(){
 
 	if (f.is_open()){
 
-		InvertedIndexAnchor();
+		this->vocabulary.clear();
+		this->vocabulary_order.clear();
+
+		InvertedIndex();
+
+		if (!f.eof()){
+			f >> this->total_docs;
+		}
 
 		while (!f.eof()){
 			Vocabulary item;
@@ -348,7 +357,6 @@ void InvertedIndexAnchor::load_vocabulary(){
 			}
 		}
 	}
-
 	f.close();
 }
 
@@ -473,5 +481,72 @@ void InvertedIndexAnchor::to_text(){
 
 
 	input.close();
+	output.close();
+}
+
+void InvertedIndexAnchor::wd_computing(string temp_name){
+	bool test;
+	double w_t;
+	vector<int> aux;
+	int word_id, doc_id, freq, pos;
+	// int previous_word_id = 0, previous_doc_id = 0;
+
+	ifstream input;
+	ofstream output;
+
+
+	input.open(temp_name+ANCHOR_INDEX_SORTED_FILE_NAME, ios::in);
+
+	unordered_map<unsigned int, double> w_d;
+
+	if (this->vocabulary.size() == 0){
+		this->load_vocabulary();
+	}
+
+	if (input.is_open()){
+		this->reset_distance();
+		// test = this->read_line(word_id, doc_id, freq, pos, input);
+		test = this->read_line(input, aux);
+
+		while (test){
+
+			this->distance_rest(aux);
+			word_id = aux[0]; doc_id = aux[1]; freq = aux[2]; pos = aux[3];
+			// cout << word_id<< endl;
+
+			w_t = log2(1.0 + (this->total_docs / (this->vocabulary_order[word_id].total_docs)));
+
+			// doc_id += previous_doc_id;
+
+			if(w_d.find(doc_id) == w_d.end()){
+				w_d[doc_id] = 0.0;
+			}
+
+			w_d[doc_id] += pow((1.0 + log2(freq)) * w_t,2);
+
+			for (int i = 0; i < (freq - 1) && !input.eof(); i++){
+				// this->read_line(word_id, doc_id, freq, pos, input);
+				test = this->read_line(input, aux);
+			}
+
+			// test = this->read_line(word_id, doc_id, freq, pos, input);
+			test = this->read_line(input, aux);
+		}
+	}
+
+	input.close();
+
+	this->vocabulary.clear();
+
+	output.open(temp_name+ANCHOR_DOC_WD_FILE_NAME, ios::out);
+
+	if (output.is_open()){
+		output << w_d.size() << '\n';
+
+		for (auto wd : w_d){
+			output << wd.first << " " << wd.second << '\n';
+		}
+	}
+
 	output.close();
 }

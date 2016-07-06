@@ -18,10 +18,10 @@ void Pagerank::load_graph(){
 	int link, loop = 0;
 	unsigned int in_link;
 
+	cout << "Loading graph" << endl;
 	f.open(GRAPH_FILENAME, ios::out);
 
 	if(f.is_open()){
-		Graph();
 
 		while(!f.eof()){
 			Page node;
@@ -33,6 +33,7 @@ void Pagerank::load_graph(){
 				f >> c;
 
 				f >> node.out_links;
+				// cout << "Link " << link << " " << node.out_links << endl;;
 				for(int i = 0; i < node.out_links; i++){
 					f >> in_link;
 				}
@@ -40,6 +41,7 @@ void Pagerank::load_graph(){
 				f >> loop;
 				for(int i = 0; i < loop; i++){
 					f >> in_link;
+					// cout << '\t' << in_link << endl;
 					node.in_links.push_back(in_link);
 				}
 
@@ -50,6 +52,8 @@ void Pagerank::load_graph(){
 	}
 
 	f.close();
+
+	cout << "Done loading graph" << endl;
 }
 
 void Pagerank::compute_rank(unsigned int max_it){
@@ -60,6 +64,7 @@ void Pagerank::compute_rank(unsigned int max_it){
 	unsigned int it = 0;
 
 	while(cond){
+		cout << "Iteration " << it << endl;
 		cond = false;
 		error = 0.0;
 

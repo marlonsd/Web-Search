@@ -200,11 +200,12 @@ int main(int argc, const char* argv[]) {
 		}
 
 		input.close();
-		cout << "File: " << DIRNAME+file << " finished" << endl;
 		index.sorted_index("temp/");
 		anchor_index.sorted_index("temp/");
 
 		network.dump("temp/");
+
+		cout << "File: " << DIRNAME+file << " finished" << endl;
 	}
 
 	doc_id.close();
