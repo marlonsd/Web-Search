@@ -27,6 +27,6 @@ Para executar o servidor, mover para pastar server. Lá
   make
   ./http_examples
 
-Acessar o servidor em [http://localhost:8080]
+Acessar o servidor em [http://localhost:8080/].
 Servidor baseado no trabalho de eidheim [https://github.com/eidheim/Simple-Web-Server]
   
