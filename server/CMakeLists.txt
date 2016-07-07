@@ -39,6 +39,3 @@ if(MSYS) #TODO: Is MSYS true when MSVC is true?
     target_link_libraries(http_examples ws2_32 wsock32)
     target_link_libraries(https_examples ws2_32 wsock32)
 endif()
-
-enable_testing()
-add_subdirectory(test)

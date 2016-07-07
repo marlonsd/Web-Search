@@ -5,8 +5,12 @@ VectorialSearch::VectorialSearch(bool a){
 	this->w_d_anchor = {};
 	this->w_d_text = {};
 	this->pagerank = {};
+	cout << "Loading wd" << endl;
 	this->load_w_d();
+	cout << "Done loading wd" << endl;
+	cout << "Loading pagerank" << endl;
 	this->load_pagerank();
+	cout << "Done loading pagerank" << endl;
 }
 
 void VectorialSearch::read_line(int& word_id, int& doc_id, int& freq, int& pos, ifstream& index){
@@ -115,6 +119,7 @@ void VectorialSearch::load_w_d(){
 
 	ifstream input;
 
+	cout << "\tLoading ANCHOR wd" << endl;
 	input.open(ANCHOR_DOC_WD_FILE_NAME, ios::in);
 	if (input.is_open()){
 
@@ -129,7 +134,8 @@ void VectorialSearch::load_w_d(){
 		}
 	}
 	input.close();
-
+	cout << "\tLDone loading ANCHOR wd" << endl;
+	cout << "\tLoading TEXT wd" << endl;
 	input.open(DOC_WD_FILE_NAME, ios::in);
 	if (input.is_open()){
 
@@ -148,6 +154,7 @@ void VectorialSearch::load_w_d(){
 		}
 	}
 	input.close();
+	cout << "\tDone loading TEXT wd" << endl;
 }
 
 void VectorialSearch::cossine_similarity(string token, unordered_map<unsigned int, double>& acc, string filename){
