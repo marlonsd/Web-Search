@@ -74,7 +74,7 @@ vector<string> list_dir_files(string path) {
 
 	dir = opendir(path.c_str());
 
-	while (pdir == readdir(dir)) {
+	while (pdir = readdir(dir)) {
 		string filename = pdir->d_name;
 		if (filename != "." && filename != ".." && filename[0] != '.'){
 			files.push_back(filename);

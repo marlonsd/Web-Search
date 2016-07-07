@@ -68,133 +68,217 @@ int main(int argc, const char* argv[]) {
 
 		state = 0;
 
-		if (input.is_open()){
+		// if (input.is_open()){
 		
-			aux="";
+		// 	aux="";
 
-			while(!input.eof() || buffer.size() > 0){
+		// 	while(!input.eof() || buffer.size() > 0){
 				
+		// 		input >> aux;
+
+		// 		if (aux.size() > 0){
+		// 			buffer+=aux+" ";
+		// 		}
+		// 		// cout << aux;
+
+		// 		if (state == 0){
+		// 			found = buffer.find("|||");
+
+		// 			if (found != std::string::npos){
+		// 				buffer.erase(0,found+3);
+
+		// 				state = 1;
+		// 			} else {
+		// 				if(input.eof()){
+		// 					buffer = "";
+		// 				}
+		// 			}
+		// 		}
+
+		// 		if (state == 1){
+
+		// 			// if (buffer.size() > 0){
+		// 			// 	while(isspace(buffer.at(0))){
+		// 			// 		buffer.erase(0,1);
+		// 			// 	}
+		// 			// }
+
+		// 			buffer.erase(buffer.begin(), std::find_if(buffer.begin(), buffer.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
+
+		// 			found = buffer.find("|");
+
+		// 			if (found != std::string::npos){
+		// 				// cout << "State 1" << endl;
+		// 				url = buffer;
+		// 				url.erase(found, buffer.size());
+		// 				// cout << url;
+		// 				buffer.erase(0, found+1);
+		// 				// cout << "\t" << buffer << endl;
+		// 				state = 2;
+		// 			}
+		// 		}
+
+		// 		if (state == 2){
+		// 			// cout << "State 2" << endl;
+
+		// 			temp = buffer;
+		// 			temp.erase(std::remove_if(temp.begin(), temp.end(),[](char x){return std::isspace(x);}),temp.end());
+		// 			transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
+
+		// 			found = temp.find("<html");
+		// 			alt_found = temp.find("<!doctype");
+
+		// 			if (found != std::string::npos || alt_found != std::string::npos){
+		// 				temp = "";
+		// 				state = 3;
+
+		// 				if (alt_found != std::string::npos){
+		// 					found = alt_found;
+		// 				}
+
+		// 				if(found > 0){
+		// 					buffer.erase(0,found);
+		// 					// cout << "\t" << buffer << endl;
+		// 				}
+
+		// 				// acc = buffer;
+		// 			}
+		// 			temp = "";
+		// 		}
+
+		// 		if (state == 3){
+		// 			// cout << "State 3" << endl;
+		// 			// acc+=buffer;
+		// 			temp = buffer;
+		// 			temp.erase(std::remove_if(temp.begin(), temp.end(),[](char x){return std::isspace(x);}),temp.end());
+		// 			// temp.erase(std::remove(temp.begin(),temp.end(),' '),temp.end());
+		// 			transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
+
+		// 			found = temp.find("</html>");
+
+		// 			if (found != std::string::npos){
+		// 				temp = "";
+		// 				acc = buffer;
+		// 				acc.erase(found+7, acc.size());
+		// 				buffer.erase(0,found+7);
+		// 				// cout << buffer << endl;
+
+		// 				if(url.back() == ' '){
+		// 					url.pop_back();
+		// 				}
+
+		// 				doc_id << url << endl;
+
+		// 				// parsing_anchor_text(acc, t, stopwords, url);
+
+		// 				// parsing(acc, t, stopwords);
+
+		// 				Document doc(acc, url);
+
+		// 				network.add_url(doc);
+
+		// 				// Tokenizer t(doc.get_text(), Stopwords::instance()->get_value());
+		// 				index.indexing(doc, file_index);
+		// 				anchor_index.indexing(doc);
+
+		// 				file_index++;
+
+		// 				state = 0;
+		// 				acc = "";
+		// 				url = "";
+		// 				aux = "";
+		// 				doc_title << doc.get_title() << endl;
+		// 				// cout << doc.get_title() << endl;
+		// 				// doc.print();
+		// 				// exit(0);
+		// 			}
+		// 			temp = "";
+		// 		}
+
+		// 	}
+		// }
+
+		if (input.is_open()){
+			while (!input.eof()){
+				string aux;
 				input >> aux;
-
-				if (aux.size() > 0){
-					buffer+=aux+" ";
-				}
-				// cout << aux;
-
-				if (state == 0){
-					found = buffer.find("|||");
-
-					if (found != std::string::npos){
-						buffer.erase(0,found+3);
-
-						state = 1;
-					} else {
-						if(input.eof()){
-							buffer = "";
-						}
-					}
-				}
-
-				if (state == 1){
-
-					// if (buffer.size() > 0){
-					// 	while(isspace(buffer.at(0))){
-					// 		buffer.erase(0,1);
-					// 	}
-					// }
-
-					buffer.erase(buffer.begin(), std::find_if(buffer.begin(), buffer.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
-
-					found = buffer.find("|");
-
-					if (found != std::string::npos){
-						// cout << "State 1" << endl;
-						url = buffer;
-						url.erase(found, buffer.size());
-						// cout << url;
-						buffer.erase(0, found+1);
-						// cout << "\t" << buffer << endl;
-						state = 2;
-					}
-				}
-
-				if (state == 2){
-					// cout << "State 2" << endl;
-
-					temp = buffer;
-					temp.erase(std::remove_if(temp.begin(), temp.end(),[](char x){return std::isspace(x);}),temp.end());
-					transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
-
-					found = temp.find("<html");
-					alt_found = temp.find("<!doctype");
-
-					if (found != std::string::npos || alt_found != std::string::npos){
-						temp = "";
-						state = 3;
-
-						if (alt_found != std::string::npos){
-							found = alt_found;
+				// Finite Automata. See report's Figure 3
+				switch(state){
+					case 0:
+						if (aux == "|||"){
+							state = 1;
 						}
 
-						if(found > 0){
-							buffer.erase(0,found);
-							// cout << "\t" << buffer << endl;
+						break;
+
+					case 1:
+						if (aux == "|"){
+							state = 2;
+						} else {
+							url+=aux+" ";
 						}
 
-						// acc = buffer;
-					}
-					temp = "";
-				}
+						break;
 
-				if (state == 3){
-					// cout << "State 3" << endl;
-					// acc+=buffer;
-					temp = buffer;
-					temp.erase(std::remove_if(temp.begin(), temp.end(),[](char x){return std::isspace(x);}),temp.end());
-					// temp.erase(std::remove(temp.begin(),temp.end(),' '),temp.end());
-					transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
+					case 2:
+						transform(aux.begin(), aux.end(), aux.begin(), ::tolower);
 
-					found = temp.find("</html>");
+						found = aux.find("<html");
+						alt_found = aux.find("<!doctype");
 
-					if (found != std::string::npos){
-						temp = "";
-						acc = buffer;
-						acc.erase(found+7, acc.size());
-						buffer.erase(0,found+7);
-						// cout << buffer << endl;
-
-						if(url.back() == ' '){
-							url.pop_back();
+						if ((found != std::string::npos && found == 0) ||
+							(alt_found != std::string::npos && alt_found == 0)){
+							acc = aux+" ";
+							state = 3;
 						}
 
-						doc_id << url << endl;
+						if (aux == "|||"){
+							state = 1;
+							url = "";
+						}
 
-						// parsing_anchor_text(acc, t, stopwords, url);
+						break;
 
-						// parsing(acc, t, stopwords);
+					case 3:
 
-						Document doc(acc, url);
+						transform(aux.begin(), aux.end(), aux.begin(), ::tolower);
+						found = aux.find("</html>");
 
-						network.add_url(doc);
+						acc+=aux+" ";
 
-						// Tokenizer t(doc.get_text(), Stopwords::instance()->get_value());
-						index.indexing(doc, file_index);
-						anchor_index.indexing(doc);
+						// 7 is "</html>" size
+						if (found != std::string::npos && (aux.size() - found) == 7){
+							state = 4;
+						}
 
-						file_index++;
+						break;
 
-						state = 0;
-						acc = "";
-						url = "";
-						aux = "";
-						doc_title << doc.get_title() << endl;
-						// cout << doc.get_title() << endl;
-						// doc.print();
-						// exit(0);
-					}
-					temp = "";
+					case 4:
+
+						if (aux == "|||"){
+
+							doc_id << url << endl;
+
+
+							Document doc(acc, url);
+
+							network.add_url(doc);
+
+							// Tokenizer t(doc.get_text(), Stopwords::instance()->get_value());
+							index.indexing(doc, file_index);
+							anchor_index.indexing(doc);
+
+							file_index++;
+
+							doc_title << doc.get_title() << endl;
+
+							state = 1;
+							acc = "";
+							url = "";
+						}
+
+						break;
 				}
-
 			}
 		}
 
