@@ -28,6 +28,8 @@ Para busca:
   ```
 Para ajustar os pesos considerados do pagerank e anchor text, ajustar em search/main_search.cpp os defines ANCHOR_TEXT e PAGERANK, valores default 0.25 e 0.3.
 
+Para busca, os devidos arquivos gerados pelo indexador devem estar na pasta ```util```
+
 Para executar o servidor, mover para pastar server. Lá
   ```
   cmake .
