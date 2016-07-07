@@ -10,7 +10,9 @@ Search::Search(bool a){
 	this->anchor = a;
 
 	this->reset_distance();
+	cout << "Importing vocabulary ..." << endl;
 	this->import_vocabulary();
+	cout << "Done vocabulary" << endl;
 
 	this->set_searcher();
 }

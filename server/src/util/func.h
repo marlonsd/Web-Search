@@ -28,24 +28,25 @@
 
 #define LOCAL_VOCABULARY_SIZE 30000 //(bytes)
 
-#define VOCABULARY_FILE_NAME "info/vocabulary"
-#define DOC_ID_FILE_NAME "info/doc_id"
-#define DOC_TITLE_FILE_NAME "info/doc_title"
-#define DOC_WD_FILE_NAME "info/w_d"
+#define VOCABULARY_FILE_NAME "src/info/vocabulary"
+#define DOC_ID_FILE_NAME "src/info/doc_id"
+#define DOC_TITLE_FILE_NAME "src/info/doc_title"
+#define DOC_WD_FILE_NAME "src/info/w_d"
 
-#define INDEX_SORTED_FILE_NAME "info/sorted_index"
+#define INDEX_SORTED_FILE_NAME "src/info/sorted_index"
 
-#define PAGERANK_FILENAME "info/pagerank"
+#define PAGERANK_FILENAME "src/info/pagerank"
+// #define PAGERANK_FILENAME "src/info/rank"
 
 
-#define ANCHOR_VOCABULARY_FILE_NAME "info/vocabulary_anchor"
-#define ANCHOR_DOC_ID_FILE_NAME "info/doc_id_anchor"
-#define ANCHOR_DOC_TITLE_FILE_NAME "info/doc_title_anchor"
-#define ANCHOR_DOC_WD_FILE_NAME "info/w_d_anchor"
+#define ANCHOR_VOCABULARY_FILE_NAME "src/info/vocabulary_anchor"
+#define ANCHOR_DOC_ID_FILE_NAME "src/info/doc_id_anchor"
+#define ANCHOR_DOC_TITLE_FILE_NAME "src/info/doc_title_anchor"
+#define ANCHOR_DOC_WD_FILE_NAME "src/info/w_d_anchor"
 
-#define ANCHOR_INDEX_SORTED_FILE_NAME "info/sorted_index_anchor"
+#define ANCHOR_INDEX_SORTED_FILE_NAME "src/info/sorted_index_anchor"
 
-#define STOPWORDS_PATH "info/stopwords"
+#define STOPWORDS_PATH "src/info/stopwords"
 
 
 using namespace std;

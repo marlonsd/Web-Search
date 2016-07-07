@@ -1,12 +1,16 @@
 #include "vectorialsearch.h"
 
 VectorialSearch::VectorialSearch(bool a){
+	cout << "Creating Vectorial searcher..." << endl;
 	Search();
 	this->w_d_anchor = {};
 	this->w_d_text = {};
 	this->pagerank = {};
+	cout << "Loading wd" << endl;
 	this->load_w_d();
+	cout << "Done wd" << endl;
 	this->load_pagerank();
+	cout << "Done Vectorial searcher" << endl;
 }
 
 void VectorialSearch::read_line(int& word_id, int& doc_id, int& freq, int& pos, ifstream& index){
@@ -18,16 +22,29 @@ void VectorialSearch::read_line(int& word_id, int& doc_id, int& freq, int& pos, 
 
 void VectorialSearch::load_pagerank(){
 	int id;
-	double value;
-	ifstream input;
+	string aux;
+	double value = 0;
+	ifstream infile;
 
-	input.open(PAGERANK_FILENAME, ios::in);
+	infile.open(PAGERANK_FILENAME, ios::in);
 
-	while(!input.eof()){
-		input >> id >> value;
-
-		this->pagerank[id] = value;
+	if(infile.is_open()){
+		cout << "Loading pagerank..." << endl;	
 	}
+
+	
+	while(!infile.eof()){
+		infile >> id >> value;
+
+		cout << id << " " << value << endl;
+
+		if(!infile.eof()){
+			this->pagerank[id] = value;
+		}
+	}
+	cout << "Done pagerank" << endl;
+
+	infile.close();
 
 
 }
@@ -131,7 +148,7 @@ void VectorialSearch::load_w_d(){
 		while(!input.eof()){
 			input >> id >> value;
 			this->w_d_anchor[id] = sqrt(value);
-			// std::cout << "id: " << id << " value: " << sqrt(value) << std::endl;
+			std::cout << "id: " << id << " value: " << sqrt(value) << std::endl;
 		}
 	}
 	input.close();
@@ -148,7 +165,7 @@ void VectorialSearch::load_w_d(){
 		for(int i = 0; i < size && !input.eof(); i++){
 			input >> id >> value;
 			if (!input.eof()){
-				// std::cout << "id: " << id << " value: " << sqrt(value) << std::endl;
+				std::cout << "id: " << id << " value: " << sqrt(value) << std::endl;
 				this->w_d_text[id] = sqrt(value);
 			}
 		}

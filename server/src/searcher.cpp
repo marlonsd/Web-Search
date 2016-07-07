@@ -1,7 +1,7 @@
 #include "searcher.h"
 
 Searcher::Searcher(){
-	
+	cout << "Creating searcher..." << endl;
 }
 
 
