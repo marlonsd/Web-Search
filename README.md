@@ -10,6 +10,7 @@ Compilar código, no terminal:
   
 Antes de executar:
   ulimit -n 4000 # Para mudar valor, deve-se mudar no código.
+  
   export LD_LIBRARY_PATH="/usr/local/lib"
   
 Para executar indexação, htmls devem estar na pasta htmls:
